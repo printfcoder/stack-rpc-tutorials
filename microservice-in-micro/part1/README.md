@@ -12,11 +12,9 @@ web服务主要向用户提供如下接口
 
 我们不提供注册接口，一来增加不必要的代码量，我们的核心还是介绍如何使用Micro组件。
 
-## 开始编写
+## user-service
 
 我们先从下往上编写，也就是从服务层**user-service**开始
-
-### user-service
 
 Micro有提供代码生成器指令[**new**][micro-new]，它可以新建服务模板代码，把基本所需的目录结构建好，省去大家挖坑的时间。
 
@@ -26,7 +24,7 @@ Micro有提供代码生成器指令[**new**][micro-new]，它可以新建服务�
 
 好，我们开始
 
-#### 新建模板
+### 新建模板
 
 ```bash
 micro new --namespace=mu.micro.book.user --type=srv --alias=service github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service
@@ -50,7 +48,7 @@ micro new --namespace=mu.micro.book.user --type=srv --alias=service github.com/m
 
 ```
 
-#### 定义User原型
+### 定义User原型
 
 我们需要在service.proto中定义User原型，暂且定义以下字段，足够登录，显示用户基本信息、异常信息即可;
 
@@ -160,7 +158,7 @@ func main() {
 
 朋友们可能已经发现，如果我们要从数据库里获取数据，模块提供的代码是远远不够的，那下面我们就开始真正开始编写代码。
 
-#### 开始写代码
+### 开始写代码
 
 上面的生成的目录部分，我们需要手动改一下：
 
@@ -173,14 +171,14 @@ func main() {
 ├── basic
 │   └── config               * 配置类
 │   │   └── config.go        * 初始化配置类
-│   │   └── config_consul.go * consul配置结构
-│   │   └── config_mysql.go  * mysql配置
+│   │   └── config_consul.go * consul配置结构体
+│   │   └── config_mysql.go  * mysql配置结构体
 │   │   └── profiles.go      * 配置文件树辅助类
 │   └── db                   * 数据库相关
 │   │    └── db.go           * 初始化数据库
 │   │    └── mysql.go        * mysql数据库相关
 │   └── basic                * 初始化基础组件
-├── config                   * 配置文件目录
+├── conf                     * 配置文件目录
 ├── handler
 │   └── service.go           * 将名称改为service
 ├── model                    * 增加模型层，用于与数据库交换数据
@@ -199,19 +197,19 @@ func main() {
 
 其实模板只是生成基础目录，把大家引进一个风格的项目中，这样管理起来会轻松许多。下面我们解释一下为什么要新增两个目录：**basic**，**model**和**config**。
 
-**basic**和**model**其实和Micro无关，只是为了满足我们为**user-service**的业务定位，它是一个**MVC**应用，其中C交给了**user-web**，剩下的**MV**才是它的主要功能。
+**basic**和**model**其实和Micro无关，只是为了满足我们为**user-service**的业务定位，它是一个**MVC**应用后台，而C交给了**user-web**，其中的**M**才是它的主要功能。
 
 - **basic** 负责初始化基础组件，比如数据库、配置等
 
 - **model** 负责封装业务逻辑
 
-- **config** 配置文件目录，现在我们还没用配置中心，暂先用文件的方式
+- **conf** 配置文件目录，现在我们还没用配置中心，暂先用文件的方式
 
-有朋友会问，那**handler**目录呢？**user-service**本质上也是一个MVC应用，它弱化了C成handler，只负责接收请求，不改动业务数据**值**，但可能改动结构以便回传。
+有朋友会问，那**handler**目录呢？刚说**user-service**本质上是一个MVC应用的后台，它弱化了C成handler，只负责接收请求，不改动业务数据**值**，但可能改动结构以便回传。
 
 下面我们开始处理业务方面的东西
 
-##### 创建User表
+### 创建User表
 
 我们选用Mysql作为数据库，以下是建表语句，完整sql可以在[文档](./docs/schema.sql)目录找到：
 
@@ -232,13 +230,14 @@ CREATE TABLE `user`
   COLLATE = utf8mb4_bin COMMENT ='用户表';
 ```
 
-预置一条数据，<span style="color:red">为了简化，我们的账户密码暂时使用明文</span>，后面的章节会加盐hash后再存储、匹配。
+
+预置一条数据，*为了简化，我们的账户密码暂时使用明文*，后面的章节会加盐hash后再存储、匹配。
 
 ```sql
 INSERT INTO user (user_id, user_name, pwd) VALUE (10001, 'micro', '123');
 ```
 
-##### 基础组件
+### 基础组件
 
 [基础组件](./user-service/basic)目前主要的功能是初始化配置与数据库。它的入口代码是一个**Init**初始化方法，负责初始化其下所有组件。
 
@@ -256,9 +255,21 @@ func Init() {
 }
 ```
 
-###### 配置
+### 配置
 
-初始化配置的过程大致如下：
+我们先看下根配置文件[application.yml](./user-service/conf/application.yml)的样子
+
+```yaml
+app:
+  profiles:
+    include: consul, db
+```
+
+起名为**application.yml**是参考了Spring-boot风格，我觉得这个设计非常漂亮，于是在这抄袭一番。我们把consul和db配置分到独立的文件中
+
+通过解析`app.profiles.include`来加载指定的配置文件。当然也可以全部写在**application.yml**中，只是我觉得挤在一起的配置不优雅。
+
+然后再将初始化配置的过程大致如下：
 
 |顺序|过程|说明|
 |---|---|---|
@@ -355,7 +366,7 @@ type defaultMysqlConfig struct {
 }
 ```
 
-###### 数据库初始化
+### 数据库初始化
 
 数据库的初始化动作在[db.go](user-service/basic/db/db.go)目录下，下面是初始化方法入口：
 
@@ -390,6 +401,12 @@ func InitDB() {
 
 	inited = true
 }
+
+// GetDB 获取db
+func GetDB() *sql.DB {
+	return mysqlDB
+}
+
 ```
 
 从代码中可以看到，在判断配置文件中有激活Mysql指令**GetEnabled**时才会去加载数据库。
@@ -420,15 +437,236 @@ func initMysql() {
 		panic(err)
 	}
 }
+
 ```
 
-##### 用户模型服务
+好，我们把基础的配置与数据库加载完成，现在开始编写业务服务代码。
+
+### 用户模型服务
+
+用户模型服务很简单，就是像数据库获取用户信息被返回给调用者
+
+下面用户模型服务类定义及初始化[user.go](./user-service/model/user/user.go)
+
+user.go
+
+```go
+package user
+
+// ...
+
+var (
+	s *service
+	m sync.RWMutex
+)
+
+// service 服务
+type service struct {
+}
+
+// Service 用户服务类
+type Service interface {
+	// QueryUserByName 根据用户名获取用户
+	QueryUserByName(userName string) (ret *proto.User, err error)
+}
+
+// GetService 获取服务类
+func GetService() (Service, error) {
+	if s == nil {
+		return nil, fmt.Errorf("[GetService] GetService 未初始化")
+	}
+	return s, nil
+}
+
+// InitService 初始化用户服务层
+func InitService() {
+	m.Lock()
+	defer m.Unlock()
+
+	if s != nil {
+		return
+	}
+
+	s = &service{}
+}
+```
+
+1. 其定义了接口*Service*，声明其能力*GetService*。
+2. **service**结构继承*Service*提供服务。
+3. userService向[model.go](./user-service/model/model.go)暴露初始化方法**InitUserService**
+
+- model.go
+
+```go
+package model
+
+// ...
+
+// InitModel 初始化模型层
+func InitModel() {
+	user.InitService()
+}
+```
+
+现在我们有了服务模型层的结构，开始实现从数据库里获取数据，具体逻辑写在[user_get.go](./user-service/model/user/user_get.go)里
+
+user_get.go
+
+```go
+package user
+
+// ...
+func (s *service) QueryUserByName(userName string) (ret *proto.User, err error) {
+
+	queryString := `SELECT user_id, user_name, pwd  FROM user WHERE user_name = ?`
+
+	// 获取数据库
+	o := db.GetDB()
+
+	ret = &proto.User{}
+
+	// 查询
+	err = o.QueryRow(queryString, userName).Scan(ret.Id, ret.Name, ret.Pwd)
+	if err != nil {
+		log.Logf("[QueryUserByName] 查询数据失败，err：%s", err)
+		return
+	}
+	return
+}
+
+```
+
+查询方法很简单，这里不过赘述。
+
+服务类写完之后，我们还差handler与main方法没有完成，下一步我们编写handler处理器[hander-service.go](./user-service/handler/service.go)，让它来调用model模型层。
+
+handler service.go
+
+```bash
+package handler
+
+// ...
+
+type Service struct{}
+
+var (
+	userService us.Service
+)
+
+// InitHandler 初始化handler
+func InitHandler() {
+
+	var err error
+	userService, err = us.GetService()
+	if err != nil {
+		log.Fatal("[InitHandler] 初始化Handler错误")
+		return
+	}
+}
+
+// QueryUserByName 通过参数中的名字返回用户
+func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Response) error {
+
+	user, err := userService.QueryUserByName(req.UserName)
+	if err != nil {
+		rsp.Error = &s.Error{
+			Code:   500,
+			Detail: err.Error(),
+		}
+
+		return err
+	}
+
+	rsp.User = user
+
+	return nil
+}
+```
+
+handler直接调用模型层方法获取数据并回传给rsp结构。
+
+下面把[main.go](./user-service/main.go)调整一下，然后就可以启动程序了：
+
+```go
+package main
+
+// ...
+
+func main() {
+   
+	// 初始化配置、数据库等信息
+	basic.Init()
+
+	// 使用consul注册
+	micReg := consul.NewRegistry(registryOptions)
+
+	// New Service
+	service := micro.NewService(
+		micro.Name("mu.micro.book.user.srv.service"),
+		micro.Registry(micReg),
+		micro.Version("latest"),
+	)
+
+	// 服务初始化
+	service.Init(
+		micro.Action(func(c *cli.Context) {
+			// 初始化模型层
+			model.InitModel()
+			// 初始化handler
+			handler.InitHandler()
+		}),
+	)
+
+	// 注册服务
+	s.RegisterServiceHandler(service.Server(), new(handler.Service))
+
+	// 启动服务
+	if err := service.Run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func registryOptions(ops *registry.Options) {
+	consulCfg := config.GetConsulConfig()
+	ops.Timeout = time.Second * 5
+	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
+}
+```
+
+代码中我们默认使用consul作为注册中心，被在Action中初始化基础组件与模型层。
+
+注意，因为handler依赖model，所以初始化handler要在初始化模型层之后执行。
+
+好，程序写完了，下面我们启动它。
+
+```bash
+$ go run main.go plugin.go
+
+2019/04/12 23:57:12 [InitConfig] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application.yml, {Include:consul, db}
+2019/04/12 23:57:12 [InitConfig] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application-consul.yml
+2019/04/12 23:57:12 [InitConfig] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application-db.yml
+2019/04/12 23:57:12 Transport [http] Listening on [::]:52801
+2019/04/12 23:57:12 Broker [http] Connected to [::]:52802
+2019/04/12 23:57:12 Registry [consul] Registering node: mu.micro.book.user.srv.service-f1cb2a6c-1c8b-4d90-97b6-a9e287c1acc4
+
+```
+
+启动成功，我们调用*Service.QueryUserByName*测试一下服务是否正常:
+
+```bash
+$ micro --registry=consul call mu.micro.book.user.srv.service Service.QueryUserByName '{"userName":"micro"}'
+{
+   "user": {
+       "id": 10001,
+       "name": "micro",
+       "pwd": "1234"
+   }
+}
+```
+
+## user-web
 
 todo
-
-### user-web
-
-toto
 
 ## 延伸阅读
 

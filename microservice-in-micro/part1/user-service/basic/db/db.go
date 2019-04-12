@@ -4,7 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/basic/config"
-	"log"
+	"github.com/micro/go-log"
+
 	"sync"
 )
 
@@ -23,7 +24,7 @@ func InitDB() {
 
 	if inited {
 		err = fmt.Errorf("[initMysql] Mysql 已经初始化过")
-		log.Fatal(err)
+		log.Logf(err.Error())
 		return
 	}
 
@@ -33,4 +34,9 @@ func InitDB() {
 	}
 
 	inited = true
+}
+
+// GetDB 获取db
+func GetDB() *sql.DB {
+	return mysqlDB
 }

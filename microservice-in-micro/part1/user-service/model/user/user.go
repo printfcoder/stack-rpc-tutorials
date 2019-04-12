@@ -6,14 +6,14 @@ import (
 	"sync"
 )
 
-// service 服务
-type service struct {
-}
-
 var (
 	s *service
 	m sync.RWMutex
 )
+
+// service 服务
+type service struct {
+}
 
 // Service 用户服务类
 type Service interface {
@@ -29,8 +29,8 @@ func GetService() (Service, error) {
 	return s, nil
 }
 
-// InitUserService 初始化用户服务层
-func InitUserService() {
+// InitService 初始化用户服务层
+func InitService() {
 	m.Lock()
 	defer m.Unlock()
 

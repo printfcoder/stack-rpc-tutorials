@@ -1,35 +1,57 @@
 package main
 
 import (
-	"github.com/influxdata/influxdb/services/subscriber"
+	"fmt"
+	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/basic"
+	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/basic/config"
 	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/handler"
+	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/model"
+	"github.com/micro/cli"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/registry"
+	"github.com/micro/go-micro/registry/consul"
+	"time"
 
 	s "github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/proto/service"
 )
 
 func main() {
+
+	// 初始化配置、数据库等信息
+	basic.Init()
+
+	// 使用consul注册
+	micReg := consul.NewRegistry(registryOptions)
+
 	// New Service
 	service := micro.NewService(
 		micro.Name("mu.micro.book.user.srv.service"),
+		micro.Registry(micReg),
 		micro.Version("latest"),
 	)
 
-	// Initialise service
-	service.Init()
+	// 服务初始化
+	service.Init(
+		micro.Action(func(c *cli.Context) {
+			// 初始化模型层
+			model.InitModel()
+			// 初始化handler
+			handler.InitHandler()
+		}),
+	)
 
-	// Register Handler
+	// 注册服务
 	s.RegisterServiceHandler(service.Server(), new(handler.Service))
 
-	// Register Struct as Subscriber
-	micro.RegisterSubscriber("mu.micro.book.user.srv.service", service.Server(), new(subscriber.Service))
-
-	// Register Function as Subscriber
-	micro.RegisterSubscriber("mu.micro.book.user.srv.service", service.Server(), subscriber.Service)
-
-	// Run service
+	// 启动服务
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func registryOptions(ops *registry.Options) {
+	consulCfg := config.GetConsulConfig()
+	ops.Timeout = time.Second * 5
+	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
 }

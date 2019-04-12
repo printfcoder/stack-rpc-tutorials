@@ -30,7 +30,15 @@ func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Re
 
 	user, err := userService.QueryUserByName(req.UserName)
 	if err != nil {
+		rsp.Error = &s.Error{
+			Code:   500,
+			Detail: err.Error(),
+		}
+
+		return err
 	}
+
+	rsp.User = user
 
 	return nil
 }

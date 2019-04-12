@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"github.com/micro/go-config"
 	"github.com/micro/go-config/source"
 	"github.com/micro/go-config/source/file"
@@ -33,7 +32,7 @@ func InitConfig() {
 	defer m.Unlock()
 
 	if inited {
-		log.Fatal(fmt.Errorf("[InitConfig] 配置已经初始化过"))
+		log.Logf("[InitConfig] 配置已经初始化过")
 		return
 	}
 
@@ -63,7 +62,9 @@ func InitConfig() {
 		sources := make([]source.Source, len(include))
 		for i := 0; i < len(include); i++ {
 			filePath := pt + string(filepath.Separator) + defaultConfigFilePrefix + strings.TrimSpace(include[i]) + ".yml"
-			fmt.Printf(filePath + "\n")
+
+			log.Logf("[InitConfig] 加载配置文件：path: %s\n", filePath)
+
 			sources[i] = file.NewSource(file.WithPath(filePath))
 		}
 

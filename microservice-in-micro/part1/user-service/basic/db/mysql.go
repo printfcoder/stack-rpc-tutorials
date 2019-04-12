@@ -26,6 +26,5 @@ func initMysql() {
 	// 激活链接
 	if err = mysqlDB.Ping(); err != nil {
 		log.Fatal(err)
-		panic(err)
 	}
 }
