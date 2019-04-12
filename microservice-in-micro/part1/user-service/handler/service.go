@@ -2,47 +2,35 @@ package handler
 
 import (
 	"context"
-
 	"github.com/micro/go-log"
 
-	example "github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/proto/example"
+	us "github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/model/user"
+	s "github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/proto/service"
 )
 
-type Example struct{}
+type Service struct{}
 
-// Call is a single request handler called via client.Call or the generated client code
-func (e *Example) Call(ctx context.Context, req *example.Request, rsp *example.Response) error {
-	log.Log("Received Example.Call request")
-	rsp.Msg = "Hello " + req.Name
-	return nil
+var (
+	userService us.Service
+)
+
+// InitHandler 初始化handler
+func InitHandler() {
+
+	var err error
+	userService, err = us.GetService()
+	if err != nil {
+		log.Fatal("[InitHandler] 初始化Handler错误")
+		return
+	}
 }
 
-// Stream is a server side stream handler called via client.Stream or the generated client code
-func (e *Example) Stream(ctx context.Context, req *example.StreamingRequest, stream example.Example_StreamStream) error {
-	log.Logf("Received Example.Stream request with count: %d", req.Count)
+// QueryUserByName 通过参数中的名字返回用户
+func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Response) error {
 
-	for i := 0; i < int(req.Count); i++ {
-		log.Logf("Responding: %d", i)
-		if err := stream.Send(&example.StreamingResponse{
-			Count: int64(i),
-		}); err != nil {
-			return err
-		}
+	user, err := userService.QueryUserByName(req.UserName)
+	if err != nil {
 	}
 
 	return nil
-}
-
-// PingPong is a bidirectional stream handler called via client.Stream or the generated client code
-func (e *Example) PingPong(ctx context.Context, stream example.Example_PingPongStream) error {
-	for {
-		req, err := stream.Recv()
-		if err != nil {
-			return err
-		}
-		log.Logf("Got ping %v", req.Stroke)
-		if err := stream.Send(&example.Pong{Stroke: req.Stroke}); err != nil {
-			return err
-		}
-	}
 }

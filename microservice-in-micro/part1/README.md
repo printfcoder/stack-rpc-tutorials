@@ -238,11 +238,197 @@ CREATE TABLE `user`
 INSERT INTO user (user_id, user_name, pwd) VALUE (10001, 'micro', '123');
 ```
 
-##### 配置
+##### 基础组件
 
-配置目录
+[基础组件](./user-service/basic)目前主要的功能是初始化配置与数据库。它的入口代码是一个**Init**初始化方法，负责初始化其下所有组件。
+
+```go
+package basic
+
+import (
+	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/basic/config"
+	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/basic/db"
+)
+
+func Init() {
+	config.InitConfig()
+	db.InitDB()
+}
+```
+
+###### 配置
+
+初始化配置的过程大致如下：
+
+|顺序|过程|说明|
+|---|---|---|
+|1|加载application.yml|读取conf目录下application.yml文件|
+|2|解析profiles属性|如果有该属性则找到include值，该值就是指定需要引入的conf下的配置文件|
+|3|解析include|解析出include配置【值】，并组合成文件名，文件名规则为[application-值.yml]|
+|4|读取include声明文件|读取配置文件值|
+|5|解析配置|将配置文件中的值解析到配置对象中|
+
+下面是它的核心代码
+
+```go
+// InitConfig 初始化配置
+func InitConfig() {
+
+	m.Lock()
+	defer m.Unlock()
+
+	if inited {
+		log.Fatal(fmt.Errorf("[InitConfig] 配置已经初始化过"))
+		return
+	}
+
+	// 加载yml配置
+	// 先加载基础配置
+	appPath, _ := filepath.Abs(filepath.Dir(filepath.Join("./", string(filepath.Separator))))
+
+	pt := filepath.Join(appPath, "conf")
+	os.Chdir(appPath)
+
+	// 找到application.yml文件
+	if err = config.Load(file.NewSource(file.WithPath(pt + "/application.yml"))); err != nil {
+		panic(err)
+	}
+
+	// 找到需要引入的新配置文件
+	if err = config.Get(defaultRootPath, "profiles").Scan(&profiles); err != nil {
+		panic(err)
+	}
+
+	log.Logf("[InitConfig] 加载配置文件：path: %s, %+v\n", pt+"/application.yml", profiles)
+
+	// 开始导入新文件
+	if len(profiles.GetInclude()) > 0 {
+		include := strings.Split(profiles.GetInclude(), ",")
+
+		sources := make([]source.Source, len(include))
+		for i := 0; i < len(include); i++ {
+			filePath := pt + string(filepath.Separator) + defaultConfigFilePrefix + strings.TrimSpace(include[i]) + ".yml"
+			fmt.Printf(filePath + "\n")
+			sources[i] = file.NewSource(file.WithPath(filePath))
+		}
+
+		// 加载include的文件
+		if err = config.Load(sources...); err != nil {
+			panic(err)
+		}
+	}
+
+	// 赋值
+	config.Get(defaultRootPath, "consul").Scan(&consulConfig)
+	config.Get(defaultRootPath, "mysql").Scan(&mysqlConfig)
+
+	// 标记已经初始化
+	inited = true
+}
+```
+
+我们目前定义了三个配置结构，它们在basic的[config](user-service/basic/config)目录下
+
+- [profiles](./user-service/basic/config/profiles.go)
+- [consul](./user-service/basic/config/config_consul.go)
+- [mysql](./user-service/basic/config/config_mysql.go)：
+
+```go
+// defaultProfiles 属性配置文件
+type defaultProfiles struct {
+	Include string `json:"include"`
+}
+
+// defaultConsulConfig 默认consul 配置
+type defaultConsulConfig struct {
+	Enabled bool   `json:"enabled"`
+	Host    string `json:"host"`
+	Port    int    `json:"port"`
+}
+
+// defaultMysqlConfig mysql 配置
+type defaultMysqlConfig struct {
+	URL               string `json:"url"`
+	Enable            bool   `json:"enabled"`
+	MaxIdleConnection int    `json:"maxIdleConnection"`
+	MaxOpenConnection int    `json:"maxOpenConnection"`
+}
+```
+
+###### 数据库初始化
+
+数据库的初始化动作在[db.go](user-service/basic/db/db.go)目录下，下面是初始化方法入口：
+
+```go
+package db
+
+// ***
+
+var (
+	inited  bool
+	mysqlDB *sql.DB
+	m       sync.RWMutex
+)
+
+// InitDB 初始化数据库
+func InitDB() {
+	m.Lock()
+	defer m.Unlock()
+
+	var err error
+
+	if inited {
+		err = fmt.Errorf("[initMysql] Mysql 已经初始化过")
+		log.Fatal(err)
+		return
+	}
+
+	// 如果配置声明使用mysql
+	if config.GetMysqlConfig().GetEnabled() {
+		initMysql()
+	}
+
+	inited = true
+}
+```
+
+从代码中可以看到，在判断配置文件中有激活Mysql指令**GetEnabled**时才会去加载数据库。
+
+[mysql.go](user-service/basic/db/mysql.go)中的初始化代码：
+
+```go
+func initMysql() {
+
+	var err error
+
+	// 创建连接
+	mysqlDB, err = sql.Open("mysql", config.GetMysqlConfig().GetURL())
+	if err != nil {
+		log.Fatal(err)
+		panic(err)
+	}
+
+	// 最大连接数
+	mysqlDB.SetMaxOpenConns(config.GetMysqlConfig().GetMaxOpenConnection())
+
+	// 最大闲置数
+	mysqlDB.SetMaxIdleConns(config.GetMysqlConfig().GetMaxIdleConnection())
+
+	// 激活链接
+	if err = mysqlDB.Ping(); err != nil {
+		log.Fatal(err)
+		panic(err)
+	}
+}
+```
+
+##### 用户模型服务
+
+todo
 
 ### user-web
+
+toto
 
 ## 延伸阅读
 

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/influxdata/influxdb/services/subscriber"
+	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/handler"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
-	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/handler"
-	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/subscriber"
 
-	example "github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/proto/example"
+	s "github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/proto/service"
 )
 
 func main() {
@@ -20,13 +20,13 @@ func main() {
 	service.Init()
 
 	// Register Handler
-	example.RegisterExampleHandler(service.Server(), new(handler.Example))
+	s.RegisterServiceHandler(service.Server(), new(handler.Service))
 
 	// Register Struct as Subscriber
-	micro.RegisterSubscriber("mu.micro.book.user.srv.service", service.Server(), new(subscriber.Example))
+	micro.RegisterSubscriber("mu.micro.book.user.srv.service", service.Server(), new(subscriber.Service))
 
 	// Register Function as Subscriber
-	micro.RegisterSubscriber("mu.micro.book.user.srv.service", service.Server(), subscriber.Handler)
+	micro.RegisterSubscriber("mu.micro.book.user.srv.service", service.Server(), subscriber.Service)
 
 	// Run service
 	if err := service.Run(); err != nil {

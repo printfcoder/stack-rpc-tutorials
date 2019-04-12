@@ -34,7 +34,7 @@ var _ server.Option
 // Client API for Service service
 
 type Service interface {
-	QueryUser(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	QueryUserByName(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 }
 
 type service struct {
@@ -55,8 +55,8 @@ func NewService(name string, c client.Client) Service {
 	}
 }
 
-func (c *service) QueryUser(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.name, "Service.QueryUser", in)
+func (c *service) QueryUserByName(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "Service.QueryUserByName", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -68,12 +68,12 @@ func (c *service) QueryUser(ctx context.Context, in *Request, opts ...client.Cal
 // Server API for Service service
 
 type ServiceHandler interface {
-	QueryUser(context.Context, *Request, *Response) error
+	QueryUserByName(context.Context, *Request, *Response) error
 }
 
 func RegisterServiceHandler(s server.Server, hdlr ServiceHandler, opts ...server.HandlerOption) error {
 	type service interface {
-		QueryUser(ctx context.Context, in *Request, out *Response) error
+		QueryUserByName(ctx context.Context, in *Request, out *Response) error
 	}
 	type Service struct {
 		service
@@ -86,6 +86,6 @@ type serviceHandler struct {
 	ServiceHandler
 }
 
-func (h *serviceHandler) QueryUser(ctx context.Context, in *Request, out *Response) error {
-	return h.ServiceHandler.QueryUser(ctx, in, out)
+func (h *serviceHandler) QueryUserByName(ctx context.Context, in *Request, out *Response) error {
+	return h.ServiceHandler.QueryUserByName(ctx, in, out)
 }
