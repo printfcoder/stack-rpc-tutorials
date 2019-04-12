@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package mu.micro.book.user.srv.service;
+
+service Service {
+    rpc QueryUser (Request) returns (Response) {
+    }
+}
+
+message User {
+    int64 id = 1;
+    string name = 2;
+    string pwd = 3;
+}
+
+message Request {
+    string userID = 1;
+    string userName = 2;
+    string userPwd = 3;
+}
+
+message Response {
+    User user = 1;
+}
