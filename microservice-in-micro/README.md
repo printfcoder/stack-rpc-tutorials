@@ -103,8 +103,8 @@ Golang，gRPC，Mysql，Redis，Docker，K8s，Go-micro/Micro
 - 第六章 熔断、降级、容错
 - 第七章 链路追踪
 - 第八章 docker打包与K8s部署
-- 第九章 todo
-- 第十章 todo
+- 第九章 单元测试
+- 第十章 总结
 
 ## 特别声明
 
