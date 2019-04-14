@@ -6,6 +6,6 @@ import (
 )
 
 func Init() {
-	config.InitConfig()
-	db.InitDB()
+	config.Init()
+	db.Init()
 }

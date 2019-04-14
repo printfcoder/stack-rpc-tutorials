@@ -15,15 +15,15 @@ var (
 	m       sync.RWMutex
 )
 
-// InitDB 初始化数据库
-func InitDB() {
+// Init 初始化数据库
+func Init() {
 	m.Lock()
 	defer m.Unlock()
 
 	var err error
 
 	if inited {
-		err = fmt.Errorf("[initMysql] Mysql 已经初始化过")
+		err = fmt.Errorf("[Init] db 已经初始化过")
 		log.Logf(err.Error())
 		return
 	}

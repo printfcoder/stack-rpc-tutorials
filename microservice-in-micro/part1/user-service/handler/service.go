@@ -14,8 +14,8 @@ var (
 	userService us.Service
 )
 
-// InitHandler 初始化handler
-func InitHandler() {
+// Init 初始化handler
+func Init() {
 
 	var err error
 	userService, err = us.GetService()

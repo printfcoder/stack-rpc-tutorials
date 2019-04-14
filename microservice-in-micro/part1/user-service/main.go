@@ -35,9 +35,9 @@ func main() {
 	service.Init(
 		micro.Action(func(c *cli.Context) {
 			// 初始化模型层
-			model.InitModel()
+			model.Init()
 			// 初始化handler
-			handler.InitHandler()
+			handler.Init()
 		}),
 	)
 

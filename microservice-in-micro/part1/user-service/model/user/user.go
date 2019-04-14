@@ -29,8 +29,8 @@ func GetService() (Service, error) {
 	return s, nil
 }
 
-// InitService 初始化用户服务层
-func InitService() {
+// Init 初始化用户服务层
+func Init() {
 	m.Lock()
 	defer m.Unlock()
 
