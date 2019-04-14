@@ -875,13 +875,13 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 - [**micro new**][micro-new-code]，生成Micro风格的模板代码，它是micro项目中的一个子包。
 - [**protoc-gen-go**][protoc-gen-go]，隐藏在`protoc ... --micro_out`指令中执行了，感兴趣的同学可以去了解一下。
 - [**go-micro**][go-micro]，代码中**micro.NewService**，**service.Init**等都是go-micro中不同类型服务各自实现的方法。
-- [**go-config**][go-config], 加载配置时使用。
-- [**go-web**][go-web], 编写web应用**user-web**时用到。
+- [**go-config**][go-config]，加载配置时使用。
+- [**go-web**][go-web]，编写web应用**user-web**时用到。
 
-但我们工作还不完善
+但我们工作还不完善：
 
-- 登录后会话session没有保存
-- **web**和**service**都有basic部分的初始化代码，这部分是可以抽出来公用的
+- 登录后会话session没有保存。
+- **web**和**service**都有basic部分的初始化代码，这部分是可以抽出来公用的。
 
 后面我们会逐一完善。
 
