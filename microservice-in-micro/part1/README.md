@@ -878,6 +878,10 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 - [**go-config**][go-config]，加载配置时使用。
 - [**go-web**][go-web]，编写web应用**user-web**时用到。
 
+至此，我们的服务架构完成度如下：（红圈服务为完成）
+
+![](../docs/part1_done_services.png)
+
 但我们工作还不完善：
 
 - 登录后会话session没有保存。
