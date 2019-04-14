@@ -321,7 +321,7 @@ func InitConfig() {
 	defer m.Unlock()
 
 	if inited {
-		log.Fatal(fmt.Errorf("[InitConfig] 配置已经初始化过"))
+		log.Logf(fmt.Errorf("[InitConfig] 配置已经初始化过"))
 		return
 	}
 
@@ -422,7 +422,7 @@ func Init() {
 
 	if inited {
 		err = fmt.Errorf("[Init] db 已经初始化过")
-		log.Fatal(err)
+		log.Logf(err)
 		return
 	}
 
@@ -840,6 +840,14 @@ handler里定义了错误结构体**Error**、**Init**、**Login**方法。
 
 本章我们实现了处理从客户端到服务链的用户登录请求，给大家演示了从API层到web层再到服务层之间是如何工作的。
 
+我们本章用到的Micro技术点有（依次从文章开始到结束）
+
+- **micro new**，生成Micro风格的模板代码，它是micro项目中的一个子包，[项目地址][micro-new-code]。
+- **protoc-gen-go**，隐藏在`protoc ... --micro_out`指令中执行了，感兴趣的同学可以去了解一下，[项目地址][protoc-gen-go]。
+- **go-micro**，代码中**micro.NewService**，**service.Init**等都是go-micro中不同类型服务各自实现的方法，[项目地址][go-micro]。
+- **go-config**, 加载配置时使用，[项目地址][go-config]
+- **go-web**, 编写**user-web**web应用时用到，[项目地址][go-web]
+
 但我们工作还不完善
 
 - 登录后会话session没有保存
@@ -866,6 +874,12 @@ handler里定义了错误结构体**Error**、**Init**、**Login**方法。
 [使用Micro模板新建服务][micro-new]
 
 [micro-new]: https://github.com/micro-in-cn/micro-all-in-one/tree/master/middle-practices/micro-new
+[protoc-gen-go]: https://github.com/micro/protoc-gen-micro
+[micro-new-code]: https://github.com/micro/micro/tree/master/new
+[go-micro]: https://github.com/micro/go-micro
+[go-config]: https://github.com/micro/go-config
+[go-web]: https://github.com/micro/go-web
+
 [第二章]: ../part2
 [第三章]: ../part3
 [第四章]: ../part4
