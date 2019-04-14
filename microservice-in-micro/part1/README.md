@@ -53,7 +53,7 @@ Micro有提供代码生成器指令[**new**][micro-new]，它可以新建服务�
 ### 新建模板
 
 ```bash
-micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service
+micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service
 ```
 
 我们解释一下各个flag参数
@@ -275,8 +275,8 @@ INSERT INTO user (user_id, user_name, pwd) VALUE (10001, 'micro', '123');
 package basic
 
 import (
-	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/basic/config"
-	"github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/basic/db"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic/db"
 )
 
 func Init() {
@@ -287,7 +287,7 @@ func Init() {
 
 ### 配置
 
-加载配置我们会使用到[go-config](https://github.com/micro/go-config)里面的本地文件配置。相关示例可以参考[go-config示例](https://github.com/micro-in-cn/micro-all-in-one/tree/master/basic-practices/micro-config)。
+加载配置我们会使用到[go-config](https://github.com/micro/go-config)里面的本地文件配置。相关示例可以参考[go-config示例](https://github.com/micro-in-cn/all-in-one/tree/master/basic-practices/micro-config)。
 
 我们先看下根配置文件[application.yml](./user-service/conf/application.yml)的样子
 
@@ -674,9 +674,9 @@ func registryOptions(ops *registry.Options) {
 ```bash
 $ go run main.go plugin.go
 
-2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application.yml, {Include:consul, db}
-2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application-consul.yml
-2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application-db.yml
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/conf/application.yml, {Include:consul, db}
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/conf/application-consul.yml
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/conf/application-db.yml
 2019/04/12 23:57:12 Transport [http] Listening on [::]:52801
 2019/04/12 23:57:12 Broker [http] Connected to [::]:52802
 2019/04/12 23:57:12 Registry [consul] Registering node: mu.micro.book.srv.user-f1cb2a6c-1c8b-4d90-97b6-a9e287c1acc4
@@ -721,7 +721,7 @@ $ micro --registry=consul call mu.micro.book.srv.user Service.QueryUserByName '{
 因为**web**是web应用，所以我们`--type`flag传入web。
 
 ```bash
-micro new --namespace=mu.micro.book --type=web --alias=user github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-web
+micro new --namespace=mu.micro.book --type=web --alias=user github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-web
 ```
 
 生成的模板目录结构如下
@@ -907,7 +907,7 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 
 [使用Micro模板新建服务][micro-new]
 
-[micro-new]: https://github.com/micro-in-cn/micro-all-in-one/tree/master/middle-practices/micro-new
+[micro-new]: https://github.com/micro-in-cn/all-in-one/tree/master/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
 [micro-new-code]: https://github.com/micro/micro/tree/master/new
 [go-micro]: https://github.com/micro/go-micro
