@@ -2,15 +2,33 @@
 
 本章节我们实现用户服务，用户服务分为两层，web层（user-web）与服务层（user-service），前者提供http接口，后者向web提供RPC服务。
 
-- user-web 以下简称web
-- user-service 以下简称service
+- user-web 以下简称**web**
+- user-service 以下简称**service**
 
-web服务主要向用户提供如下接口
+**web**服务主要向用户提供如下接口
 
 - 登录与token颁发
 - 鉴权
 
 我们不提供注册接口，一来增加不必要的代码量，我们的核心还是介绍如何使用Micro组件。
+
+**server**服务主要向所有内部服务提供用户查询接口：
+
+- 根据userName用户名查询用户
+
+由于我们现在才开始第一章，所以我们下面的内容细节处讲解会多一些。后面的章节我们会加快脚步。
+
+在开发应用之前，我们要先定义好命名空间。
+
+|服务|命名空间|说明|---|
+|---|---|---|---|
+|接入层API|mu.micro.book.web|负责代理所有**mu.micro.book.web**下游的web应用，比如**mu.micro.book.web.user**等|---|
+|用户web|mu.micro.book.web.user|接收API下放的路由为/user请求|---|
+|用户服务|mu.micro.book.srv.user|对架构内应用提供user查询服务|---|
+
+见下图
+
+![](../docs/part1_framework_namespace.png)
 
 ## user-service
 
@@ -35,8 +53,12 @@ Micro有提供代码生成器指令[**new**][micro-new]，它可以新建服务�
 ### 新建模板
 
 ```bash
-micro new --namespace=mu.micro.book.user --type=srv --alias=service github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service
+micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service
 ```
+
+我们解释一下各个flag参数
+
+- namespace，因为我们要让**web**直接暴露在API之下，而本篇后面我们会开一个handler模式为web的API，它的命名空间为`mu.micro.book.web`，故而，我们服务
 
 模板生成在**user-service**目录，其结构如下
 
@@ -63,7 +85,7 @@ micro new --namespace=mu.micro.book.user --type=srv --alias=service github.com/m
 ```proto
 syntax = "proto3";
 
-package mu.micro.book.user.srv.service;
+package mu.micro.book.srv.user;
 
 service Service {
     rpc QueryUserByName (Request) returns (Response) {
@@ -112,7 +134,7 @@ package main
 func main() {
 	// New Service
 	service := micro.NewService(
-		micro.Name("mu.micro.book.user.srv.service"),
+		micro.Name("mu.micro.book.srv.user"),
 		micro.Version("latest"),
 	)
 
@@ -123,10 +145,10 @@ func main() {
 	s.RegisterServiceHandler(service.Server(), new(handler.Service))
 
 	// Register Struct as Subscriber
-	micro.RegisterSubscriber("mu.micro.book.user.srv.service", service.Server(), new(subscriber.Service))
+	micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), new(subscriber.Service))
 
 	// Register Function as Subscriber
-	micro.RegisterSubscriber("mu.micro.book.user.srv.service", service.Server(), subscriber.Service)
+	micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), subscriber.Service)
 
 	// Run service
 	if err := service.Run(); err != nil {
@@ -146,7 +168,7 @@ package main
 func main() {
 	// New Service   新建服务
 	service := micro.NewService(
-		micro.Name("mu.micro.book.user.srv.service"),
+		micro.Name("mu.micro.book.srv.user"),
 		micro.Version("latest"),
 	)
 
@@ -258,8 +280,8 @@ import (
 )
 
 func Init() {
-	config.InitConfig()
-	db.InitDB()
+	config.Init()
+	db.Init()
 }
 ```
 
@@ -389,15 +411,15 @@ var (
 	m       sync.RWMutex
 )
 
-// InitDB 初始化数据库
-func InitDB() {
+// Init 初始化数据库
+func Init() {
 	m.Lock()
 	defer m.Unlock()
 
 	var err error
 
 	if inited {
-		err = fmt.Errorf("[initMysql] Mysql 已经初始化过")
+		err = fmt.Errorf("[Init] db 已经初始化过")
 		log.Fatal(err)
 		return
 	}
@@ -486,8 +508,8 @@ func GetService() (Service, error) {
 	return s, nil
 }
 
-// InitService 初始化用户服务层
-func InitService() {
+// Init 初始化用户服务层
+func Init() {
 	m.Lock()
 	defer m.Unlock()
 
@@ -501,7 +523,7 @@ func InitService() {
 
 1. 其定义了接口*Service*，声明其能力*GetService*。
 2. **service**结构继承*Service*提供服务。
-3. userService向[model.go](./user-service/model/model.go)暴露初始化方法**InitUserService**
+3. userService向[model.go](./user-service/model/model.go)暴露初始化方法**Init**
 
 - model.go
 
@@ -510,9 +532,9 @@ package model
 
 // ...
 
-// InitModel 初始化模型层
-func InitModel() {
-	user.InitService()
+// Init 初始化模型层
+func Init() {
+	user.Init()
 }
 ```
 
@@ -561,13 +583,13 @@ var (
 	userService us.Service
 )
 
-// InitHandler 初始化handler
-func InitHandler() {
+// Init 初始化handler
+func Init() {
 
 	var err error
 	userService, err = us.GetService()
 	if err != nil {
-		log.Fatal("[InitHandler] 初始化Handler错误")
+		log.Fatal("[Init] 初始化Handler错误")
 		return
 	}
 }
@@ -610,7 +632,7 @@ func main() {
 
 	// New Service
 	service := micro.NewService(
-		micro.Name("mu.micro.book.user.srv.service"),
+		micro.Name("mu.micro.book.srv.user"),
 		micro.Registry(micReg),
 		micro.Version("latest"),
 	)
@@ -619,9 +641,9 @@ func main() {
 	service.Init(
 		micro.Action(func(c *cli.Context) {
 			// 初始化模型层
-			model.InitModel()
+			model.Init()
 			// 初始化handler
-			handler.InitHandler()
+			handler.Init()
 		}),
 	)
 
@@ -650,19 +672,19 @@ func registryOptions(ops *registry.Options) {
 ```bash
 $ go run main.go plugin.go
 
-2019/04/12 23:57:12 [InitConfig] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application.yml, {Include:consul, db}
-2019/04/12 23:57:12 [InitConfig] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application-consul.yml
-2019/04/12 23:57:12 [InitConfig] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application-db.yml
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application.yml, {Include:consul, db}
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application-consul.yml
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-service/conf/application-db.yml
 2019/04/12 23:57:12 Transport [http] Listening on [::]:52801
 2019/04/12 23:57:12 Broker [http] Connected to [::]:52802
-2019/04/12 23:57:12 Registry [consul] Registering node: mu.micro.book.user.srv.service-f1cb2a6c-1c8b-4d90-97b6-a9e287c1acc4
+2019/04/12 23:57:12 Registry [consul] Registering node: mu.micro.book.srv.user-f1cb2a6c-1c8b-4d90-97b6-a9e287c1acc4
 
 ```
 
 启动成功，我们调用*Service.QueryUserByName*测试一下服务是否正常:
 
 ```bash
-$ micro --registry=consul call mu.micro.book.user.srv.service Service.QueryUserByName '{"userName":"micro"}'
+$ micro --registry=consul call mu.micro.book.srv.user Service.QueryUserByName '{"userName":"micro"}'
 {
    "user": {
        "id": 10001,
@@ -684,7 +706,144 @@ $ micro --registry=consul call mu.micro.book.user.srv.service Service.QueryUserB
 
 ## user-web
 
-todo
+**web**服务负责暴露接口给用户，用户请求登录，**web**通过用户名**userName**向**service**获取用户信息，再比对密码，正确则登录成功，反之返回错误。
+
+请求链如下图
+
+![](../docs/part1_user_login_process.png)
+
+相信大家在了解**user-service**之后，对整个编码过程更熟悉了，所以我们加快步伐。开始写代码。
+
+### 新建模板
+
+因为**web**是web应用，所以我们`--type`flag传入web。
+
+```bash
+micro new --namespace=mu.micro.book --type=web --alias=user github.com/micro-in-cn/micro-tutorials/microservice-in-micro/part1/user-web
+```
+
+生成的模板目录结构如下
+
+```text
+├── main.go     
+├── plugin.go
+├── handler
+│   └── handler.go
+├── html
+│   └── index.html
+├── Dockerfile
+├── Makefile
+└── README.md
+
+```
+
+go-web是一个很简单的web开发库，它不像其它go语言的web框架有那么多工具集，它核心在两个方面
+
+- 让程序支持http请求
+- 天生属于Micro生态
+
+它不需要额外的代码就可以注册到Micro生态中，和其它类型的服务一样。
+
+**web**核心有三个地方
+
+- [config.go](./user-web/basic/config/config.go) 负责加载配置
+- [handler.go](./user-web/handler/handler.go) 负责处理请求
+- [main.go](./user-web/main.go) 程序运行入口
+
+**config.go**和**service**的[config](#配置)差不多，我们不赘述。
+
+**handler.go**
+
+```go
+package handler
+
+// ...
+
+var (
+	serviceClient us.Service
+)
+
+// Error 错误结构体
+type Error struct {
+	Code   string `json:"code"`
+	Detail string `json:"detail"`
+}
+
+func Init() {
+	serviceClient = us.NewService("mu.micro.book.srv.user", client.DefaultClient)
+}
+
+// Login 登录入口
+func Login(w http.ResponseWriter, r *http.Request) {
+
+	// 只接受POST请求
+	if r.Method != "POST" {
+		log.Logf("非法请求")
+		http.Error(w, "非法请求", 400)
+		return
+	}
+
+	r.ParseForm()
+
+	// 调用后台服务
+	rsp, err := serviceClient.QueryUserByName(context.TODO(), &us.Request{
+		UserName: r.Form.Get("userName"),
+	})
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	// 返回结果
+	response := map[string]interface{}{
+		"ref": time.Now().UnixNano(),
+	}
+
+	if rsp.User.Pwd == r.Form.Get("pwd") {
+		response["success"] = rsp.Success
+
+		// 干掉密码返回
+		rsp.User.Pwd = ""
+		response["data"] = rsp.User
+
+	} else {
+		response["success"] = false
+		response["error"] = &Error{
+			Detail: "密码错误",
+		}
+	}
+
+	w.Header().Add("Content-Type", "application/json; charset=utf-8")
+	
+	// 返回JSON结构
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+}
+```
+
+handler里定义了错误结构体**Error**、**Init**、**Login**方法。
+
+- **Init** 用来初始化handler需要用到的服务客户端
+- **Login** 处理登录请求
+
+**Login**在解析完参数后，通过RPC调用**service**的**QueryUserByName**方法。查出的结果后再进行密码匹配。
+
+匹配成功后便返回用户信息。
+
+这样，我们把用户发送请求，API接收请求，**web**向**service**查询数据整个调用链都调通了。
+
+## 总结
+
+本章我们实现了处理从客户端到服务链的用户登录请求，给大家演示了从API层到web层再到服务层之间是如何工作的。
+
+但我们工作还不完善
+
+- 登录后会话session没有保存
+- **web**和**service**都有basic部分的初始化代码，这部分是可以抽出来公用的
+
+后面我们会逐一完善
 
 ## 延伸阅读
 
