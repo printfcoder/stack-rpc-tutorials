@@ -26,7 +26,7 @@ func main() {
 
 	// New Service
 	service := micro.NewService(
-		micro.Name("mu.micro.book.user.srv.service"),
+		micro.Name("mu.micro.book.srv.user"),
 		micro.Registry(micReg),
 		micro.Version("latest"),
 	)
