@@ -872,11 +872,11 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 
 我们本章用到的Micro技术点有（依次从文章开始到结束）
 
-- **micro new**，生成Micro风格的模板代码，它是micro项目中的一个子包，[项目地址][micro-new-code]。
-- **protoc-gen-go**，隐藏在`protoc ... --micro_out`指令中执行了，感兴趣的同学可以去了解一下，[项目地址][protoc-gen-go]。
-- **go-micro**，代码中**micro.NewService**，**service.Init**等都是go-micro中不同类型服务各自实现的方法，[项目地址][go-micro]。
-- **go-config**, 加载配置时使用，[项目地址][go-config]
-- **go-web**, 编写**user-web**web应用时用到，[项目地址][go-web]
+- [**micro new**][micro-new-code]，生成Micro风格的模板代码，它是micro项目中的一个子包。
+- [**protoc-gen-go**][protoc-gen-go]，隐藏在`protoc ... --micro_out`指令中执行了，感兴趣的同学可以去了解一下。
+- [**go-micro**][go-micro]，代码中**micro.NewService**，**service.Init**等都是go-micro中不同类型服务各自实现的方法。
+- [**go-config**][go-config], 加载配置时使用。
+- [**go-web**][go-web], 编写web应用**user-web**时用到。
 
 但我们工作还不完善
 
