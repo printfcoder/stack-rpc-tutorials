@@ -832,7 +832,37 @@ handler里定义了错误结构体**Error**、**Init**、**Login**方法。
 
 **Login**在解析完参数后，通过RPC调用**service**的**QueryUserByName**方法。查出的结果后再进行密码匹配。
 
-匹配成功后便返回用户信息。
+匹配成功后便返回用户信息。我们看下请求结果
+
+运行api
+
+```bash
+$ micro --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
+```
+
+运行user-service
+
+```bash
+$ cd ../user-service
+$ go run main.go plugin.go 
+```
+
+运行user-web
+
+```bash
+$ go run main.go
+```
+
+请求
+
+```bash
+$  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Content-Type: application/x-www-form-urlencoded'  --data 'userName=micro&pwd=1234'
+
+# 返回结果
+
+{"data":{"id":10001,"name":"micro"},"ref":1555248603726819000,"success":false}
+```
+
 
 这样，我们把用户发送请求，API接收请求，**web**向**service**查询数据整个调用链都调通了。
 
