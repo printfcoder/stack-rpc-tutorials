@@ -186,7 +186,7 @@ func main() {
 
 ```
 
-朋友们可能已经发现，如果我们要从数据库里获取数据，模块提供的代码是远远不够的，那下面我们就开始真正开始编写代码。
+朋友们可能已经发现，如果我们要从数据库里获取数据，模块提供的代码是远远不够的，那下面我们就真正开始编写代码。
 
 ### 开始写代码
 
@@ -286,6 +286,8 @@ func Init() {
 ```
 
 ### 配置
+
+加载配置我们会使用到[go-config](https://github.com/micro/go-config)里面的本地文件配置。相关示例可以参考[go-config示例](https://github.com/micro-in-cn/micro-all-in-one/tree/master/basic-practices/micro-config)。
 
 我们先看下根配置文件[application.yml](./user-service/conf/application.yml)的样子
 
@@ -843,10 +845,33 @@ handler里定义了错误结构体**Error**、**Init**、**Login**方法。
 - 登录后会话session没有保存
 - **web**和**service**都有basic部分的初始化代码，这部分是可以抽出来公用的
 
-后面我们会逐一完善
+后面我们会逐一完善。
+
+接下来的下一章，我们会编写权限服务，刚提到的session管理，我们会在这一章实现。请翻阅，[第二章 权限服务][第二章]。
+
+## 系列文章
+
+- [第二章 权限服务][第二章]
+- [第三章 库存服务与订单服务、支付服务][第三章] todo
+- [第四章 消息总线、日志持久化][第四章] todo
+- [第五章 使用配置中心][第五章] todo
+- [第六章 熔断、降级、容错][第六章] todo
+- [第七章 链路追踪][第七章] todo
+- [第八章 docker打包与K8s部署][第八章] todo
+- [第九章 单元测试][第九章] todo
+- [第十章 总结][第十章] todo
 
 ## 延伸阅读
 
 [使用Micro模板新建服务][micro-new]
 
 [micro-new]: https://github.com/micro-in-cn/micro-all-in-one/tree/master/middle-practices/micro-new
+[第二章]: ../part2
+[第三章]: ../part3
+[第四章]: ../part4
+[第五章]: ../part5
+[第六章]: ../part6
+[第七章]: ../part7
+[第八章]: ../part8
+[第九章]: ../part9
+[第十章]: ../part10
