@@ -884,7 +884,7 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 
 但我们工作还不完善：
 
-- 登录后会话session没有保存。
+- 登录后会话session没有保存，没有生成并返回token。
 - **web**和**service**都有basic部分的初始化代码，这部分是可以抽出来公用的。
 
 后面我们会逐一完善。
