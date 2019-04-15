@@ -1,3 +1,3 @@
 FROM alpine
-ADD service-srv /service-srv
-ENTRYPOINT [ "/service-srv" ]
+ADD user-service /user-service
+ENTRYPOINT [ "/user-service" ]
