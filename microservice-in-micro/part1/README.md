@@ -201,8 +201,8 @@ func main() {
 ├── basic
 │   └── config               * 配置类
 │   │   └── config.go        * 初始化配置类
-│   │   └── config_consul.go * consul配置结构体
-│   │   └── config_mysql.go  * mysql配置结构体
+│   │   └── consul.go * consul配置结构体
+│   │   └── mysql.go  * mysql配置结构体
 │   │   └── profiles.go      * 配置文件树辅助类
 │   └── db                   * 数据库相关
 │   │    └── db.go           * 初始化数据库
@@ -373,8 +373,8 @@ func InitConfig() {
 我们目前定义了三个配置结构，它们在basic的[config](user-service/basic/config)目录下
 
 - [profiles](./user-service/basic/config/profiles.go)
-- [consul](./user-service/basic/config/config_consul.go)
-- [mysql](./user-service/basic/config/config_mysql.go)：
+- [consul](./user-service/basic/config/consul.go)
+- [mysql](./user-service/basic/config/mysql.go)：
 
 ```go
 // defaultProfiles 属性配置文件
