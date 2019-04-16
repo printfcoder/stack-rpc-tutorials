@@ -8,7 +8,7 @@ service Service {
 }
 
 message User {
-    int64 id = 1;
+    uint64 id = 1;
     string name = 2;
     string pwd = 3;
     uint64 createdTime = 4;

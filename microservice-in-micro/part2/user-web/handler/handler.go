@@ -7,12 +7,14 @@ import (
 	"net/http"
 	"time"
 
-	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/proto/service"
+	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/auth/proto/auth"
+	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/user-service/proto/service"
 	"github.com/micro/go-micro/client"
 )
 
 var (
 	serviceClient us.Service
+	authClient    auth.Service
 )
 
 // Error 错误结构体
@@ -23,6 +25,7 @@ type Error struct {
 
 func Init() {
 	serviceClient = us.NewService("mu.micro.book.srv.user", client.DefaultClient)
+	authClient = auth.NewService("mu.micro.book.srv.auth", client.DefaultClient)
 }
 
 // Login 登录入口
@@ -57,6 +60,21 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		// 干掉密码返回
 		rsp.User.Pwd = ""
 		response["data"] = rsp.User
+		log.Logf("[Login] 密码校验完成，生成token...")
+
+		// 生成token
+		rsp2, err := authClient.MakeAccessToken(context.TODO(), &auth.Request{
+			UserId:   rsp.User.Id,
+			UserName: rsp.User.Name,
+		})
+		if err != nil {
+			log.Logf("[Login] 创建token失败，err：%s", err)
+			http.Error(w, err.Error(), 500)
+			return
+		}
+
+		log.Logf("[Login] token %s", rsp2.Token)
+		response["token"] = rsp2.Token
 
 	} else {
 		response["success"] = false

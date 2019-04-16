@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic/config"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/handler"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/model"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/auth/handler"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/auth/model"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/basic"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/basic/config"
 	"github.com/micro/cli"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
@@ -13,7 +13,7 @@ import (
 	"github.com/micro/go-micro/registry/consul"
 	"time"
 
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/proto/service"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/auth/proto/auth"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 
 	// 新建服务
 	service := micro.NewService(
-		micro.Name("mu.micro.book.srv.user"),
+		micro.Name("mu.micro.book.srv.auth"),
 		micro.Registry(micReg),
 		micro.Version("latest"),
 	)
@@ -34,7 +34,7 @@ func main() {
 	// 服务初始化
 	service.Init(
 		micro.Action(func(c *cli.Context) {
-			// 初始化模型层
+			// 初始化handler
 			model.Init()
 			// 初始化handler
 			handler.Init()

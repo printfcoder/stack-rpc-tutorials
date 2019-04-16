@@ -102,12 +102,12 @@ Golang，gRPC，Mysql，Redis，Docker，K8s，Go-micro/Micro
 - [第一章 用户服务][第一章]
 - [第二章 权限服务][第二章] todo
 - [第三章 库存服务与订单服务、支付服务][第三章] todo
-- [第四章 消息总线、日志持久化][第四章] todo
+- [第四章 消息总线、日志持久化与插件][第四章] todo
 - [第五章 使用配置中心][第五章] todo
 - [第六章 熔断、降级、容错][第六章] todo
 - [第七章 链路追踪][第七章] todo
-- [第八章 docker打包与K8s部署][第八章] todo
-- [第九章 单元测试][第九章] todo
+- [第八章 单元测试][第九章] todo
+- [第九章 docker打包与K8s部署][第八章] todo
 - [第十章 总结][第十章] todo
 
 ## 特别声明
@@ -116,6 +116,7 @@ Golang，gRPC，Mysql，Redis，Docker，K8s，Go-micro/Micro
 
 ## 引伸阅读
 
+- [Micro中文示例](https://github.com/micro-in-cn/all-in-one)
 - [使用Golang编写微服务](https://ewanvalentine.io/microservices-in-golang-part-1/)
 
 [examples]: https://github.com/micro-in-cn/all-in-one

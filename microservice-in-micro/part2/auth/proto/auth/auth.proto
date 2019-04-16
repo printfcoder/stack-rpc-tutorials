@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package mu.micro.book.srv.auth;
+
+service Service {
+    rpc MakeAccessToken (Request) returns (Response) {
+    }
+}
+
+message Error {
+    int32 code = 1;
+    string detail = 2;
+}
+
+message Request {
+    uint64 userId = 1;
+    string userName = 2;
+}
+
+message Response {
+    bool success = 1;
+    Error error = 2;
+    string token = 3;
+}

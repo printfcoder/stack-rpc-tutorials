@@ -20,7 +20,7 @@ func Init() {
 	var err error
 	userService, err = us.GetService()
 	if err != nil {
-		log.Fatal("[InitHandler] 初始化Handler错误")
+		log.Fatal("[Init] 初始化Handler错误")
 		return
 	}
 }

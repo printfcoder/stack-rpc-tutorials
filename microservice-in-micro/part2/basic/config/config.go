@@ -19,19 +19,22 @@ var (
 	defaultRootPath         = "app"
 	defaultConfigFilePrefix = "application-"
 	consulConfig            defaultConsulConfig
+	mysqlConfig             defaultMysqlConfig
+	jwtConfig               defaultJwtConfig
+	redisConfig             defaultRedisConfig
 	profiles                defaultProfiles
 	m                       sync.RWMutex
 	inited                  bool
 )
 
-// InitConfig 初始化配置
-func InitConfig() {
+// Init 初始化配置
+func Init() {
 
 	m.Lock()
 	defer m.Unlock()
 
 	if inited {
-		log.Logf("[InitConfig] 配置已经初始化过")
+		log.Logf("[Init] 配置已经初始化过")
 		return
 	}
 
@@ -52,7 +55,7 @@ func InitConfig() {
 		panic(err)
 	}
 
-	log.Logf("[InitConfig] 加载配置文件：path: %s, %+v\n", pt+"/application.yml", profiles)
+	log.Logf("[Init] 加载配置文件：path: %s, %+v\n", pt+"/application.yml", profiles)
 
 	// 开始导入新文件
 	if len(profiles.GetInclude()) > 0 {
@@ -62,7 +65,7 @@ func InitConfig() {
 		for i := 0; i < len(include); i++ {
 			filePath := pt + string(filepath.Separator) + defaultConfigFilePrefix + strings.TrimSpace(include[i]) + ".yml"
 
-			log.Logf("[InitConfig] 加载配置文件：path: %s\n", filePath)
+			log.Logf("[Init] 加载配置文件：path: %s\n", filePath)
 
 			sources[i] = file.NewSource(file.WithPath(filePath))
 		}
@@ -75,12 +78,30 @@ func InitConfig() {
 
 	// 赋值
 	config.Get(defaultRootPath, "consul").Scan(&consulConfig)
+	config.Get(defaultRootPath, "mysql").Scan(&mysqlConfig)
+	config.Get(defaultRootPath, "redis").Scan(&redisConfig)
+	config.Get(defaultRootPath, "jwt").Scan(&jwtConfig)
 
 	// 标记已经初始化
 	inited = true
 }
 
+// GetMysqlConfig 获取mysql配置
+func GetMysqlConfig() (ret MysqlConfig) {
+	return mysqlConfig
+}
+
 // GetConsulConfig 获取Consul配置
 func GetConsulConfig() (ret ConsulConfig) {
 	return consulConfig
+}
+
+// GetJwtConfig 获取Jwt配置
+func GetJwtConfig() (ret JwtConfig) {
+	return jwtConfig
+}
+
+// GetRedisConfig 获取Redis配置
+func GetRedisConfig() (ret RedisConfig) {
+	return redisConfig
 }

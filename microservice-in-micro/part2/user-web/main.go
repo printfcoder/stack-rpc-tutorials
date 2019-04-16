@@ -2,16 +2,15 @@ package main
 
 import (
 	"fmt"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/basic"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/user-web/handler"
 	"github.com/micro/cli"
-	"time"
-
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-web/basic"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-web/basic/config"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-web/handler"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 	"github.com/micro/go-web"
+	"time"
 )
 
 func main() {
