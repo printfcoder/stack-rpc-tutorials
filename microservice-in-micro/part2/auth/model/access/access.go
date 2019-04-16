@@ -24,6 +24,9 @@ type Service interface {
 
 	// GetCachedAccessToken 获取缓存的token
 	GetCachedAccessToken(subject *Subject) (ret string, err error)
+
+	// DelUserAccessToken 清除用户token
+	DelUserAccessToken(token string) (err error)
 }
 
 // GetService 获取服务类

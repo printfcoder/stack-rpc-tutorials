@@ -10,12 +10,18 @@ import (
 var (
 	client *redis.Client
 	m      sync.RWMutex
+	inited bool
 )
 
 // Init 初始化Redis
 func Init() {
 	m.Lock()
 	defer m.Unlock()
+
+	if inited {
+		log.Log("已经初始化过Redis...")
+		return
+	}
 
 	redisConfig := config.GetRedisConfig()
 

@@ -5,6 +5,8 @@ package mu.micro.book.srv.auth;
 service Service {
     rpc MakeAccessToken (Request) returns (Response) {
     }
+    rpc DelUserAccessToken (Request) returns (Response) {
+    }
 }
 
 message Error {
@@ -15,6 +17,7 @@ message Error {
 message Request {
     uint64 userId = 1;
     string userName = 2;
+    string token = 3;
 }
 
 message Response {

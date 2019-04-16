@@ -45,3 +45,19 @@ func (s *Service) MakeAccessToken(ctx context.Context, req *auth.Request, rsp *a
 
 	return nil
 }
+
+// DelUserAccessToken 清除用户token
+func (s *Service) DelUserAccessToken(ctx context.Context, req *auth.Request, rsp *auth.Response) error {
+	log.Log("[DelUserAccessToken] 清除用户token")
+	err := accessService.DelUserAccessToken(req.Token)
+	if err != nil {
+		rsp.Error = &auth.Error{
+			Detail: err.Error(),
+		}
+
+		log.Logf("[DelUserAccessToken] 清除用户token失败，err：%s", err)
+		return err
+	}
+
+	return nil
+}
