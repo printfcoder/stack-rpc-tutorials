@@ -8,3 +8,9 @@
 
 - [MFC，Micro从零开始](./micro-from-scratch) todo
 - [使用Micro构建微服务](./microservice-in-micro)
+
+## 其它系列
+
+- [Micro全中文示例](https://github.com/micro-in-cn/all-in-one)
+- [Micro中文博客](https://github.com/micro-in-cn/blogs) todo
+- [Micro中文文档](https://github.com/micro-in-cn/docs) todo
