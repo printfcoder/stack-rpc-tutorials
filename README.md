@@ -23,9 +23,9 @@
 - [Micro中文博客][cn-blogs] todo
 - [Micro中文文档][cn-docs] todo
 
-- [cn-examples](https://github.com/micro-in-cn/all-in-one)
-- [cn-blogs](https://github.com/micro-in-cn/blogs) todo
-- [cn-docs](https://github.com/micro-in-cn/docs) todo
+[cn-examples]: https://github.com/micro-in-cn/all-in-one
+[cn-blogs]: https://github.com/micro-in-cn/blogs
+[cn-docs]: https://github.com/micro-in-cn/docs
 
 ## 贡献
 
