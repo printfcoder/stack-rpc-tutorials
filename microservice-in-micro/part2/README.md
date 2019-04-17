@@ -847,6 +847,10 @@ $ curl --request POST \
 - [第九章 单元测试][第九章] todo
 - [第十章 总结][第十章] todo
 
+## 讨论
+
+朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
+
 ## 延伸阅读
 
 

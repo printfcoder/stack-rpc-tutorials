@@ -907,6 +907,10 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 
 [使用Micro模板新建服务][micro-new]
 
+## 讨论
+
+朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
+
 [micro-new]: https://github.com/micro-in-cn/all-in-one/tree/master/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
 [micro-new-code]: https://github.com/micro/micro/tree/master/new
