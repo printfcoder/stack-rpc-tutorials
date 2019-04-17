@@ -15,7 +15,7 @@
 
 **MFC，Micro从零开始**，MFC的意思是**Micro from scratch**，该系列侧重从Golang开始讲解，然后引入Micro，再逐层深入Micro。
 
-**使用Micro构建微服务**，在假设读者有Golang以及Micro的基础之上，对如何使用Micro构建微服务上，给大家一些建议。
+**使用Micro构建微服务**，假设读者有Golang以及Micro的基础知识，在如何使用Micro构建微服务上，给大家一些建议。
 
 ## 其它系列
 
