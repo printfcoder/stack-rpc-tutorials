@@ -1,0 +1,5 @@
+app:
+  jwt:
+    secretKey: W6VjDud2W1kMG3BicbMNlGgI4ZfcoHtMGLWr
+  profiles:
+    include: consul, redis

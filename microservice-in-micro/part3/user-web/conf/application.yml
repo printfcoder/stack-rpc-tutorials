@@ -1,0 +1,3 @@
+app:
+  profiles:
+    include: consul
