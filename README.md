@@ -8,10 +8,14 @@
 
 需要说明的是，本系列不同于文档，示例，它更专注在Micro的使用范例上，同时希望在对大家实施Micro应用生产时，提供尽可能的帮助与指导。
 
-## 目录
+## 内容
 
 - [MFC，Micro从零开始](./micro-from-scratch) todo
 - [使用Micro构建微服务](./microservice-in-micro)
+
+**MFC，Micro从零开始**，MFC的意思是**Micro from scratch**，该系列侧重从Golang开始讲解，然后引入Micro，再逐层深入Micro。
+
+**使用Micro构建微服务**，在假设读者有Golang以及Micro的基础之上，对如何使用Micro构建微服务上，给大家一些建议。
 
 ## 其它系列
 
