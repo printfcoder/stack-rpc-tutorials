@@ -4,7 +4,7 @@
 
 在本篇中，我们除了完成抽离公用基础包，还要实现请求认证服务auth（session管理我们需要放到下一章节来完成，因为现在我们的web服务太少，不方便看效果）。
 
-后面的章节中，user-web，orders-web，inventory-web等接收到的需要认证的请求都要向auth确认。
+后面的章节中，user-web，orders-web等接收到的需要认证的请求都要向auth确认。
 
 本章我们要实现**Auth**服务的工作架构如下图：
 
@@ -824,7 +824,7 @@ $ curl --request POST \
 
 至此，我们的服务架构完成度如下：（红圈服务为完成）
 
-![](../docs/part2_auth_process.png)
+![](../docs/part2_done_services.png)
 
 但我们工作还不完善：
 
