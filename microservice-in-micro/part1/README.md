@@ -132,28 +132,28 @@ package main
 // ...
 
 func main() {
-	// New Service
-	service := micro.NewService(
-		micro.Name("mu.micro.book.srv.user"),
-		micro.Version("latest"),
-	)
+    // New Service
+    service := micro.NewService(
+        micro.Name("mu.micro.book.srv.user"),
+        micro.Version("latest"),
+    )
 
-	// Initialise service
-	service.Init()
+    // Initialise service
+    service.Init()
 
-	// Register Handler
-	s.RegisterServiceHandler(service.Server(), new(handler.Service))
+    // Register Handler
+    s.RegisterServiceHandler(service.Server(), new(handler.Service))
 
-	// Register Struct as Subscriber
-	micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), new(subscriber.Service))
+    // Register Struct as Subscriber
+    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), new(subscriber.Service))
 
-	// Register Function as Subscriber
-	micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), subscriber.Service)
+    // Register Function as Subscriber
+    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), subscriber.Service)
 
-	// Run service
-	if err := service.Run(); err != nil {
-		log.Fatal(err)
-	}
+    // Run service
+    if err := service.Run(); err != nil {
+        log.Fatal(err)
+    }
 }
 
 ```
@@ -166,22 +166,22 @@ package main
 // ...
 
 func main() {
-	// New Service   新建服务
-	service := micro.NewService(
-		micro.Name("mu.micro.book.srv.user"),
-		micro.Version("latest"),
-	)
+    // New Service   新建服务
+    service := micro.NewService(
+        micro.Name("mu.micro.book.srv.user"),
+        micro.Version("latest"),
+    )
 
-	// Initialise service  初始化服务
-	service.Init()
+    // Initialise service  初始化服务
+    service.Init()
 
-	// Register Handler   注册服务
-	s.RegisterServiceHandler(service.Server(), new(handler.Service))
+    // Register Handler   注册服务
+    s.RegisterServiceHandler(service.Server(), new(handler.Service))
 
-	// Run service    启动服务
-	if err := service.Run(); err != nil {
-		log.Fatal(err)
-	}
+    // Run service    启动服务
+    if err := service.Run(); err != nil {
+        log.Fatal(err)
+    }
 }
 
 ```
@@ -275,13 +275,13 @@ INSERT INTO user (user_id, user_name, pwd) VALUE (10001, 'micro', '123');
 package basic
 
 import (
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic/config"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic/db"
+    "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic/config"
+    "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic/db"
 )
 
 func Init() {
-	config.Init()
-	db.Init()
+    config.Init()
+    db.Init()
 }
 ```
 
@@ -317,56 +317,56 @@ app:
 // InitConfig 初始化配置
 func InitConfig() {
 
-	m.Lock()
-	defer m.Unlock()
+    m.Lock()
+    defer m.Unlock()
 
-	if inited {
-		log.Logf(fmt.Errorf("[InitConfig] 配置已经初始化过"))
-		return
-	}
+    if inited {
+        log.Logf(fmt.Errorf("[InitConfig] 配置已经初始化过"))
+        return
+    }
 
-	// 加载yml配置
-	// 先加载基础配置
-	appPath, _ := filepath.Abs(filepath.Dir(filepath.Join("./", string(filepath.Separator))))
+    // 加载yml配置
+    // 先加载基础配置
+    appPath, _ := filepath.Abs(filepath.Dir(filepath.Join("./", string(filepath.Separator))))
 
-	pt := filepath.Join(appPath, "conf")
-	os.Chdir(appPath)
+    pt := filepath.Join(appPath, "conf")
+    os.Chdir(appPath)
 
-	// 找到application.yml文件
-	if err = config.Load(file.NewSource(file.WithPath(pt + "/application.yml"))); err != nil {
-		panic(err)
-	}
+    // 找到application.yml文件
+    if err = config.Load(file.NewSource(file.WithPath(pt + "/application.yml"))); err != nil {
+        panic(err)
+    }
 
-	// 找到需要引入的新配置文件
-	if err = config.Get(defaultRootPath, "profiles").Scan(&profiles); err != nil {
-		panic(err)
-	}
+    // 找到需要引入的新配置文件
+    if err = config.Get(defaultRootPath, "profiles").Scan(&profiles); err != nil {
+        panic(err)
+    }
 
-	log.Logf("[InitConfig] 加载配置文件：path: %s, %+v\n", pt+"/application.yml", profiles)
+    log.Logf("[InitConfig] 加载配置文件：path: %s, %+v\n", pt+"/application.yml", profiles)
 
-	// 开始导入新文件
-	if len(profiles.GetInclude()) > 0 {
-		include := strings.Split(profiles.GetInclude(), ",")
+    // 开始导入新文件
+    if len(profiles.GetInclude()) > 0 {
+        include := strings.Split(profiles.GetInclude(), ",")
 
-		sources := make([]source.Source, len(include))
-		for i := 0; i < len(include); i++ {
-			filePath := pt + string(filepath.Separator) + defaultConfigFilePrefix + strings.TrimSpace(include[i]) + ".yml"
-			fmt.Printf(filePath + "\n")
-			sources[i] = file.NewSource(file.WithPath(filePath))
-		}
+        sources := make([]source.Source, len(include))
+        for i := 0; i < len(include); i++ {
+            filePath := pt + string(filepath.Separator) + defaultConfigFilePrefix + strings.TrimSpace(include[i]) + ".yml"
+            fmt.Printf(filePath + "\n")
+            sources[i] = file.NewSource(file.WithPath(filePath))
+        }
 
-		// 加载include的文件
-		if err = config.Load(sources...); err != nil {
-			panic(err)
-		}
-	}
+        // 加载include的文件
+        if err = config.Load(sources...); err != nil {
+            panic(err)
+        }
+    }
 
-	// 赋值
-	config.Get(defaultRootPath, "consul").Scan(&consulConfig)
-	config.Get(defaultRootPath, "mysql").Scan(&mysqlConfig)
+    // 赋值
+    config.Get(defaultRootPath, "consul").Scan(&consulConfig)
+    config.Get(defaultRootPath, "mysql").Scan(&mysqlConfig)
 
-	// 标记已经初始化
-	inited = true
+    // 标记已经初始化
+    inited = true
 }
 ```
 
@@ -379,22 +379,22 @@ func InitConfig() {
 ```go
 // defaultProfiles 属性配置文件
 type defaultProfiles struct {
-	Include string `json:"include"`
+    Include string `json:"include"`
 }
 
 // defaultConsulConfig 默认consul 配置
 type defaultConsulConfig struct {
-	Enabled bool   `json:"enabled"`
-	Host    string `json:"host"`
-	Port    int    `json:"port"`
+    Enabled bool   `json:"enabled"`
+    Host    string `json:"host"`
+    Port    int    `json:"port"`
 }
 
 // defaultMysqlConfig mysql 配置
 type defaultMysqlConfig struct {
-	URL               string `json:"url"`
-	Enable            bool   `json:"enabled"`
-	MaxIdleConnection int    `json:"maxIdleConnection"`
-	MaxOpenConnection int    `json:"maxOpenConnection"`
+    URL               string `json:"url"`
+    Enable            bool   `json:"enabled"`
+    MaxIdleConnection int    `json:"maxIdleConnection"`
+    MaxOpenConnection int    `json:"maxOpenConnection"`
 }
 ```
 
@@ -408,35 +408,35 @@ package db
 // ***
 
 var (
-	inited  bool
-	mysqlDB *sql.DB
-	m       sync.RWMutex
+    inited  bool
+    mysqlDB *sql.DB
+    m       sync.RWMutex
 )
 
 // Init 初始化数据库
 func Init() {
-	m.Lock()
-	defer m.Unlock()
+    m.Lock()
+    defer m.Unlock()
 
-	var err error
+    var err error
 
-	if inited {
-		err = fmt.Errorf("[Init] db 已经初始化过")
-		log.Logf(err)
-		return
-	}
+    if inited {
+        err = fmt.Errorf("[Init] db 已经初始化过")
+        log.Logf(err)
+        return
+    }
 
-	// 如果配置声明使用mysql
-	if config.GetMysqlConfig().GetEnabled() {
-		initMysql()
-	}
+    // 如果配置声明使用mysql
+    if config.GetMysqlConfig().GetEnabled() {
+        initMysql()
+    }
 
-	inited = true
+    inited = true
 }
 
 // GetDB 获取db
 func GetDB() *sql.DB {
-	return mysqlDB
+    return mysqlDB
 }
 
 ```
@@ -448,26 +448,26 @@ func GetDB() *sql.DB {
 ```go
 func initMysql() {
 
-	var err error
+    var err error
 
-	// 创建连接
-	mysqlDB, err = sql.Open("mysql", config.GetMysqlConfig().GetURL())
-	if err != nil {
-		log.Fatal(err)
-		panic(err)
-	}
+    // 创建连接
+    mysqlDB, err = sql.Open("mysql", config.GetMysqlConfig().GetURL())
+    if err != nil {
+        log.Fatal(err)
+        panic(err)
+    }
 
-	// 最大连接数
-	mysqlDB.SetMaxOpenConns(config.GetMysqlConfig().GetMaxOpenConnection())
+    // 最大连接数
+    mysqlDB.SetMaxOpenConns(config.GetMysqlConfig().GetMaxOpenConnection())
 
-	// 最大闲置数
-	mysqlDB.SetMaxIdleConns(config.GetMysqlConfig().GetMaxIdleConnection())
+    // 最大闲置数
+    mysqlDB.SetMaxIdleConns(config.GetMysqlConfig().GetMaxIdleConnection())
 
-	// 激活链接
-	if err = mysqlDB.Ping(); err != nil {
-		log.Fatal(err)
-		panic(err)
-	}
+    // 激活链接
+    if err = mysqlDB.Ping(); err != nil {
+        log.Fatal(err)
+        panic(err)
+    }
 }
 
 ```
@@ -488,8 +488,8 @@ package user
 // ...
 
 var (
-	s *service
-	m sync.RWMutex
+    s *service
+    m sync.RWMutex
 )
 
 // service 服务
@@ -498,28 +498,28 @@ type service struct {
 
 // Service 用户服务类
 type Service interface {
-	// QueryUserByName 根据用户名获取用户
-	QueryUserByName(userName string) (ret *proto.User, err error)
+    // QueryUserByName 根据用户名获取用户
+    QueryUserByName(userName string) (ret *proto.User, err error)
 }
 
 // GetService 获取服务类
 func GetService() (Service, error) {
-	if s == nil {
-		return nil, fmt.Errorf("[GetService] GetService 未初始化")
-	}
-	return s, nil
+    if s == nil {
+        return nil, fmt.Errorf("[GetService] GetService 未初始化")
+    }
+    return s, nil
 }
 
 // Init 初始化用户服务层
 func Init() {
-	m.Lock()
-	defer m.Unlock()
+    m.Lock()
+    defer m.Unlock()
 
-	if s != nil {
-		return
-	}
+    if s != nil {
+        return
+    }
 
-	s = &service{}
+    s = &service{}
 }
 ```
 
@@ -536,7 +536,7 @@ package model
 
 // Init 初始化模型层
 func Init() {
-	user.Init()
+    user.Init()
 }
 ```
 
@@ -550,20 +550,20 @@ package user
 // ...
 func (s *service) QueryUserByName(userName string) (ret *proto.User, err error) {
 
-	queryString := `SELECT user_id, user_name, pwd  FROM user WHERE user_name = ?`
+    queryString := `SELECT user_id, user_name, pwd  FROM user WHERE user_name = ?`
 
-	// 获取数据库
-	o := db.GetDB()
+    // 获取数据库
+    o := db.GetDB()
 
-	ret = &proto.User{}
+    ret = &proto.User{}
 
-	// 查询
-	err = o.QueryRow(queryString, userName).Scan(ret.Id, ret.Name, ret.Pwd)
-	if err != nil {
-		log.Logf("[QueryUserByName] 查询数据失败，err：%s", err)
-		return
-	}
-	return
+    // 查询
+    err = o.QueryRow(queryString, userName).Scan(ret.Id, ret.Name, ret.Pwd)
+    if err != nil {
+        log.Logf("[QueryUserByName] 查询数据失败，err：%s", err)
+        return
+    }
+    return
 }
 
 ```
@@ -582,36 +582,36 @@ package handler
 type Service struct{}
 
 var (
-	userService us.Service
+    userService us.Service
 )
 
 // Init 初始化handler
 func Init() {
 
-	var err error
-	userService, err = us.GetService()
-	if err != nil {
-		log.Fatal("[Init] 初始化Handler错误")
-		return
-	}
+    var err error
+    userService, err = us.GetService()
+    if err != nil {
+        log.Fatal("[Init] 初始化Handler错误")
+        return
+    }
 }
 
 // QueryUserByName 通过参数中的名字返回用户
 func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Response) error {
 
-	user, err := userService.QueryUserByName(req.UserName)
-	if err != nil {
-		rsp.Error = &s.Error{
-			Code:   500,
-			Detail: err.Error(),
-		}
+    user, err := userService.QueryUserByName(req.UserName)
+    if err != nil {
+        rsp.Error = &s.Error{
+            Code:   500,
+            Detail: err.Error(),
+        }
 
-		return err
-	}
+        return err
+    }
 
-	rsp.User = user
+    rsp.User = user
 
-	return nil
+    return nil
 }
 ```
 
@@ -626,42 +626,42 @@ package main
 
 func main() {
    
-	// 初始化配置、数据库等信息
-	basic.Init()
+    // 初始化配置、数据库等信息
+    basic.Init()
 
-	// 使用consul注册
-	micReg := consul.NewRegistry(registryOptions)
+    // 使用consul注册
+    micReg := consul.NewRegistry(registryOptions)
 
-	// New Service
-	service := micro.NewService(
-		micro.Name("mu.micro.book.srv.user"),
-		micro.Registry(micReg),
-		micro.Version("latest"),
-	)
+    // New Service
+    service := micro.NewService(
+        micro.Name("mu.micro.book.srv.user"),
+        micro.Registry(micReg),
+        micro.Version("latest"),
+    )
 
-	// 服务初始化
-	service.Init(
-		micro.Action(func(c *cli.Context) {
-			// 初始化模型层
-			model.Init()
-			// 初始化handler
-			handler.Init()
-		}),
-	)
+    // 服务初始化
+    service.Init(
+        micro.Action(func(c *cli.Context) {
+            // 初始化模型层
+            model.Init()
+            // 初始化handler
+            handler.Init()
+        }),
+    )
 
-	// 注册服务
-	s.RegisterServiceHandler(service.Server(), new(handler.Service))
+    // 注册服务
+    s.RegisterServiceHandler(service.Server(), new(handler.Service))
 
-	// 启动服务
-	if err := service.Run(); err != nil {
-		log.Fatal(err)
-	}
+    // 启动服务
+    if err := service.Run(); err != nil {
+        log.Fatal(err)
+    }
 }
 
 func registryOptions(ops *registry.Options) {
-	consulCfg := config.GetConsulConfig()
-	ops.Timeout = time.Second * 5
-	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
+    consulCfg := config.GetConsulConfig()
+    ops.Timeout = time.Second * 5
+    ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
 }
 ```
 
@@ -762,66 +762,66 @@ package handler
 // ...
 
 var (
-	serviceClient us.Service
+    serviceClient us.Service
 )
 
 // Error 错误结构体
 type Error struct {
-	Code   string `json:"code"`
-	Detail string `json:"detail"`
+    Code   string `json:"code"`
+    Detail string `json:"detail"`
 }
 
 func Init() {
-	serviceClient = us.NewService("mu.micro.book.srv.user", client.DefaultClient)
+    serviceClient = us.NewService("mu.micro.book.srv.user", client.DefaultClient)
 }
 
 // Login 登录入口
 func Login(w http.ResponseWriter, r *http.Request) {
 
-	// 只接受POST请求
-	if r.Method != "POST" {
-		log.Logf("非法请求")
-		http.Error(w, "非法请求", 400)
-		return
-	}
+    // 只接受POST请求
+    if r.Method != "POST" {
+        log.Logf("非法请求")
+        http.Error(w, "非法请求", 400)
+        return
+    }
 
-	r.ParseForm()
+    r.ParseForm()
 
-	// 调用后台服务
-	rsp, err := serviceClient.QueryUserByName(context.TODO(), &us.Request{
-		UserName: r.Form.Get("userName"),
-	})
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
+    // 调用后台服务
+    rsp, err := serviceClient.QueryUserByName(context.TODO(), &us.Request{
+        UserName: r.Form.Get("userName"),
+    })
+    if err != nil {
+        http.Error(w, err.Error(), 500)
+        return
+    }
 
-	// 返回结果
-	response := map[string]interface{}{
-		"ref": time.Now().UnixNano(),
-	}
+    // 返回结果
+    response := map[string]interface{}{
+        "ref": time.Now().UnixNano(),
+    }
 
-	if rsp.User.Pwd == r.Form.Get("pwd") {
-		response["success"] = rsp.Success
+    if rsp.User.Pwd == r.Form.Get("pwd") {
+        response["success"] = rsp.Success
 
-		// 干掉密码返回
-		rsp.User.Pwd = ""
-		response["data"] = rsp.User
+        // 干掉密码返回
+        rsp.User.Pwd = ""
+        response["data"] = rsp.User
 
-	} else {
-		response["success"] = false
-		response["error"] = &Error{
-			Detail: "密码错误",
-		}
-	}
+    } else {
+        response["success"] = false
+        response["error"] = &Error{
+            Detail: "密码错误",
+        }
+    }
 
-	w.Header().Add("Content-Type", "application/json; charset=utf-8")
-	
-	// 返回JSON结构
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
+    w.Header().Add("Content-Type", "application/json; charset=utf-8")
+    
+    // 返回JSON结构
+    if err := json.NewEncoder(w).Encode(response); err != nil {
+        http.Error(w, err.Error(), 500)
+        return
+    }
 }
 ```
 
