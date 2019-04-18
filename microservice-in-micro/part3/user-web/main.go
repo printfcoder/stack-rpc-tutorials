@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/config"
+	_ "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/plugins/session"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-web/handler"
 	"github.com/micro/cli"
 	"github.com/micro/go-log"
@@ -45,6 +46,7 @@ func main() {
 	service.HandleFunc("/user/login", handler.Login)
 	// 注册退出接口
 	service.HandleFunc("/user/logout", handler.Logout)
+	service.HandleFunc("/user/test", handler.TestSession)
 
 	// 运行服务
 	if err := service.Run(); err != nil {

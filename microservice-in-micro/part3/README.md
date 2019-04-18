@@ -1,4 +1,4 @@
-# 第二章 库存服务、订单服务、支付服务与Session管理 doing
+# 第三章 库存服务、订单服务、支付服务与Session管理 doing
 
 我们先回顾下前面两章我们完成的工作
 
@@ -7,38 +7,205 @@
 
 待完成工作
 
-- session管理
+- session 管理
 
-而本章我们要完成剩下的几个web服务，**orders-web**，**inventory-web**和**payment-web**，以及它们各自对应的服务层应用**orders-service**，**inventory-service**和**payment-service**
+而本章我们要完成剩下的几个web服务以及它们各自对应的服务层应用
+
+- **orders-web**、**orders-service**
+- **inventory-service**
+- **payment-web**、**payment-service**
 
 下面我们大体介绍下三个web和service服务主要有哪些功能
 
-|服务|接口|---|
+|服务|接口|说明|
 |---|---|---|
-|orders|---|---|
-|inventory|---|---|
-|payment|---|---|
+|orders|QueryUserOrders|用户订单查询|
+|inventory|QueryBooks，GetBookById|查询库存、书籍详情|
+|payment|QueryUserPayments, PayForOrder|支付列表、支付订单|
 
-[上一章][第二章]我们初步完成了用户服务部分的两个子服务**user-web**和**user-service**。但是最后我们并没有实现session管理，以及抽离公用基础包。
+因为几个web是各自分布的，所以，我们需要一个session在几个web之间流转，共享当前用户会话信息。
 
-在本篇中，我们除了完成抽离公用基础包，还要实现请求认证服务auth（session管理我们需要放到下一章节来完成，因为现在我们的web服务太少，不方便看效果）。
+所以，接下来，我们先从session开始
 
-后面的章节中，user-web，orders-web，inventory-web等接收到的需要认证的请求都要向auth确认。
+## session
 
-本章我们要实现**Auth**服务的工作架构如下图：
+什么是session，session一般称作会话，服务端与客户端建立连接时，服务端用来确定客户端身份的一种临时状态，它的生命周期取决于服务端何时删除会话或客户端主动关闭连接。
 
-![](../docs/part2_auth_layer_view.png)
+首先，为什么我们要引入session，这是因为http在客户端与服务端之间彼此信息交互时，是没有状态的，即是说多次请求，都无法确认用户身份。所以我们需要使用session会话这种能够确认身份的机制。
 
-- 当用户请求每个web服务时，会有**wrapper**调用**auth**确定认证结果，并缓存合法结果30分钟。
-- 当用户退出时，**auth**广播，各服务**sub**清掉缓存。
+那么，怎么样生成和管理session才使得http请求有状态呢？
 
-我们的缓存使用**redis**。
+我们简单用流程图表示
 
-同时，我们将就在第一章的基础上改动一番，直接把代码复制一份，将import指令中的part1路径换成part2即可。
+![](../docs/part3_session_flow.png)
+
+首先，如果服务器要知道请求是一个客户端发出的，那么就需要用户在每次请求时都带上一个身份识别id，我们叫它**sessionId**。
+
+如何带上这个**sessionId**？主要有两种方式：
+
+- 第一次请求时通过重定向或跳转将sessionId附加到url后变成参数，比如**http://www.micro.mu?sessionId=123**。
+- 通过 cookies 保存在客户端，每次请求时存放有sessionId的cookies会被传到服务器。
+
+两种方式都有各种的优势，前者不需要cookie支持，在客户端禁掉cookie时仍能工作。后者可以通过自包含可以存放更多信息，只是要让客户端打开cookie缓存。
+
+由上面的流程图中我们可以看到，服务端在获取**sessionId**后会向已经缓存起来的哈希表中查找，如果不存在，就会生成新的跳转回去让客户端重新请求（也可能会继续往下处理，看业务与技术设计，并无标准答案，但是道理一致）
+
+至于生成sessionId的逻辑与安全因素，还有实现session管理包，这大大超过了本系列的讨论范畴，我们不考虑，直接使用开源的现成包即可。
+
+我们使用[gorilla的session][gorilla-session]包，它采用的是cookie的解决方案：
+
+```bash
+$ go get -v github.com/gorilla/sessions
+```
+
+**gorilla-session**使用起来非常简单，我们着重使用，不过多介绍它，有兴趣的同学可以翻阅[资料][gorilla-session]。
+
+我们定义一个**gorilla.go**文件，将其放到插件包[**plugin**](./plugins/session/gorilla.go)下，需要引用的web服务直接import该包即可。
+
+我们也不去封装，直接使用原生的方法，尽管不太优雅，毕竟不是本系列的重点。
+
+**gorilla.go**
+
+```go
+package session
+
+// ...
+
+var (
+    sessionIdNamePrefix = "session-id-"
+    store               *sessions.CookieStore
+)
+
+func init() {
+    // 随机生成加密的key，切记，正式环境一定不要暴露，通过写到环境变量或其它安全方式
+    // 我们是为了演示的步骤简单些，才直接硬编码
+    store = sessions.NewCookieStore([]byte("OnNUU5RUr6Ii2HMI0d6E54bXTS52tCCL"))
+}
+
+// GetSession 获取当前会话session
+func GetSession(w http.ResponseWriter, r *http.Request) *sessions.Session {
+
+    // sessionId
+    var sId string
+
+    for _, c := range r.Cookies() {
+        if strings.Index(c.Name, sessionIdNamePrefix) == 0 {
+            sId = c.Name
+            break
+        }
+    }
+
+    // 如果cookie中没有sessionId的值，则使用随机生成
+    if sId == "" {
+        sId = sessionIdNamePrefix + uuid.New().String()
+    }
+
+    // 忽略错误，因为Get方法会一直都返回session
+    ses, _ := store.Get(r, sId)
+    // 没有id说明是新session
+    if ses.ID == "" {
+        // 将sessionId设置到cookie中
+        cookie := &http.Cookie{Name: sId, Value: sId, Path: "/", Expires: time.Now().Add(30 * time.Second), MaxAge: 0}
+        http.SetCookie(w, cookie)
+
+        // 保存新的session
+        ses.ID = sId
+        ses.Save(r, w)
+    }
+    return ses
+}
+```
+
+- 再次提醒，**NewCookieStore**的密钥一定不要硬编码到代码中，这样非常不安全，要写到配置中或其它相对安全的方式。
+
+上述代码获取当前session的方法**GetSession**，它先从cookie中获取是否有**session-id**为前缀的key，如果有，它就是session的密文。不过，这里有个漏洞，就是我们显式在cookies中声明某个value是**session-id**。
+
+一般而言，为了安全，我们不会称名字为叫**session-id**，而是换个其它名称，而且也不会把值直接暴露，会再进行一次加密。同时，我们也不能暴露cookie中每个键值对的彼此之间的关系，这样安全。
+
+不过，细心的朋友可能会发现一个bug，我们来看下面**GetSession**的片段代码
+
+```go
+// GetSession 获取当前会话session
+func GetSession(w http.ResponseWriter, r *http.Request) *sessions.Session {
+
+    // ...
+    for _, c := range r.Cookies() {
+        if strings.Index(c.Name, sessionIdNamePrefix) == 0 {
+            sId = c.Name
+            break
+        }
+    }
+```
+
+当for循环找到第一个名称前缀为**session-id**的cookie时，就会认为这个Name即为我们要找的session，其实，客户端是可以存在多条Name前缀为**session-id**的cookie的。为了简便我们不去优化，朋友们可以自行优化。
+
+session管理部分的代码我们基本写完了。接下来我们要开始写业务逻辑代码
 
 ## 开始写代码
 
+由于前面两章我们已经介绍了如何编写web和service服务，剩下的几个服务与**user**相比也没有特别的地方，所以我们直接略过非必要的业务代码介绍，大家直接翻看相关目录的代码，以及建表记录可在[schema.sql](./docs/schema.sql)查看。
+
+各服务生成模型命令：
+
+**inventory-service**
+
+```bash
+$  micro new --namespace=mu.micro.book --type=srv --alias=inventory github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-service
+```
+
+**order-web**
+
+```bash
+$  micro new --namespace=mu.micro.book --type=web --alias=order github.com/micro-in-cn/tutorials/microservice-in-micro/part3/order-web
+```
+
+**order-service**
+
+```bash
+$  micro new --namespace=mu.micro.book --type=srv --alias=order github.com/micro-in-cn/tutorials/microservice-in-micro/part3/order-service
+```
+
+**payment-web**
+
+```bash
+$  micro new --namespace=mu.micro.book --type=web --alias=payment github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-web
+```
+
+**payment-service**
+
+```bash
+$  micro new --namespace=mu.micro.book --type=srv --alias=payment github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-service
+```
+
+服务生成后，我们需要解决下面几个问题：
+
+- 如何在多个web服务之间，共享session
+- **order-service**订单服务，**inventory-service**库存服务，**payment-service**支付服务之间如何协作，确认下单与支付。
+
+第一个问题，如何在多个web服务之间，共享session。上面的**GetSession**中我们明显看到，每个web服务都是自己有**GetSession**方法的，那要如何保证它们对于同一客户端得到的session是一样的呢？
+
+由于我们采用的是**gorilla-session**，它支持两种方式让各web之间共享session
+
+- 基于CookieStore，各节点只要加密的密钥一致，即可共享缓存在cookie中的session信息
+- 自定义store服务端存储，详见[服务端存储实现](https://github.com/gorilla/sessions/blob/master/README.md#store-implementations)
+
+为了简单，我们使用基于Cookie的方案。而这个方案只要求各节点之间共享密钥：
+
+```go
+sessions.NewCookieStore([]byte("OnNUU5RUr6Ii2HMI0d6E54bXTS52tCCL"))
+```
+
+在调用**NewCookieStore**时，我们需要传入相同的密钥即可，各web服务都会使用同一密钥解密cookie中的session，得到同样的结果，从而保证会话可共享。
+
+第二个问题，**inventory-service**服务销存一笔记录时，如何确保该笔记录被消费。我们用下图来描述：
+
+![](../docs/part3_order_and_pay_flow.png)
+
+
+
 ## 总结
+
+- 每个proto文件都有一个错误类，属于冗余代码
 
 ## 系列文章
 
@@ -58,6 +225,8 @@
 
 ## 延伸阅读
 
+[gorilla-session][gorilla-session]
+
 
 [micro-new]: https://github.com/micro-in-cn/all-in-one/tree/master/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
@@ -67,6 +236,8 @@
 [go-web]: https://github.com/micro/go-web
 [go-broker]: https://github.com/micro/go-micro/broker
 [jwt]: https://jwt.io/introduction/
+[gorilla-session]: https://github.com/gorilla/sessions
+
 
 [第一章]: ../part1
 [第二章]: ../part2

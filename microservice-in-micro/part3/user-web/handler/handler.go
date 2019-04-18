@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/plugins/session"
 	"github.com/micro/go-log"
 	"net/http"
 	"time"
@@ -142,4 +143,20 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
+}
+
+func TestSession(w http.ResponseWriter, r *http.Request) {
+	sess := session.GetSession(w, r)
+
+	if v, ok := sess.Values["path"]; !ok {
+		sess.Values["path"] = r.URL.Query().Get("path")
+		log.Logf("path:" + r.URL.Query().Get("path"))
+	} else {
+		log.Logf(v.(string))
+	}
+
+	log.Logf(sess.ID)
+	log.Logf(sess.Name())
+
+	w.Write([]byte("OK"))
 }
