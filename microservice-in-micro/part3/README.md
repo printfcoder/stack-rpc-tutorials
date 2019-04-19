@@ -143,6 +143,34 @@ session管理部分的代码我们基本写完了。接下来我们要开始写�
 
 ## 开始写代码
 
+在开始写之前，我们先总结一下要解决的几个问题：
+
+- 如何在多个web服务之间，共享session
+- **order-service**订单服务，**inventory-service**库存服务，**payment-service**支付服务之间如何协作，确认下单与支付。
+
+第一个问题，如何在多个web服务之间，共享session。上面的**GetSession**中我们明显看到，每个web服务都是自己有**GetSession**方法的，那要如何保证它们对于同一客户端得到的session是一样的呢？
+
+由于我们采用的是**gorilla-session**，它支持两种方式让各web之间共享session
+
+- 基于CookieStore，各节点只要加密的密钥一致，即可共享缓存在cookie中的session信息
+- 自定义store服务端存储，详见[服务端存储实现](https://github.com/gorilla/sessions/blob/master/README.md#store-implementations)
+
+为了简单，我们使用基于Cookie的方案。而这个方案只要求各节点之间共享密钥：
+
+```go
+sessions.NewCookieStore([]byte("OnNUU5RUr6Ii2HMI0d6E54bXTS52tCCL"))
+```
+
+在调用**NewCookieStore**时，我们需要传入相同的密钥即可，各web服务都会使用同一密钥解密cookie中的session，得到同样的结果，从而保证会话可共享。
+
+第二个问题，**inventory-service**服务销存一笔记录时，如何确保该笔记录被消费。我们用下图来描述：
+
+![](../docs/part3_order_and_pay_flow.png)
+
+图中，蓝色是下单流程，红色是支付流程，两个流程都会走向inventory服务。
+
+### 生成服务代码
+
 由于前面两章我们已经介绍了如何编写web和service服务，剩下的几个服务与**user**相比也没有特别的地方，所以我们直接略过非必要的业务代码介绍，大家直接翻看相关目录的代码，以及建表记录可在[schema.sql](./docs/schema.sql)查看。
 
 各服务生成模型命令：
@@ -176,32 +204,34 @@ $  micro new --namespace=mu.micro.book --type=web --alias=payment github.com/mic
 ```bash
 $  micro new --namespace=mu.micro.book --type=srv --alias=payment github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-service
 ```
+### 下单与支付
 
-服务生成后，我们需要解决下面几个问题：
+下单流程
 
-- 如何在多个web服务之间，共享session
-- **order-service**订单服务，**inventory-service**库存服务，**payment-service**支付服务之间如何协作，确认下单与支付。
+|---|服务名|接口|说明|
+|---|---|---|---|
+|1|**orders-web**|/orders/new|用户向该接口提交订单|
+|2|**orders-service**|Orders.New|web向service提交订单|
+|3|**inventory-service**|Inventory.Sell|service向库存服务请求销存|
 
-第一个问题，如何在多个web服务之间，共享session。上面的**GetSession**中我们明显看到，每个web服务都是自己有**GetSession**方法的，那要如何保证它们对于同一客户端得到的session是一样的呢？
+支付流程
 
-由于我们采用的是**gorilla-session**，它支持两种方式让各web之间共享session
+|---|服务名|接口|说明|
+|---|---|---|---|
+|1|**payment-web**|/payment/pay-order|用户向该接口提交支付|
+|2|**payment-service**|Payment.PayOrder|web向service交支付|
+|3|**inventory-service**|Inventory.Confirm|service向库存服务确认出库|
+|4|**payment-service**|pub：mu.micro.book.topic.payment.done|service广播支付完成|
+|5|**orders-service**|sub：mu.micro.book.topic.payment.done|接收支付完成消息|
 
-- 基于CookieStore，各节点只要加密的密钥一致，即可共享缓存在cookie中的session信息
-- 自定义store服务端存储，详见[服务端存储实现](https://github.com/gorilla/sessions/blob/master/README.md#store-implementations)
+我们从最底层的**inventory-service**库存服务开始编写
 
-为了简单，我们使用基于Cookie的方案。而这个方案只要求各节点之间共享密钥：
+### 库存服务
 
-```go
-sessions.NewCookieStore([]byte("OnNUU5RUr6Ii2HMI0d6E54bXTS52tCCL"))
-```
+库存服务有两个大功能
 
-在调用**NewCookieStore**时，我们需要传入相同的密钥即可，各web服务都会使用同一密钥解密cookie中的session，得到同样的结果，从而保证会话可共享。
-
-第二个问题，**inventory-service**服务销存一笔记录时，如何确保该笔记录被消费。我们用下图来描述：
-
-![](../docs/part3_order_and_pay_flow.png)
-
-
+- Sell 销存，调用此接口时，库存数会减一，但是会标记为未出库状态
+- Confirm 确认销存，调用此接口会把销存确认为出库
 
 ## 总结
 
@@ -226,7 +256,6 @@ sessions.NewCookieStore([]byte("OnNUU5RUr6Ii2HMI0d6E54bXTS52tCCL"))
 ## 延伸阅读
 
 [gorilla-session][gorilla-session]
-
 
 [micro-new]: https://github.com/micro-in-cn/all-in-one/tree/master/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
