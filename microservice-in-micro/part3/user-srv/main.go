@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/config"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-service/handler"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-service/model"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/handler"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/model"
 	"github.com/micro/cli"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
@@ -13,7 +13,7 @@ import (
 	"github.com/micro/go-micro/registry/consul"
 	"time"
 
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-service/proto/service"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/proto/service"
 )
 
 func main() {

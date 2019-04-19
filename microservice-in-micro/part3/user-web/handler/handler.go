@@ -9,7 +9,7 @@ import (
 	"time"
 
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
-	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-service/proto/service"
+	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/proto/service"
 	"github.com/micro/go-micro/client"
 )
 
