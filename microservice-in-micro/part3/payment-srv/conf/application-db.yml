@@ -1,0 +1,6 @@
+app:
+  mysql:
+    enabled: true
+    url: root:123@(127.0.0.1:3306)/micro_book_mall?charset=utf8&parseTime=true&loc=Asia%2FShanghai
+    maxIdleConnection: 100
+    maxOpenConnection: 130

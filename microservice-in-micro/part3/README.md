@@ -12,16 +12,10 @@
 而本章我们要完成剩下的几个web服务以及它们各自对应的服务层应用
 
 - **orders-web**、**orders-service**
-- **inventory-service**
+- **inventory-srv**
 - **payment-web**、**payment-service**
 
-下面我们大体介绍下三个web和service服务主要有哪些功能
-
-|服务|接口|说明|
-|---|---|---|
-|orders|QueryUserOrders|用户订单查询|
-|inventory|QueryBooks，GetBookById|查询库存、书籍详情|
-|payment|QueryUserPayments, PayForOrder|支付列表、支付订单|
+下面我们大体介绍下个web和service服务主要有哪些功能
 
 因为几个web是各自分布的，所以，我们需要一个session在几个web之间流转，共享当前用户会话信息。
 
@@ -146,7 +140,7 @@ session管理部分的代码我们基本写完了。接下来我们要开始写�
 在开始写之前，我们先总结一下要解决的几个问题：
 
 - 如何在多个web服务之间，共享session
-- **order-service**订单服务，**inventory-service**库存服务，**payment-service**支付服务之间如何协作，确认下单与支付。
+- **order-service**订单服务，**inventory-srv**库存服务，**payment-service**支付服务之间如何协作，确认下单与支付。
 
 第一个问题，如何在多个web服务之间，共享session。上面的**GetSession**中我们明显看到，每个web服务都是自己有**GetSession**方法的，那要如何保证它们对于同一客户端得到的session是一样的呢？
 
@@ -163,7 +157,7 @@ sessions.NewCookieStore([]byte("OnNUU5RUr6Ii2HMI0d6E54bXTS52tCCL"))
 
 在调用**NewCookieStore**时，我们需要传入相同的密钥即可，各web服务都会使用同一密钥解密cookie中的session，得到同样的结果，从而保证会话可共享。
 
-第二个问题，**inventory-service**服务销存一笔记录时，如何确保该笔记录被消费。我们用下图来描述：
+第二个问题，**inventory-srv**服务销存一笔记录时，如何确保该笔记录被消费。我们用下图来描述：
 
 ![](../docs/part3_order_and_pay_flow.png)
 
@@ -175,22 +169,22 @@ sessions.NewCookieStore([]byte("OnNUU5RUr6Ii2HMI0d6E54bXTS52tCCL"))
 
 各服务生成模型命令：
 
-**inventory-service**
+**inventory-srv**
 
 ```bash
-$  micro new --namespace=mu.micro.book --type=srv --alias=inventory github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-service
+$  micro new --namespace=mu.micro.book --type=srv --alias=inventory github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv
 ```
 
 **order-web**
 
 ```bash
-$  micro new --namespace=mu.micro.book --type=web --alias=order github.com/micro-in-cn/tutorials/microservice-in-micro/part3/order-web
+$  micro new --namespace=mu.micro.book --type=web --alias=order github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-web
 ```
 
 **order-service**
 
 ```bash
-$  micro new --namespace=mu.micro.book --type=srv --alias=order github.com/micro-in-cn/tutorials/microservice-in-micro/part3/order-service
+$  micro new --namespace=mu.micro.book --type=srv --alias=order github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv
 ```
 
 **payment-web**
@@ -202,8 +196,9 @@ $  micro new --namespace=mu.micro.book --type=web --alias=payment github.com/mic
 **payment-service**
 
 ```bash
-$  micro new --namespace=mu.micro.book --type=srv --alias=payment github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-service
+$  micro new --namespace=mu.micro.book --type=srv --alias=payment github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv
 ```
+
 ### 下单与支付
 
 下单流程
@@ -212,7 +207,7 @@ $  micro new --namespace=mu.micro.book --type=srv --alias=payment github.com/mic
 |---|---|---|---|
 |1|**orders-web**|/orders/new|用户向该接口提交订单|
 |2|**orders-service**|Orders.New|web向service提交订单|
-|3|**inventory-service**|Inventory.Sell|service向库存服务请求销存|
+|3|**inventory-srv**|Inventory.Sell|service向库存服务请求销存|
 
 支付流程
 
@@ -220,11 +215,11 @@ $  micro new --namespace=mu.micro.book --type=srv --alias=payment github.com/mic
 |---|---|---|---|
 |1|**payment-web**|/payment/pay-order|用户向该接口提交支付|
 |2|**payment-service**|Payment.PayOrder|web向service交支付|
-|3|**inventory-service**|Inventory.Confirm|service向库存服务确认出库|
+|3|**inventory-srv**|Inventory.Confirm|service向库存服务确认出库|
 |4|**payment-service**|pub：mu.micro.book.topic.payment.done|service广播支付完成|
 |5|**orders-service**|sub：mu.micro.book.topic.payment.done|接收支付完成消息|
 
-我们从最底层的**inventory-service**库存服务开始编写
+我们从最底层的**inventory-srv**库存服务开始编写
 
 ### 库存服务
 
@@ -232,6 +227,191 @@ $  micro new --namespace=mu.micro.book --type=srv --alias=payment github.com/mic
 
 - Sell 销存，调用此接口时，库存数会减一，但是会标记为未出库状态
 - Confirm 确认销存，调用此接口会把销存确认为出库
+
+[inventory_post.go](./inventory-srv/model/inventory/inventory_post.go)
+
+```go
+package inventory
+
+// ...
+
+// Sell 销存
+func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
+
+	// 获取数据库
+	o := db.GetDB()
+	tx, err := o.Begin()
+	if err != nil {
+		log.Logf("[Sell] 事务开启失败", err.Error())
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
+
+	querySQL := `SELECT id, book_id, unit_price, stock, version FROM inventory WHERE book_id = ?`
+
+	inv := &proto.Inv{}
+
+	updateSQL := `UPDATE inventory SET stock = ?, version = ?  WHERE book_id = ? AND version = ?`
+
+	// 销存方法，通过version字段避免脏写
+	var minusInv func() error
+	minusInv = func() (errIn error) {
+
+		// 查询
+		errIn = o.QueryRow(querySQL, bookId).Scan(&inv.Id, &inv.BookId, &inv.UnitPrice, &inv.Stock, &inv.Version)
+		if err != nil {
+			log.Logf("[Sell] 查询数据失败，err：%s", err)
+			return err
+		}
+
+		if inv.Stock < 1 {
+			log.Logf("[Sell] 库存不足，err：%s", err)
+			return err
+		}
+
+		r, errIn := o.Exec(updateSQL, inv.Stock-1, inv.Version+1, bookId, inv.Version)
+		if errIn != nil {
+			log.Logf("[Sell] 更新库存数据失败，err：%s", errIn)
+			return
+		}
+
+		if affected, _ := r.RowsAffected(); affected == 0 {
+			log.Logf("[Sell] 更新库存数据失败，版本号%d过期，即将重试", inv.Version)
+			minusInv()
+		}
+
+		return
+	}
+
+	// 开始销存
+	err = minusInv()
+	if err != nil {
+		log.Logf("[Sell] 销存失败，err：%s", err)
+		return
+	}
+
+	insertSQL := `INSERT inventory_history (book_id, user_id, state) VALUE (?, ?, ?) `
+	r, err := o.Exec(insertSQL, bookId, userId, common.InventoryHistoryStateNotOut)
+	if err != nil {
+		log.Logf("[Sell] 新增销存记录失败，err：%s", err)
+		return
+	}
+
+	id, _ = r.LastInsertId()
+
+	// 忽略error
+	tx.Commit()
+
+	return
+}
+
+// Confirm 确认销存
+func (s *service) Confirm(id int64, state int) (err error) {
+
+	updateSQL := `UPDATE inventory_history SET state = ? WHERE id = ?;`
+
+	// 获取数据库
+	o := db.GetDB()
+
+	// 查询
+	_, err = o.Exec(updateSQL, state, id)
+	if err != nil {
+		log.Logf("[Confirm] 更新失败，err：%s", err)
+		return
+	}
+	return
+}
+```
+
+#### Sell
+
+**Confirm**方法执行的逻辑比较简单，就是通过流水号（inventory_history表的id）更新支付状态。
+
+我们重点讲一下**Sell**流程，因为**Sell**方法会对两张表进行写操作，故而我们需要开启事务
+
+```go
+    o := db.GetDB()
+	tx, err := o.Begin()
+	if err != nil {
+		log.Logf("[Sell] 事务开启失败", err.Error())
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
+```
+
+并在通过**defer**指令声明在方法执行完后查错再回滚。
+
+而后我们又定义了**minusInv**内部方法，该方法用来减小库存，因为库存操作可能是并发的，可能会有很多请求同时操作一笔数据，所以我们加了**version**版本号来确认没有脏写。
+
+```go
+    minusInv = func() (errIn error) {
+
+		// 查询
+		errIn = o.QueryRow(querySQL, bookId).Scan(&inv.Id, &inv.BookId, &inv.UnitPrice, &inv.Stock, &inv.Version)
+		if err != nil {
+			log.Logf("[Sell] 查询数据失败，err：%s", err)
+			return err
+		}
+
+		if inv.Stock < 1 {
+			log.Logf("[Sell] 库存不足，err：%s", err)
+			return err
+		}
+
+		r, errIn := o.Exec(updateSQL, inv.Stock-1, inv.Version+1, bookId, inv.Version)
+		if errIn != nil {
+			log.Logf("[Sell] 更新库存数据失败，err：%s", errIn)
+			return
+		}
+
+		if affected, _ := r.RowsAffected(); affected == 0 {
+			log.Logf("[Sell] 更新库存数据失败，版本号%d过期，即将重试", inv.Version)
+			minusInv()
+		}
+
+		return
+	}
+```
+
+**minusInv**方法内部会有递归，在**version**版本号过期后会重新执行。更新记录成功后，再插入历史记录，标记出单状态为**未出库**
+
+```go
+    insertSQL := `INSERT inventory_history (book_id, user_id, state) VALUE (?, ?, ?) `
+	r, err := o.Exec(insertSQL, bookId, userId, common.InventoryHistoryStateNotOut)
+	if err != nil {
+		log.Logf("[Sell] 新增销存记录失败，err：%s", err)
+		return
+	}
+
+    // 返回历史记录id，作为流水号使用
+	id, _ = r.LastInsertId()
+```
+
+最后，提交事务
+
+```go
+	tx.Commit()
+```
+
+### 订单服务与支付服务
+
+订单与支付服务我们分别有两个接口要做：
+
+- /orders/new，用户使用该接口进行下单操作
+- /payment/pay-order，用户使用该接口进行下单操作
+
+订单服务由两个子服务组成，**orders-web**和**orders-service**前者作为订单服务的门面层，后者则是真正的核心业务层。
+
+由于两个服务与前面我们所说服务并无特别的地方，我们跳过非核心代码解读。感兴趣的朋友可以直接翻阅代码[orders-web](./orders-web)和[orders-service](./orders-service)
+
 
 ## 总结
 

@@ -3,7 +3,7 @@ package inventory
 import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/db"
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-service/proto/inventory"
+	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/service"
 	"github.com/micro/go-log"
 )
 
@@ -59,6 +59,7 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 		return
 	}
 
+	// 开始销存
 	err = minusInv()
 	if err != nil {
 		log.Logf("[Sell] 销存失败，err：%s", err)
@@ -72,6 +73,7 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 		return
 	}
 
+	// 返回历史记录id，作为流水号使用
 	id, _ = r.LastInsertId()
 
 	// 忽略error
@@ -88,7 +90,7 @@ func (s *service) Confirm(id int64, state int) (err error) {
 	// 获取数据库
 	o := db.GetDB()
 
-	// 查询
+	// 更新
 	_, err = o.Exec(updateSQL, state, id)
 	if err != nil {
 		log.Logf("[Confirm] 更新失败，err：%s", err)
