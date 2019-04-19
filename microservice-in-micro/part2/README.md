@@ -1,6 +1,6 @@
 # 第二章 权限服务
 
-[上一章][第一章]我们初步完成了用户服务部分的两个子服务**user-web**和**user-service**。但是最后我们并没有实现session管理，以及抽离公用基础包。
+[上一章][第一章]我们初步完成了用户服务部分的两个子服务**user-web**和**user-srv**。但是最后我们并没有实现session管理，以及抽离公用基础包。
 
 在本篇中，我们除了完成抽离公用基础包，还要实现请求认证服务auth（session管理我们需要放到下一章节来完成，因为现在我们的web服务太少，不方便看效果）。
 
@@ -40,7 +40,7 @@
 │       ├── db.go
 │       └── mysql.go
 ├── docs
-├── user-service
+├── user-srv
 └── user-web
 ```
 
@@ -760,10 +760,10 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 $ micro --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
 ```
 
-运行user-service
+运行user-srv
 
 ```bash
-$ cd user-service
+$ cd user-srv
 $ go run main.go plugin.go 
 ```
 
@@ -811,7 +811,7 @@ $ curl --request POST \
 
 ## 总结
 
-本章我们在第一章的基础上增加认证服务auth，并优化了**user-web**和**user-service**服务，把基础组件抽到公用包中。
+本章我们在第一章的基础上增加认证服务auth，并优化了**user-web**和**user-srv**服务，把基础组件抽到公用包中。
 
 我们本章用到的Micro技术点有（依次从文章开始到结束）
 

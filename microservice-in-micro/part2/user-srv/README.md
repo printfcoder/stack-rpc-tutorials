@@ -19,7 +19,7 @@ make build
 运行二进制文件
 
 ```
-./user-service
+./user-srv
 ```
 
 打包成docker镜像
