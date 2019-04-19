@@ -11,9 +11,9 @@
 
 而本章我们要完成剩下的几个web服务以及它们各自对应的服务层应用
 
-- **orders-web**、**orders-service**
+- **orders-web**、**orders-srv**
 - **inventory-srv**
-- **payment-web**、**payment-service**
+- **payment-web**、**payment-srv**
 
 下面我们大体介绍下个web和service服务主要有哪些功能
 
@@ -71,7 +71,7 @@ var (
 )
 
 func init() {
-    // 随机生成加密的key，切记，正式环境一定不要暴露，通过写到环境变量或其它安全方式
+    // 随机生成32位加密的key，切记，正式环境一定不要暴露，通过写到环境变量或其它安全方式
     // 我们是为了演示的步骤简单些，才直接硬编码
     store = sessions.NewCookieStore([]byte("OnNUU5RUr6Ii2HMI0d6E54bXTS52tCCL"))
 }
@@ -140,7 +140,7 @@ session管理部分的代码我们基本写完了。接下来我们要开始写�
 在开始写之前，我们先总结一下要解决的几个问题：
 
 - 如何在多个web服务之间，共享session
-- **order-service**订单服务，**inventory-srv**库存服务，**payment-service**支付服务之间如何协作，确认下单与支付。
+- **orders-srv**订单服务，**inventory-srv**库存服务，**payment-srv**支付服务之间如何协作，确认下单与支付。
 
 第一个问题，如何在多个web服务之间，共享session。上面的**GetSession**中我们明显看到，每个web服务都是自己有**GetSession**方法的，那要如何保证它们对于同一客户端得到的session是一样的呢？
 
@@ -163,6 +163,9 @@ sessions.NewCookieStore([]byte("OnNUU5RUr6Ii2HMI0d6E54bXTS52tCCL"))
 
 图中，蓝色是下单流程，红色是支付流程，两个流程都会走向inventory服务。
 
+- 下单流程最后一步调用库存服务**Inventory.Sell**生成一笔记录但标记为未出单，并返回订单orderId
+- 支付流程最后一步调用库存服务**Inventory.Confirm**确认将未出单的库存记录设置置为出单，并广播支付成功消息。
+
 ### 生成服务代码
 
 由于前面两章我们已经介绍了如何编写web和service服务，剩下的几个服务与**user**相比也没有特别的地方，所以我们直接略过非必要的业务代码介绍，大家直接翻看相关目录的代码，以及建表记录可在[schema.sql](./docs/schema.sql)查看。
@@ -181,7 +184,7 @@ $  micro new --namespace=mu.micro.book --type=srv --alias=inventory github.com/m
 $  micro new --namespace=mu.micro.book --type=web --alias=order github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-web
 ```
 
-**order-service**
+**order-srv**
 
 ```bash
 $  micro new --namespace=mu.micro.book --type=srv --alias=order github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv
@@ -193,7 +196,7 @@ $  micro new --namespace=mu.micro.book --type=srv --alias=order github.com/micro
 $  micro new --namespace=mu.micro.book --type=web --alias=payment github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-web
 ```
 
-**payment-service**
+**payment-srv**
 
 ```bash
 $  micro new --namespace=mu.micro.book --type=srv --alias=payment github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv
@@ -206,7 +209,7 @@ $  micro new --namespace=mu.micro.book --type=srv --alias=payment github.com/mic
 |---|服务名|接口|说明|
 |---|---|---|---|
 |1|**orders-web**|/orders/new|用户向该接口提交订单|
-|2|**orders-service**|Orders.New|web向service提交订单|
+|2|**orders-srv**|Orders.New|web向service提交订单|
 |3|**inventory-srv**|Inventory.Sell|service向库存服务请求销存|
 
 支付流程
@@ -214,10 +217,10 @@ $  micro new --namespace=mu.micro.book --type=srv --alias=payment github.com/mic
 |---|服务名|接口|说明|
 |---|---|---|---|
 |1|**payment-web**|/payment/pay-order|用户向该接口提交支付|
-|2|**payment-service**|Payment.PayOrder|web向service交支付|
+|2|**payment-srv**|Payment.PayOrder|web向service交支付|
 |3|**inventory-srv**|Inventory.Confirm|service向库存服务确认出库|
-|4|**payment-service**|pub：mu.micro.book.topic.payment.done|service广播支付完成|
-|5|**orders-service**|sub：mu.micro.book.topic.payment.done|接收支付完成消息|
+|4|**payment-srv**|pub：mu.micro.book.topic.payment.done|service广播支付完成|
+|5|**orders-srv**|sub：mu.micro.book.topic.payment.done|接收支付完成消息|
 
 我们从最底层的**inventory-srv**库存服务开始编写
 
@@ -408,9 +411,9 @@ func (s *service) Confirm(id int64, state int) (err error) {
 - /orders/new，用户使用该接口进行下单操作
 - /payment/pay-order，用户使用该接口进行下单操作
 
-订单服务由两个子服务组成，**orders-web**和**orders-service**前者作为订单服务的门面层，后者则是真正的核心业务层。
+订单服务由两个子服务组成，**orders-web**和**orders-srv**前者作为订单服务的门面层，后者则是真正的核心业务层。
 
-由于两个服务与前面我们所说服务并无特别的地方，我们跳过非核心代码解读。感兴趣的朋友可以直接翻阅代码[orders-web](./orders-web)和[orders-service](./orders-service)
+由于两个服务与前面我们所说服务并无特别的地方，我们跳过非核心代码解读。感兴趣的朋友可以直接翻阅代码[orders-web](./orders-web)和[orders-srv](./orders-srv)
 
 
 ## 总结

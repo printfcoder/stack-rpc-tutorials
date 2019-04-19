@@ -14,7 +14,7 @@ var (
 )
 
 func init() {
-	// 随机生成加密的key，切记，正式环境一定不要暴露，通过写到环境变量或其它安全方式
+	// 随机生成32位加密的key，切记，正式环境一定不要暴露，通过写到环境变量或其它安全方式
 	// 我们是为了演示的步骤简单些，才直接硬编码
 	store = sessions.NewCookieStore([]byte("OnNUU5RUr6Ii2HMI0d6E54bXTS52tCCL"))
 }
