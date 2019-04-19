@@ -8,7 +8,7 @@ proto:
 .PHONY: build
 build: proto
 
-	go build -o user-service main.go plugin.go
+	go build -o user-srv main.go plugin.go
 
 .PHONY: test
 test:
@@ -16,4 +16,4 @@ test:
 
 .PHONY: docker
 docker:
-	docker build . -t user-service:latest
+	docker build . -t user-srv:latest

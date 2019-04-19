@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/micro/go-log"
 
-	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/model/user"
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/proto/service"
+	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/model/user"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/proto/service"
 )
 
 type Service struct{}
@@ -30,6 +30,7 @@ func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Re
 
 	user, err := userService.QueryUserByName(req.UserName)
 	if err != nil {
+		rsp.Success = false
 		rsp.Error = &s.Error{
 			Code:   500,
 			Detail: err.Error(),
@@ -39,6 +40,7 @@ func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Re
 	}
 
 	rsp.User = user
+	rsp.Success = true
 
 	return nil
 }
