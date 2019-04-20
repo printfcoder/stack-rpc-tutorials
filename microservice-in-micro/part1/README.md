@@ -568,7 +568,7 @@ func (s *service) QueryUserByName(userName string) (ret *proto.User, err error) 
 
 ```
 
-查询方法很简单，这里不过赘述。
+查询方法很简单，这里不赘述。
 
 服务类写完之后，我们还差handler与main方法没有完成，下一步我们编写handler处理器[hander-service.go](./user-srv/handler/service.go)，让它来调用model模型层。
 
