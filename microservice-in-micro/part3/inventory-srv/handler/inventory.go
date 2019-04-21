@@ -5,7 +5,7 @@ import (
 	"github.com/go-log/log"
 
 	inv "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/model/inventory"
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/service"
+	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/inventory"
 )
 
 var (

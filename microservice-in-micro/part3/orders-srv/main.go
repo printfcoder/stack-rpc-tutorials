@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/handler"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/model"
@@ -14,7 +15,7 @@ import (
 	"github.com/micro/go-micro/registry/consul"
 	"time"
 
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/service"
+	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/orders"
 )
 
 func main() {
@@ -25,7 +26,7 @@ func main() {
 	// 使用consul注册
 	micReg := consul.NewRegistry(registryOptions)
 
-	// New Service
+	// 新建服务
 	service := micro.NewService(
 		micro.Name("mu.micro.book.srv.orders"),
 		micro.Registry(micReg),
@@ -43,13 +44,16 @@ func main() {
 	)
 
 	// 侦听订单支付消息
-	_ = micro.RegisterSubscriber("mu.micro.book.srv.orders", service.Server(), subscriber.PayOrder)
+	_ = micro.RegisterSubscriber(common.TopicPaymentDone, service.Server(), subscriber.PayOrder)
 
 	// 注册服务
-	_ = proto.RegisterServiceHandler(service.Server(), new(handler.Service))
+	err := proto.RegisterOrdersHandler(service.Server(), new(handler.Orders))
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// 启动服务
-	if err := service.Run(); err != nil {
+	if err = service.Run(); err != nil {
 		log.Fatal(err)
 	}
 }

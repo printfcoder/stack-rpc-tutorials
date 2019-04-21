@@ -4,16 +4,20 @@ import (
 	"context"
 	"encoding/json"
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
+	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/service"
 	orders "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/service"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/plugins/session"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 var (
 	serviceClient orders.Service
 	authClient    auth.Service
+	invClient     invS.Service
 )
 
 // Error 错误结构体
@@ -25,6 +29,7 @@ type Error struct {
 func Init() {
 	serviceClient = orders.NewService("mu.micro.book.srv.orders", client.DefaultClient)
 	authClient = auth.NewService("mu.micro.book.srv.auth", client.DefaultClient)
+	invClient = invS.NewService("mu.micro.book.srv.inventory", client.DefaultClient)
 }
 
 // New 新增订单入口
@@ -44,11 +49,17 @@ func New(w http.ResponseWriter, r *http.Request) {
 	// 调用后台服务
 	rsp, err := serviceClient.New(context.TODO(), &orders.Request{
 		BookId: bookId,
-		UserId: 1,
+		UserId: session.GetSession(w, r).Values["userId"].(int64),
 	})
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
+	}
+
+	// 返回结果
+	response := map[string]interface{}{
+		"orderId": rsp.Order.Id,
+		"ref":     time.Now().UnixNano(),
 	}
 
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")

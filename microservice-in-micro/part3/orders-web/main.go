@@ -10,6 +10,7 @@ import (
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 	"github.com/micro/go-web"
+	"net/http"
 	"time"
 )
 
@@ -26,7 +27,7 @@ func main() {
 		web.Name("mu.micro.book.web.orders"),
 		web.Version("latest"),
 		web.Registry(micReg),
-		web.Address(":8088"),
+		web.Address(":8091"),
 	)
 
 	// 初始化服务
@@ -41,7 +42,8 @@ func main() {
 	}
 
 	// 新建订单接口
-	service.HandleFunc("/orders/new", handler.Login)
+	authHandler := http.HandlerFunc(handler.New)
+	service.Handle("/orders/new", handler.AuthWrapper(authHandler))
 
 	// 运行服务
 	if err := service.Run(); err != nil {

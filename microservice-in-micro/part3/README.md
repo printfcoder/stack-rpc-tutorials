@@ -261,19 +261,19 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 	updateSQL := `UPDATE inventory SET stock = ?, version = ?  WHERE book_id = ? AND version = ?`
 
 	// 销存方法，通过version字段避免脏写
-	var minusInv func() error
-	minusInv = func() (errIn error) {
+	var deductInv func() error
+	deductInv = func() (errIn error) {
 
 		// 查询
 		errIn = o.QueryRow(querySQL, bookId).Scan(&inv.Id, &inv.BookId, &inv.UnitPrice, &inv.Stock, &inv.Version)
-		if err != nil {
-			log.Logf("[Sell] 查询数据失败，err：%s", err)
-			return err
+		if errIn != nil {
+			log.Logf("[Sell] 查询数据失败，err：%s", errIn)
+			return errIn
 		}
 
 		if inv.Stock < 1 {
-			log.Logf("[Sell] 库存不足，err：%s", err)
-			return err
+			log.Logf("[Sell] 库存不足，err：%s", errIn)
+			return errIn
 		}
 
 		r, errIn := o.Exec(updateSQL, inv.Stock-1, inv.Version+1, bookId, inv.Version)
@@ -284,14 +284,14 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 
 		if affected, _ := r.RowsAffected(); affected == 0 {
 			log.Logf("[Sell] 更新库存数据失败，版本号%d过期，即将重试", inv.Version)
-			minusInv()
+			deductInv()
 		}
 
 		return
 	}
 
 	// 开始销存
-	err = minusInv()
+	err = deductInv()
 	if err != nil {
 		log.Logf("[Sell] 销存失败，err：%s", err)
 		return
@@ -352,21 +352,21 @@ func (s *service) Confirm(id int64, state int) (err error) {
 
 并在通过**defer**指令声明在方法执行完后查错再回滚。
 
-而后我们又定义了**minusInv**内部方法，该方法用来减小库存，因为库存操作可能是并发的，可能会有很多请求同时操作一笔数据，所以我们加了**version**版本号来确认没有脏写。
+而后我们又定义了**deductInv**内部方法，该方法用来减小库存，因为库存操作可能是并发的，可能会有很多请求同时操作一笔数据，所以我们加了**version**版本号来确认没有脏写。
 
 ```go
-    minusInv = func() (errIn error) {
+    deductInv = func() (errIn error) {
 
 		// 查询
 		errIn = o.QueryRow(querySQL, bookId).Scan(&inv.Id, &inv.BookId, &inv.UnitPrice, &inv.Stock, &inv.Version)
-		if err != nil {
-			log.Logf("[Sell] 查询数据失败，err：%s", err)
-			return err
+		if errIn != nil {
+			log.Logf("[Sell] 查询数据失败，err：%s", errIn)
+			return errIn
 		}
 
 		if inv.Stock < 1 {
-			log.Logf("[Sell] 库存不足，err：%s", err)
-			return err
+			log.Logf("[Sell] 库存不足，err：%s", errIn)
+			return errIn
 		}
 
 		r, errIn := o.Exec(updateSQL, inv.Stock-1, inv.Version+1, bookId, inv.Version)
@@ -377,14 +377,15 @@ func (s *service) Confirm(id int64, state int) (err error) {
 
 		if affected, _ := r.RowsAffected(); affected == 0 {
 			log.Logf("[Sell] 更新库存数据失败，版本号%d过期，即将重试", inv.Version)
-			minusInv()
+			// 重试，直到没有库存
+			deductInv()
 		}
 
 		return
 	}
 ```
 
-**minusInv**方法内部会有递归，在**version**版本号过期后会重新执行。更新记录成功后，再插入历史记录，标记出单状态为**未出库**
+**deductInv**方法内部会有递归，在**version**版本号过期后会重新执行。更新记录成功后，再插入历史记录，标记出单状态为**未出库**
 
 ```go
     insertSQL := `INSERT inventory_history (book_id, user_id, state) VALUE (?, ?, ?) `
@@ -414,6 +415,7 @@ func (s *service) Confirm(id int64, state int) (err error) {
 订单服务由两个子服务组成，**orders-web**和**orders-srv**前者作为订单服务的门面层，后者则是真正的核心业务层。
 
 由于两个服务与前面我们所说服务并无特别的地方，我们跳过非核心代码解读。感兴趣的朋友可以直接翻阅代码[orders-web](./orders-web)和[orders-srv](./orders-srv)
+
 
 
 ## 总结

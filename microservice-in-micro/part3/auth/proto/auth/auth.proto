@@ -7,6 +7,9 @@ service Service {
     }
     rpc DelUserAccessToken (Request) returns (Response) {
     }
+
+    rpc GetCachedAccessToken (Request) returns (Response) {
+    }
 }
 
 message Error {
@@ -15,7 +18,7 @@ message Error {
 }
 
 message Request {
-    uint64 userId = 1;
+    int64 userId = 1;
     string userName = 2;
     string token = 3;
 }

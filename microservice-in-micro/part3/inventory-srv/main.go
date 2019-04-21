@@ -13,7 +13,7 @@ import (
 	"github.com/micro/go-micro/registry/consul"
 	"time"
 
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/service"
+	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/inventory"
 )
 
 func main() {
@@ -24,7 +24,7 @@ func main() {
 	// 使用consul注册
 	micReg := consul.NewRegistry(registryOptions)
 
-	// New Service
+	// 新建服务
 	service := micro.NewService(
 		micro.Name("mu.micro.book.srv.inventory"),
 		micro.Registry(micReg),
@@ -42,7 +42,7 @@ func main() {
 	)
 
 	// 注册服务
-	proto.RegisterServiceHandler(service.Server(), new(handler.Service))
+	proto.RegisterInventoryHandler(service.Server(), new(handler.Service))
 
 	// 启动服务
 	if err := service.Run(); err != nil {

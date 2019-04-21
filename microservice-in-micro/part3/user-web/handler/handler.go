@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/plugins/session"
 	"github.com/micro/go-log"
+	"github.com/micro/go-micro/client"
 	"net/http"
 	"time"
 
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
 	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/proto/service"
-	"github.com/micro/go-micro/client"
 )
 
 var (
@@ -84,6 +84,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		cookie := http.Cookie{Name: "remember-me-token", Value: rsp2.Token, Path: "/", Expires: expire, MaxAge: 90000}
 		http.SetCookie(w, &cookie)
 
+		// 同步到session中
+		sess := session.GetSession(w, r)
+		sess.Values["userId"] = rsp.User.Id
+		sess.Values["userName"] = rsp.User.Name
+		_ = sess.Save(r, w)
 	} else {
 		response["success"] = false
 		response["error"] = &Error{

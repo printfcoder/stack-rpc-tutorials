@@ -24,7 +24,7 @@ func main() {
 	// 使用consul注册
 	micReg := consul.NewRegistry(registryOptions)
 
-	// New Service
+	// 新建服务
 	service := micro.NewService(
 		micro.Name("mu.micro.book.srv.user"),
 		micro.Registry(micReg),

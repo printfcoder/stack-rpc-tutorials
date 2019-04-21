@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package mu.micro.book.srv.inventory;
 
-service Service {
+service Inventory {
     rpc Sell (Request) returns (Response) {
     }
     rpc Confirm (Request) returns (Response) {

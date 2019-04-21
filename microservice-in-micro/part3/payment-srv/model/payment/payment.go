@@ -1,33 +1,28 @@
-package orders
+package payment
 
 import (
 	"fmt"
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/service"
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/orders"
+	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/service"
 	"github.com/micro/go-grpc/client"
 	"sync"
 )
 
 var (
-	s         *service
-	invClient invS.Service
-	m         sync.RWMutex
+	s          *service
+	invClient  invS.Service
+	ordSClient ordS.Service
+	m          sync.RWMutex
 )
 
 // service 服务
 type service struct {
 }
 
-// Service 订单服务类
+// Service 服务类
 type Service interface {
-	// New 下单
-	New(bookId, userId int64) (orderId int64, err error)
-
-	// GetOrder 获取订单
-	GetOrder(orderId int64) (order *proto.Order, err error)
-
-	// UpdateOrderState 更新订单状态
-	UpdateOrderState(orderId int64, state int) (err error)
+	// PayOrder 支付订单
+	PayOrder(orderId int64) (err error)
 }
 
 // GetService 获取服务类
@@ -46,6 +41,8 @@ func Init() {
 	if s != nil {
 		return
 	}
+
 	invClient = invS.NewService("mu.micro.book.srv.inventory", client.DefaultClient)
+	ordSClient = ordS.NewService("mu.micro.book.srv.orders", client.DefaultClient)
 	s = &service{}
 }

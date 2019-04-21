@@ -1,10 +1,10 @@
 package model
 
 import (
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/model/inventory"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/model/orders"
 )
 
 // Init 初始化模型层
 func Init() {
-	inventory.Init()
+	orders.Init()
 }
