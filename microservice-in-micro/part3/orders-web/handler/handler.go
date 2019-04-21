@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
-	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/service"
-	orders "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/service"
+	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/inventory"
+	orders "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/orders"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/plugins/session"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
@@ -15,9 +15,9 @@ import (
 )
 
 var (
-	serviceClient orders.Service
+	serviceClient orders.OrdersService
 	authClient    auth.Service
-	invClient     invS.Service
+	invClient     invS.InventoryService
 )
 
 // Error 错误结构体
@@ -27,9 +27,8 @@ type Error struct {
 }
 
 func Init() {
-	serviceClient = orders.NewService("mu.micro.book.srv.orders", client.DefaultClient)
+	serviceClient = orders.NewOrdersService("mu.micro.book.srv.orders", client.DefaultClient)
 	authClient = auth.NewService("mu.micro.book.srv.auth", client.DefaultClient)
-	invClient = invS.NewService("mu.micro.book.srv.inventory", client.DefaultClient)
 }
 
 // New 新增订单入口

@@ -44,10 +44,13 @@ func main() {
 	)
 
 	// 侦听订单支付消息
-	_ = micro.RegisterSubscriber(common.TopicPaymentDone, service.Server(), subscriber.PayOrder)
+	err := micro.RegisterSubscriber(common.TopicPaymentDone, service.Server(), subscriber.PayOrder)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// 注册服务
-	err := proto.RegisterOrdersHandler(service.Server(), new(handler.Orders))
+	err = proto.RegisterOrdersHandler(service.Server(), new(handler.Orders))
 	if err != nil {
 		log.Fatal(err)
 	}

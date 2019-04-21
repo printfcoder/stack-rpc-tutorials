@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/model/orders"
-	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv/proto/service"
+	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv/proto/payment"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/broker"
 )

@@ -2,15 +2,15 @@ package orders
 
 import (
 	"fmt"
-	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/service"
+	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/inventory"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/orders"
-	"github.com/micro/go-grpc/client"
+	"github.com/micro/go-micro/client"
 	"sync"
 )
 
 var (
 	s         *service
-	invClient invS.Service
+	invClient invS.InventoryService
 	m         sync.RWMutex
 )
 
@@ -46,6 +46,6 @@ func Init() {
 	if s != nil {
 		return
 	}
-	invClient = invS.NewService("mu.micro.book.srv.inventory", client.DefaultClient)
+	invClient = invS.NewInventoryService("mu.micro.book.srv.inventory", client.DefaultClient)
 	s = &service{}
 }

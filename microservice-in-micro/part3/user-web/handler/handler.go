@@ -10,11 +10,11 @@ import (
 	"time"
 
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
-	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/proto/service"
+	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/proto/user"
 )
 
 var (
-	serviceClient us.Service
+	serviceClient us.UserService
 	authClient    auth.Service
 )
 
@@ -25,7 +25,7 @@ type Error struct {
 }
 
 func Init() {
-	serviceClient = us.NewService("mu.micro.book.srv.user", client.DefaultClient)
+	serviceClient = us.NewUserService("mu.micro.book.srv.user", client.DefaultClient)
 	authClient = auth.NewService("mu.micro.book.srv.auth", client.DefaultClient)
 }
 

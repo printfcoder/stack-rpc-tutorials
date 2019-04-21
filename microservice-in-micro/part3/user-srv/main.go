@@ -13,7 +13,7 @@ import (
 	"github.com/micro/go-micro/registry/consul"
 	"time"
 
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/proto/service"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/proto/user"
 )
 
 func main() {
@@ -42,7 +42,7 @@ func main() {
 	)
 
 	// 注册服务
-	s.RegisterServiceHandler(service.Server(), new(handler.Service))
+	s.RegisterUserHandler(service.Server(), new(handler.Service))
 
 	// 启动服务
 	if err := service.Run(); err != nil {

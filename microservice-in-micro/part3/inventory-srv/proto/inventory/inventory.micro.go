@@ -58,6 +58,7 @@ func NewInventoryService(name string, c client.Client) InventoryService {
 
 func (c *inventoryService) Sell(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "Inventory.Sell", in)
+
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {

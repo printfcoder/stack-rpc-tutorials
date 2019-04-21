@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package mu.micro.book.srv.payment;
 
-service Service {
+service Payment {
     rpc PayOrder (Request) returns (Response) {
     }
 }

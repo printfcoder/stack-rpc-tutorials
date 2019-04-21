@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/db"
-	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/service"
-	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/service"
-	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv/proto/service"
+	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/inventory"
+	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/orders"
+	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv/proto/payment"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/broker"
 )

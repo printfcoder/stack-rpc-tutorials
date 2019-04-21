@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
-	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv/proto/service"
+	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv/proto/payment"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
 	"net/http"
@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	serviceClient payS.Service
+	serviceClient payS.PaymentService
 	authClient    auth.Service
 )
 
@@ -24,7 +24,7 @@ type Error struct {
 }
 
 func Init() {
-	serviceClient = payS.NewService("mu.micro.book.srv.payment", client.DefaultClient)
+	serviceClient = payS.NewPaymentService("mu.micro.book.srv.payment", client.DefaultClient)
 	authClient = auth.NewService("mu.micro.book.srv.auth", client.DefaultClient)
 }
 
