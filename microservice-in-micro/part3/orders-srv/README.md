@@ -1,11 +1,11 @@
-# 库存服务
+# 订单服务
 
 ## 使用
 
 ### 运行
 
 ```bash
-go run main.go
+go run main.go plugin.go
 ```
 
 ### 编译打包

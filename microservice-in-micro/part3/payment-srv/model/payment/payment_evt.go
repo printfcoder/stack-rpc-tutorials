@@ -11,7 +11,7 @@ import (
 // sendPayDoneEvt 发送支付事件
 func (s *service) sendPayDoneEvt(orderId int64, state int32) {
 
-	// create new event
+	// 构建事件
 	ev := &proto.PayEvent{
 		Id:       uuid.New().String(),
 		SentTime: time.Now().Unix(),
@@ -21,7 +21,7 @@ func (s *service) sendPayDoneEvt(orderId int64, state int32) {
 
 	log.Logf("[sendPayDoneEvt] 发送支付事件，%+v\n", ev)
 
-	// publish an event
+	// 广播
 	if err := payPublisher.Publish(context.Background(), ev); err != nil {
 		log.Logf("[sendPayDoneEvt] 异常: %v", err)
 	}

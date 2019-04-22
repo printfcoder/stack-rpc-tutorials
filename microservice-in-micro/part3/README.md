@@ -1,4 +1,4 @@
-# 第三章 库存服务、订单服务、支付服务与Session管理 doing
+# 第三章 库存服务、订单服务、支付服务与Session管理
 
 我们先回顾下前面两章我们完成的工作
 
@@ -37,10 +37,10 @@
 
 如何带上这个**sessionId**？主要有两种方式：
 
-- 第一次请求时通过重定向或跳转将sessionId附加到url后变成参数，比如**http://www.micro.mu?sessionId=123**。
+- 第一次请求时通过重定向或跳转将sessionId附加到url后变成参数，比如 **http://www.micro.mu?sessionId=123**。
 - 通过 cookies 保存在客户端，每次请求时存放有sessionId的cookies会被传到服务器。
 
-两种方式都有各种的优势，前者不需要cookie支持，在客户端禁掉cookie时仍能工作。后者可以通过自包含可以存放更多信息，只是要让客户端打开cookie缓存。
+两种方式都有各种的优势，前者不需要cookie支持，在客户端禁掉cookie时仍能工作。后者通过自包含可以存放更多信息，只是要让客户端打开cookie缓存。
 
 由上面的流程图中我们可以看到，服务端在获取**sessionId**后会向已经缓存起来的哈希表中查找，如果不存在，就会生成新的跳转回去让客户端重新请求（也可能会继续往下处理，看业务与技术设计，并无标准答案，但是道理一致）
 
@@ -112,9 +112,9 @@ func GetSession(w http.ResponseWriter, r *http.Request) *sessions.Session {
 
 - 再次提醒，**NewCookieStore**的密钥一定不要硬编码到代码中，这样非常不安全，要写到配置中或其它相对安全的方式。
 
-上述代码获取当前session的方法**GetSession**，它先从cookie中获取是否有**session-id**为前缀的key，如果有，它就是session的密文。不过，这里有个漏洞，就是我们显式在cookies中声明某个value是**session-id**。
+上述代码中获取当前session的方法**GetSession**，它先从cookie中获取是否有**session-id**为前缀的key，如果有，它就是session的密文。不过，这里有个漏洞，就是我们显式在cookies中声明某个value是**session-id**。
 
-一般而言，为了安全，我们不会称名字为叫**session-id**，而是换个其它名称，而且也不会把值直接暴露，会再进行一次加密。同时，我们也不能暴露cookie中每个键值对的彼此之间的关系，这样安全。
+一般而言，为了安全，我们不会称名字为叫**session-id**，而是换个其它名称，而且也不会把值直接暴露，会再进行一次加密（gorilla已经加密过）。同时，我们也不能暴露cookie中每个键值对的彼此之间的关系，这样更安全。
 
 不过，细心的朋友可能会发现一个bug，我们来看下面**GetSession**的片段代码
 
@@ -136,6 +136,8 @@ func GetSession(w http.ResponseWriter, r *http.Request) *sessions.Session {
 session管理部分的代码我们基本写完了。接下来我们要开始写业务逻辑代码
 
 ## 开始写代码
+
+准备工作，执行SQL，创建我们需要的基础表（请忽略表结构的严谨性，只是为了演示Micro开发流程），SQL脚本见[schema.sql](./docs/schema.sql)。
 
 在开始写之前，我们先总结一下要解决的几个问题：
 
@@ -241,9 +243,8 @@ package inventory
 // Sell 销存
 func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 
-	// 获取数据库
-	o := db.GetDB()
-	tx, err := o.Begin()
+    // 获取数据库
+	tx, err := db.GetDB().Begin()
 	if err != nil {
 		log.Logf("[Sell] 事务开启失败", err.Error())
 		return
@@ -265,18 +266,19 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 	deductInv = func() (errIn error) {
 
 		// 查询
-		errIn = o.QueryRow(querySQL, bookId).Scan(&inv.Id, &inv.BookId, &inv.UnitPrice, &inv.Stock, &inv.Version)
+		errIn = tx.QueryRow(querySQL, bookId).Scan(&inv.Id, &inv.BookId, &inv.UnitPrice, &inv.Stock, &inv.Version)
 		if errIn != nil {
 			log.Logf("[Sell] 查询数据失败，err：%s", errIn)
 			return errIn
 		}
 
 		if inv.Stock < 1 {
-			log.Logf("[Sell] 库存不足，err：%s", errIn)
+			errIn = fmt.Errorf("[Sell] 库存不足")
+			log.Logf(errIn.Error())
 			return errIn
 		}
 
-		r, errIn := o.Exec(updateSQL, inv.Stock-1, inv.Version+1, bookId, inv.Version)
+		r, errIn := tx.Exec(updateSQL, inv.Stock-1, inv.Version+1, bookId, inv.Version)
 		if errIn != nil {
 			log.Logf("[Sell] 更新库存数据失败，err：%s", errIn)
 			return
@@ -284,6 +286,7 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 
 		if affected, _ := r.RowsAffected(); affected == 0 {
 			log.Logf("[Sell] 更新库存数据失败，版本号%d过期，即将重试", inv.Version)
+			// 重试，直到没有库存
 			deductInv()
 		}
 
@@ -298,12 +301,13 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 	}
 
 	insertSQL := `INSERT inventory_history (book_id, user_id, state) VALUE (?, ?, ?) `
-	r, err := o.Exec(insertSQL, bookId, userId, common.InventoryHistoryStateNotOut)
+	r, err := tx.Exec(insertSQL, bookId, userId, common.InventoryHistoryStateNotOut)
 	if err != nil {
 		log.Logf("[Sell] 新增销存记录失败，err：%s", err)
 		return
 	}
 
+	// 返回历史记录id，作为流水号使用
 	id, _ = r.LastInsertId()
 
 	// 忽略error
@@ -358,18 +362,19 @@ func (s *service) Confirm(id int64, state int) (err error) {
     deductInv = func() (errIn error) {
 
 		// 查询
-		errIn = o.QueryRow(querySQL, bookId).Scan(&inv.Id, &inv.BookId, &inv.UnitPrice, &inv.Stock, &inv.Version)
+		errIn = tx.QueryRow(querySQL, bookId).Scan(&inv.Id, &inv.BookId, &inv.UnitPrice, &inv.Stock, &inv.Version)
 		if errIn != nil {
 			log.Logf("[Sell] 查询数据失败，err：%s", errIn)
 			return errIn
 		}
 
 		if inv.Stock < 1 {
-			log.Logf("[Sell] 库存不足，err：%s", errIn)
+			errIn = fmt.Errorf("[Sell] 库存不足")
+			log.Logf(errIn.Error())
 			return errIn
 		}
 
-		r, errIn := o.Exec(updateSQL, inv.Stock-1, inv.Version+1, bookId, inv.Version)
+		r, errIn := tx.Exec(updateSQL, inv.Stock-1, inv.Version+1, bookId, inv.Version)
 		if errIn != nil {
 			log.Logf("[Sell] 更新库存数据失败，err：%s", errIn)
 			return
@@ -456,6 +461,7 @@ func (s *service) New(bookId int64, userId int64) (orderId int64, err error) {
 
 ```go
 func main() {
+
 	// 侦听订单支付消息
 	err := micro.RegisterSubscriber(common.TopicPaymentDone, service.Server(), subscriber.PayOrder)
 	if err != nil {
@@ -467,23 +473,33 @@ func main() {
 
 ```go
 // PayOrder 订单支付消息
-func PayOrder(ctx context.Context, msg *broker.Message) (err error) {
+package subscriber
 
-	var payment payS.Payments
-	err = json.Unmarshal(msg.Body, payment)
-	if err != nil {
-		log.Logf("[PayOrder] 解序列化消息失败，err：%s", err)
-		return
-	}
+import (
+	// ...
+)
 
-	log.Logf("[PayOrder] 收到支付订单通知，%d，%d", payment.OrderId, payment.State)
-	err = ordersService.UpdateOrderState(payment.OrderId, int(payment.State))
+var (
+	ordersService orders.Service
+)
+
+// Init 初始化handler
+func Init() {
+	ordersService, _ = orders.GetService()
+}
+
+// PayOrder 订单支付消息
+func PayOrder(ctx context.Context, event *payS.PayEvent) (err error) {
+
+	log.Logf("[PayOrder] 收到支付订单通知，%d，%d", event.OrderId, event.State)
+	err = ordersService.UpdateOrderState(event.OrderId, int(event.State))
 	if err != nil {
 		log.Logf("[PayOrder] 收到支付订单通知，更新状态异常，%s", err)
 		return
 	}
 	return
 }
+
 ```
 
 ### 支付服务
@@ -497,19 +513,161 @@ func PayOrder(ctx context.Context, msg *broker.Message) (err error) {
 - **payment-srv**通过RPC向**order-srv**查询订单详情信息
 - 更新支付状态
 - 广播支付成功消息
-- 大量的client.DefaultClient声明
 
 #### 代码详解
 
+支付接口**PayOrder**接收订单id，简单验证订单正确后确认出库，然后广播出库成功通知
 
+**payment_post.go**
 
-#### 代码详解
+```go
+// PayOrder 支付订单
+func (s *service) PayOrder(orderId int64) (err error) {
+
+	// 插入支付记录
+	// ...
+	
+	// 确认出库
+	invRsp, err := invClient.Confirm(context.TODO(), &invS.Request{
+		HistoryId: orderRsp.Order.InvHistoryId,
+	})
+	if err != nil || invRsp == nil || !invRsp.Success {
+		err = fmt.Errorf("[PayOrder] 确认出库失败，%s", err)
+		log.Logf("%s", err)
+		return
+	}
+
+	// 广播支付成功
+	s.sendPayDoneEvt(orderId, common.InventoryHistoryStateOut)
+
+	tx.Commit()
+
+	return
+}
+```
+
+下面的是负责广播支付成功通知事件的方法
+
+**payment_evt.go**
+
+```go
+func (s *service) sendPayDoneEvt(orderId int64, state int32) {
+
+	// 构建事件
+	ev := &proto.PayEvent{
+		Id:       uuid.New().String(),
+		SentTime: time.Now().Unix(),
+		OrderId:  orderId,
+		State:    state,
+	}
+
+	log.Logf("[sendPayDoneEvt] 发送支付事件，%+v\n", ev)
+
+	// 广播事件
+	if err := payPublisher.Publish(context.Background(), ev); err != nil {
+		log.Logf("[sendPayDoneEvt] 异常: %v", err)
+	}
+}
+```
+
+## 演示
+
+至此，我们的程序也基本写完了。下面我们开始测试代码，我们打开几个终端，目录都切到part3下，依次执行下面的命令：
+
+**API**
+
+```bash
+$ micro --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
+```
+
+**user-srv**
+
+```bash
+$ cd user-srv
+$ go run main.go plugin.go
+```
+
+**user-web**
+
+```bash
+$ cd user-web
+$ go run main.go plugin.go
+```
+
+**payment-srv**
+
+```bash
+$ cd payment-srv
+$ go run main.go plugin.go
+```
+
+**payment-web**
+
+```bash
+$ cd payment-web
+$ go run main.go plugin.go
+```
+
+**orders-web**
+
+```bash
+$ cd orders-web
+$ go run main.go plugin.go
+```
+
+**orders-srv**
+
+```bash
+$ cd orders-srv
+$ go run main.go plugin.go
+```
+
+**inventory**
+
+```bash
+$ cd inventory-srv
+$ go run main.go plugin.go
+```
+
+**auth**
+
+```bash
+$ cd auth
+$ go run main.go plugin.go
+```
+
+由于我们用的token及session都使用了cookie，所以我们在发curl请求时，会有太长的请求命令。
+
+限于篇幅，大家使用postman验证结果，在postman中导入请求模板[**postman_collection.json**](../docs/postman_collection.json)即可。
+
+以下面步骤验证：
+
+- 登录 http://127.0.0.1:8080/user/login
+- 新建订单 http://127.0.0.1:8080/orders/new
+- 支付订单 http://127.0.0.1:8080/payment/pay-order
+- 查数据库inventory，inventory_history，orders，payment各表记录
 
 ## 总结
 
+我们基本实现了我们的业务流程，尽管没有去详细测试每个细节，但是这不是我们本系列文章的重点。
+
+我们本章用到的Micro技术点有：
+
+- [**micro new**][micro-new-code]，生成Micro风格的模板代码，它是micro项目中的一个子包。
+- [**protoc-gen-go**][protoc-gen-go]，隐藏在`protoc ... --micro_out`指令中执行了，感兴趣的同学可以去了解一下。
+- [**go-micro**][go-micro]，代码中**micro.NewService**，**service.Init**等都是go-micro中不同类型服务各自实现的方法。
+- [**go-config**][go-config]，加载配置时使用。
+- [**go-web**][go-web]，编写web应用**payment-web**、**orders-web**时用到。
+- [**go-broker**][go-broker]，编写web应用**payment-srv**与**orders-srv**时用到。
+
+不足点有：
+
 - 每个proto文件都有一个错误类，属于冗余代码
-- 每个web的返回JSON结构没有统一方法管理，目前是各自输出
+- 每个web的返回JSON结构没有统一，目前是各自输出
 - 没有统一错误码
+- 大量的client.DefaultClient声明，一个服务中应该只需要一个client
+- 没有实现session退出广播，这点大家可以参考支付事件**mu.micro.book.topic.payment.done**自行实现
+- AuthWrapper每个web各自维护一套，需要优化
 
 ## 系列文章
 

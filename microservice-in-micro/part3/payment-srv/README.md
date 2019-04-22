@@ -1,55 +1,29 @@
-# Payment Service
+# 支付服务
 
-This is the Payment service
+## 使用
 
-Generated with
+### 运行
 
-```
-micro new github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv --namespace=mu.micro.book --alias=payment --type=srv
-```
-
-## Getting Started
-
-- [Configuration](#configuration)
-- [Dependencies](#dependencies)
-- [Usage](#usage)
-
-## Configuration
-
-- FQDN: mu.micro.book.srv.payment
-- Type: srv
-- Alias: payment
-
-## Dependencies
-
-Micro services depend on service discovery. The default is multicast DNS, a zeroconf system.
-
-In the event you need a resilient multi-host setup we recommend consul.
-
-```
-# install consul
-brew install consul
-
-# run consul
-consul agent -dev
+```bash
+go run main.go plugin.go
 ```
 
-## Usage
+### 编译打包
 
-A Makefile is included for convenience
-
-Build the binary
+打包
 
 ```
 make build
 ```
 
-Run the service
+运行二进制文件
+
 ```
 ./payment-srv
 ```
 
-Build a docker image
+打包成docker镜像
+
 ```
 make docker
 ```
