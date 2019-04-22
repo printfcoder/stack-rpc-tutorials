@@ -23,11 +23,11 @@ func (s *service) New(bookId int64, userId int64) (orderId int64, err error) {
 
 	// 获取数据库
 	o := db.GetDB()
-	insertSQL := `INSERT orders (book_id, inv_his_id, state) VALUE (?, ?, ?, ?)`
+	insertSQL := `INSERT orders (user_id, book_id, inv_his_id, state) VALUE (?, ?, ?, ?)`
 
-	r, errIn := o.Exec(insertSQL, bookId, rsp.InvH.Id, common.InventoryHistoryStateNotOut)
-	if errIn != nil {
-		log.Logf("[New] 新增订单失败，err：%s", errIn)
+	r, err := o.Exec(insertSQL, userId, bookId, rsp.InvH.Id, common.InventoryHistoryStateNotOut)
+	if err != nil {
+		log.Logf("[New] 新增订单失败，err：%s", err)
 		return
 	}
 	orderId, _ = r.LastInsertId()

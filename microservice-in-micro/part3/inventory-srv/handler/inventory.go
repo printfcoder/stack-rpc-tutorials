@@ -2,7 +2,7 @@ package handler
 
 import (
 	"context"
-	"github.com/go-log/log"
+	"github.com/micro/go-log"
 
 	inv "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/model/inventory"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/inventory"
@@ -25,7 +25,7 @@ func (e *Service) Sell(ctx context.Context, req *proto.Request, rsp *proto.Respo
 
 	id, err := invService.Sell(req.BookId, req.UserId)
 	if err != nil {
-		log.Logf("[Sell] 销存失败，%s", err)
+		log.Logf("[Sell] 销存失败，bookId：%d，userId: %d，%s", req.BookId, req.UserId, err)
 		rsp.Success = false
 		return
 	}

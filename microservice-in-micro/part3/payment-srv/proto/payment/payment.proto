@@ -7,6 +7,14 @@ service Payment {
     }
 }
 
+// PayEvent
+message PayEvent {
+    string id = 1;
+    int64 sentTime = 2;
+    int64 orderId = 3;
+    int32 state = 4;
+}
+
 message Payments {
     int64 id = 1;
     int64 userId = 2;

@@ -42,23 +42,27 @@ func New(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
+	bookId, _ := strconv.ParseInt(r.Form.Get("bookId"), 10, 10)
 
-	bookId, _ := strconv.ParseInt(r.Form.Get("userName"), 64, 10)
+	// 返回结果
+	response := map[string]interface{}{}
 
 	// 调用后台服务
 	rsp, err := serviceClient.New(context.TODO(), &orders.Request{
 		BookId: bookId,
 		UserId: session.GetSession(w, r).Values["userId"].(int64),
 	})
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
 
 	// 返回结果
-	response := map[string]interface{}{
-		"orderId": rsp.Order.Id,
-		"ref":     time.Now().UnixNano(),
+	response["ref"] = time.Now().UnixNano()
+	if err != nil {
+		response["success"] = false
+		response["error"] = Error{
+			Detail: err.Error(),
+		}
+	} else {
+		response["success"] = true
+		response["orderId"] = rsp.Order.Id
 	}
 
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")

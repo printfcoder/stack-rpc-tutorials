@@ -40,22 +40,25 @@ func PayOrder(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
-	orderId, _ := strconv.ParseInt(r.Form.Get("orderId"), 64, 10)
+	orderId, _ := strconv.ParseInt(r.Form.Get("orderId"), 10, 10)
 
 	// 调用后台服务
-	rsp, err := serviceClient.PayOrder(context.TODO(), &payS.Request{
+	_, err := serviceClient.PayOrder(context.TODO(), &payS.Request{
 		OrderId: orderId,
 	})
-	if err != nil {
-		log.Logf("[PayOrder] 支付失败，err：%s", err)
-		http.Error(w, err.Error(), 500)
-		return
-	}
 
 	// 返回结果
-	response := map[string]interface{}{
-		"success": rsp.Success,
-		"ref":     time.Now().UnixNano(),
+	response := map[string]interface{}{}
+
+	// 返回结果
+	response["ref"] = time.Now().UnixNano()
+	if err != nil {
+		response["success"] = false
+		response["error"] = Error{
+			Detail: err.Error(),
+		}
+	} else {
+		response["success"] = true
 	}
 
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")

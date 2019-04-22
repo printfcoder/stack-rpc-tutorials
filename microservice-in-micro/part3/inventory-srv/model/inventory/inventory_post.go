@@ -1,6 +1,7 @@
 package inventory
 
 import (
+	"fmt"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/db"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/inventory"
@@ -40,8 +41,9 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 		}
 
 		if inv.Stock < 1 {
-			log.Logf("[Sell] 库存不足，err：%s", errIn)
-			return err
+			errIn = fmt.Errorf("[Sell] 库存不足")
+			log.Logf(errIn.Error())
+			return errIn
 		}
 
 		r, errIn := tx.Exec(updateSQL, inv.Stock-1, inv.Version+1, bookId, inv.Version)

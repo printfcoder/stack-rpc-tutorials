@@ -405,22 +405,111 @@ func (s *service) Confirm(id int64, state int) (err error) {
 	tx.Commit()
 ```
 
-### 订单服务与支付服务
+### 订单服务
 
-订单与支付服务我们分别有两个接口要做：
+订单服务需要实现下面的接口：
 
 - /orders/new，用户使用该接口进行下单操作
-- /payment/pay-order，用户使用该接口进行下单操作
 
-订单服务由两个子服务组成，**orders-web**和**orders-srv**前者作为订单服务的门面层，后者则是真正的核心业务层。
+该接口有两个子服务协作完成，**orders-web**和**orders-srv**，前者作为订单服务的门面层，后者则是真正的核心业务层。
+
+**orders-srv**通过RPC向**payment-srv**请求占用一条库存，通过侦听**inventory-srv**广播的支付事件更新订单支付状态。
+
+#### 代码详解
 
 由于两个服务与前面我们所说服务并无特别的地方，我们跳过非核心代码解读。感兴趣的朋友可以直接翻阅代码[orders-web](./orders-web)和[orders-srv](./orders-srv)
 
+如我们上面画的请求路线中所示，orders服务在下单时会调用inventory请求占有一单为待出单状态，成功后才会进入新增订单写入数据库操作。
 
+[**orders_post.go**](./orders-srv/model/orders/orders_post.go)
+
+```go
+// New 新增订单
+func (s *service) New(bookId int64, userId int64) (orderId int64, err error) {
+
+	// 请求销存
+	rsp, err := invClient.Sell(context.TODO(), &invS.Request{
+		BookId: bookId, UserId: userId,
+	})
+	if err != nil {
+		log.Logf("[New] Sell 调用库存服务时失败：%s", err.Error())
+		return
+	}
+
+	// 获取数据库
+	o := db.GetDB()
+	insertSQL := `INSERT orders (book_id, inv_his_id, state) VALUE (?, ?, ?, ?)`
+
+	r, errIn := o.Exec(insertSQL, bookId, rsp.InvH.Id, common.InventoryHistoryStateNotOut)
+	if errIn != nil {
+		log.Logf("[New] 新增订单失败，err：%s", errIn)
+		return
+	}
+	orderId, _ = r.LastInsertId()
+	return
+}
+```
+
+而在orders的main方法中，我们侦听了订单支付事件
+
+[**main.go**](./orders-srv/main.go)
+
+```go
+func main() {
+	// 侦听订单支付消息
+	err := micro.RegisterSubscriber(common.TopicPaymentDone, service.Server(), subscriber.PayOrder)
+	if err != nil {
+		log.Fatal(err)
+	}
+```
+
+侦听处理函数由**subscriber.PayOrder**负责，它处理消息成功后便更新订单为支付（出库）状态。
+
+```go
+// PayOrder 订单支付消息
+func PayOrder(ctx context.Context, msg *broker.Message) (err error) {
+
+	var payment payS.Payments
+	err = json.Unmarshal(msg.Body, payment)
+	if err != nil {
+		log.Logf("[PayOrder] 解序列化消息失败，err：%s", err)
+		return
+	}
+
+	log.Logf("[PayOrder] 收到支付订单通知，%d，%d", payment.OrderId, payment.State)
+	err = ordersService.UpdateOrderState(payment.OrderId, int(payment.State))
+	if err != nil {
+		log.Logf("[PayOrder] 收到支付订单通知，更新状态异常，%s", err)
+		return
+	}
+	return
+}
+```
+
+### 支付服务
+
+支付服务需要实现下面的接口：
+
+- /payment/pay-order，用户使用该接口支付订单
+
+该接口有两个子服务协作完成，**payment-web**和**payment-srv**。它的核心处理流程为：
+
+- **payment-srv**通过RPC向**order-srv**查询订单详情信息
+- 更新支付状态
+- 广播支付成功消息
+- 大量的client.DefaultClient声明
+
+#### 代码详解
+
+
+
+#### 代码详解
 
 ## 总结
 
 - 每个proto文件都有一个错误类，属于冗余代码
+- 每个web的返回JSON结构没有统一方法管理，目前是各自输出
+- 没有统一错误码
 
 ## 系列文章
 

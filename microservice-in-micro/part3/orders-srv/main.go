@@ -40,6 +40,8 @@ func main() {
 			model.Init()
 			// 初始化handler
 			handler.Init()
+			// 初始化sub
+			subscriber.Init()
 		}),
 	)
 

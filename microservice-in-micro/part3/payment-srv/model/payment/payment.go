@@ -2,17 +2,20 @@ package payment
 
 import (
 	"fmt"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/common"
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/inventory"
 	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/orders"
+	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/client"
 	"sync"
 )
 
 var (
-	s          *service
-	invClient  invS.InventoryService
-	ordSClient ordS.OrdersService
-	m          sync.RWMutex
+	s            *service
+	invClient    invS.InventoryService
+	ordSClient   ordS.OrdersService
+	m            sync.RWMutex
+	payPublisher micro.Publisher
 )
 
 // service 服务
@@ -44,5 +47,6 @@ func Init() {
 
 	invClient = invS.NewInventoryService("mu.micro.book.srv.inventory", client.DefaultClient)
 	ordSClient = ordS.NewOrdersService("mu.micro.book.srv.orders", client.DefaultClient)
+	payPublisher = micro.NewPublisher(common.TopicPaymentDone, client.DefaultClient)
 	s = &service{}
 }
