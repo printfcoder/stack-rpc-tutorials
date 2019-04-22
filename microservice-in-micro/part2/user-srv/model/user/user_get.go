@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/basic/db"
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/user-srv/proto/service"
+	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/user-srv/proto/user"
 	"github.com/micro/go-log"
 )
 

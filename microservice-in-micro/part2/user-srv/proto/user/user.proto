@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package mu.micro.book.user.srv.service;
 
-service Service {
+service User {
     rpc QueryUserByName (Request) returns (Response) {
     }
 }
 
-message User {
+message user {
     uint64 id = 1;
     string name = 2;
     string pwd = 3;
@@ -29,5 +29,5 @@ message Request {
 message Response {
     bool success = 1;
     Error error = 2;
-    User user = 3;
+    user user = 3;
 }
