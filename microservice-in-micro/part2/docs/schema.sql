@@ -15,5 +15,5 @@ CREATE TABLE `user`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='用户表';
 
-INSERT INTO user (user_id, user_name, pwd) VALUE (10001, 'micro', '123');
+INSERT INTO user (user_id, user_name, pwd) VALUE (10001, 'micro', '1234');
 
