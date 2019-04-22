@@ -87,12 +87,12 @@ syntax = "proto3";
 
 package mu.micro.book.srv.user;
 
-service Service {
+service User {
     rpc QueryUserByName (Request) returns (Response) {
     }
 }
 
-message User {
+message user {
     int64 id = 1;
     string name = 2;
     string pwd = 3;
@@ -114,7 +114,7 @@ message Request {
 message Response {
     bool success = 1;
     Error error = 2;
-    User user = 3;
+    user user = 3;
 }
 ```
 
@@ -123,7 +123,7 @@ message Response {
 下面我们生成类型与服务方法：
 
 ```bash
-protoc --proto_path=. --go_out=. --micro_out=. proto/service/service.proto
+protoc --proto_path=. --go_out=. --micro_out=. proto/user/user.proto
 ```
 
 ```go
@@ -142,7 +142,7 @@ func main() {
     service.Init()
 
     // Register Handler
-    s.RegisterServiceHandler(service.Server(), new(handler.Service))
+    s.RegisterUserHandler(service.Server(), new(handler.Service))
 
     // Register Struct as Subscriber
     micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), new(subscriber.Service))
@@ -176,7 +176,7 @@ func main() {
     service.Init()
 
     // Register Handler   注册服务
-    s.RegisterServiceHandler(service.Server(), new(handler.Service))
+    s.RegisterUserHandler(service.Server(), new(handler.Service))
 
     // Run service    启动服务
     if err := service.Run(); err != nil {
@@ -210,14 +210,14 @@ func main() {
 │   └── basic                * 初始化基础组件
 ├── conf                     * 配置文件目录
 ├── handler
-│   └── service.go           * 将名称改为service
+│   └── user.go              * 将名称改为user
 ├── model                    * 增加模型层，用于与数据库交换数据
 │   └── user                 * 用户模型类
 │   │   └── user.go          * 初始化用户模型类
 │   │   └── user_get.go      * 封装获取用户数据类业务
 │   └── model.go             * 初始化模型层
-├── proto/service    
-│   └── service.proto        * 将名称改为service
+├── proto/user    
+│   └── user.proto           * 将名称改为user
 ├── Dockerfile
 ├── Makefile
 └── README.md
@@ -570,15 +570,11 @@ func (s *service) QueryUserByName(userName string) (ret *proto.User, err error) 
 
 查询方法很简单，这里不赘述。
 
-服务类写完之后，我们还差handler与main方法没有完成，下一步我们编写handler处理器[hander-service.go](./user-srv/handler/service.go)，让它来调用model模型层。
+服务类写完之后，我们还差handler与main方法没有完成，下一步我们编写handler处理器[user.go](./user-srv/handler/user.go)，让它来调用model模型层。
 
-handler service.go
+**user.go**
 
-```bash
-package handler
-
-// ...
-
+```go
 type Service struct{}
 
 var (
@@ -601,6 +597,7 @@ func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Re
 
     user, err := userService.QueryUserByName(req.UserName)
     if err != nil {
+        rsp.Success = false
         rsp.Error = &s.Error{
             Code:   500,
             Detail: err.Error(),
@@ -610,6 +607,7 @@ func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Re
     }
 
     rsp.User = user
+    rsp.Success = true
 
     return nil
 }
@@ -650,7 +648,7 @@ func main() {
     )
 
     // 注册服务
-    s.RegisterServiceHandler(service.Server(), new(handler.Service))
+    s.RegisterUserHandler(service.Server(), new(handler.Service))
 
     // 启动服务
     if err := service.Run(); err != nil {
@@ -686,7 +684,7 @@ $ go run main.go plugin.go
 启动成功，我们调用*Service.QueryUserByName*测试一下服务是否正常:
 
 ```bash
-$ micro --registry=consul call mu.micro.book.srv.user Service.QueryUserByName '{"userName":"micro"}'
+$ micro --registry=consul call mu.micro.book.srv.user User.QueryUserByName '{"userName":"micro"}'
 {
    "user": {
        "id": 10001,
@@ -772,7 +770,7 @@ type Error struct {
 }
 
 func Init() {
-    serviceClient = us.NewService("mu.micro.book.srv.user", client.DefaultClient)
+    serviceClient = us.NewUserService("mu.micro.book.srv.user", client.DefaultClient)
 }
 
 // Login 登录入口
@@ -863,7 +861,6 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 {"data":{"id":10001,"name":"micro"},"ref":1555248603726819000,"success":false}
 ```
 
-
 这样，我们把用户发送请求，API接收请求，**web**向**service**查询数据整个调用链都调通了。
 
 ## 总结
@@ -894,8 +891,8 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 ## 系列文章
 
 - [第二章 权限服务][第二章]
-- [第三章 库存服务、订单服务、支付服务与Session管理][第三章] todo
-- [第四章 消息总线、日志持久化][第四章] todo
+- [第三章 库存服务、订单服务、支付服务与Session管理][第三章]
+- [第四章 消息总线、日志持久化][第四章] doing
 - [第五章 使用配置中心][第五章] todo
 - [第六章 熔断、降级、容错][第六章] todo
 - [第七章 链路追踪][第七章] todo

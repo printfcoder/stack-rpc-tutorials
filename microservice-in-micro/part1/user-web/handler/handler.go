@@ -7,12 +7,12 @@ import (
 	"net/http"
 	"time"
 
-	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/proto/service"
+	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/proto/user"
 	"github.com/micro/go-micro/client"
 )
 
 var (
-	serviceClient us.Service
+	serviceClient us.UserService
 )
 
 // Error 错误结构体
@@ -22,7 +22,7 @@ type Error struct {
 }
 
 func Init() {
-	serviceClient = us.NewService("mu.micro.book.srv.user", client.DefaultClient)
+	serviceClient = us.NewUserService("mu.micro.book.srv.user", client.DefaultClient)
 }
 
 // Login 登录入口
