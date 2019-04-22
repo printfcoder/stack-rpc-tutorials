@@ -144,5 +144,5 @@ CREATE TABLE `user`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='用户表';
 
-INSERT INTO micro_book_mall.user (id, user_id, user_name, pwd, created_time, updated_time)
-VALUES (1, 10001, 'micro', '1234', '2019-04-12 06:24:54.968000000', '2019-04-12 06:25:27.548000000');
+INSERT INTO micro_book_mall.user (id, user_id, user_name, pwd)
+VALUES (1, 10001, 'micro', '1234');
