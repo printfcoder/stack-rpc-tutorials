@@ -5,5 +5,5 @@ import (
 )
 
 func Init() {
-	config.InitConfig()
+	config.Init()
 }
