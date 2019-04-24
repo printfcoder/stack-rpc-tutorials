@@ -669,6 +669,12 @@ $ go run main.go plugin.go
 - 没有实现session退出广播，这点大家可以参考支付事件**mu.micro.book.topic.payment.done**自行实现
 - AuthWrapper每个web各自维护一套，需要优化
 
+至此，我们完成全部的服务：
+
+![](../docs/part3_done_services.png)
+
+以后的章节中，我们会在此基础上不过加入Micro的特性。请翻阅下一章
+
 ## 系列文章
 
 - [第一章 用户服务][第一章]
@@ -676,11 +682,11 @@ $ go run main.go plugin.go
 - [第四章 使用配置中心][第四章] doing
 - [第五章 消息总线1][第五章] todo
 - [第六章 消息总线2][第六章] todo
-- [第四章 日志持久化][第四章] todo
-- [第六章 熔断、降级、容错与健康检查][第六章] todo
-- [第七章 链路追踪][第七章] todo
-- [第九章 容器化][第八章] todo
-- [第十章 总结][第十章] todo
+- [第七章 日志持久化][第四章] todo
+- [第八章 熔断、降级、容错与健康检查][第六章] todo
+- [第九章 链路追踪][第七章] todo
+- [第十章 容器化][第八章] todo
+- [第十一章 总结][第十章] todo
 
 ## 讨论
 
@@ -700,7 +706,6 @@ $ go run main.go plugin.go
 [jwt]: https://jwt.io/introduction/
 [gorilla-session]: https://github.com/gorilla/sessions
 
-
 [第一章]: ../part1
 [第二章]: ../part2
 [第四章]: ../part4
@@ -710,3 +715,4 @@ $ go run main.go plugin.go
 [第八章]: ../part8
 [第九章]: ../part9
 [第十章]: ../part10
+[第十一章]: ../part11
