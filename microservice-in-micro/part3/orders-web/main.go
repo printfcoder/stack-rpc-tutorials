@@ -24,7 +24,7 @@ func main() {
 
 	// 创建新服务
 	service := web.NewService(
-		web.Name("mu.micro.book.web.orders"),
+		web.Name("go.micro.web.orders"),
 		web.Version("latest"),
 		web.Registry(micReg),
 		web.Address(":8091"),
@@ -44,6 +44,7 @@ func main() {
 	// 新建订单接口
 	authHandler := http.HandlerFunc(handler.New)
 	service.Handle("/orders/new", handler.AuthWrapper(authHandler))
+	service.HandleFunc("/", handler.Hello)
 
 	// 运行服务
 	if err := service.Run(); err != nil {
