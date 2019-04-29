@@ -1,0 +1,55 @@
+micro:
+  auth_srv:
+    name: mu.micro.book.srv.auth
+    address: 127.0.0.1
+    port: 9030
+  consul:
+    enabled: true
+    host: 127.0.0.1
+    port: 8500
+  db:
+    mysql:
+      enabled: true
+      url: root:123@(127.0.0.1:3306)/micro_book_mall?charset=utf8&parseTime=true&loc=Asia%2FShanghai
+      maxIdleConnection: 100
+      maxOpenConnection: 130
+  inv_srv:
+    name: mu.micro.book.srv.inv
+    address: 127.0.0.1
+    port: 9040
+  jwt:
+    secretKey: W6VjDud2W1kMG3BicbMNlGgI4ZfcoHtMGLWr
+  orders_srv:
+    name: mu.micro.book.srv.orders
+    address: 127.0.0.1
+    port: 9050
+  orders_web:
+    name: mu.micro.book.web.orders
+    address: 127.0.0.1
+    port: 9060
+  payment_srv:
+    name: mu.micro.book.srv.payment
+    address: 127.0.0.1
+    port: 9070
+  payment_web:
+    name: mu.micro.book.web.payment
+    address: 127.0.0.1
+    port: 9080
+  redis:
+    enabled: true
+    conn: 127.0.0.1:6379
+    dbNum: 8
+    password:
+    timeout: 3000
+    sentinel:
+      enabled: false
+      master: bookMaster
+      nodes: 127.0.0.1:16379,127.0.0.1:26379,127.0.0.1:36379
+  user_srv:
+    name: mu.micro.book.srv.user
+    address: 127.0.0.1
+    port: 9090
+  user_web:
+    name: mu.micro.book.web.user
+    address: 127.0.0.1
+    port: 10000
