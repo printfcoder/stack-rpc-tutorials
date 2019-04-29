@@ -673,7 +673,7 @@ $ go run main.go plugin.go
 
 ![](../docs/part3_done_services.png)
 
-以后的章节中，我们会在此基础上不过加入Micro的特性。请翻阅下一章
+以后的章节中，我们会在此基础上不断加入Micro的特性。请翻阅下一章
 
 ## 系列文章
 
