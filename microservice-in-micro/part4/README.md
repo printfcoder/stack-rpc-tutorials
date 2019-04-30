@@ -1,4 +1,4 @@
-# 第四章 使用配置中心 doing
+# 第四章 使用配置中心
 
 前面的章节中，我们把配置以yml文件的方式放到配置目录**conf**中，并通过**go-config**把其加载读到应用中。
 
@@ -428,14 +428,13 @@ main第一步执行初始化方法**initCfg**，在其中声明使用grpc配置�
 ## 参考阅读
 
 - [如何使用gRPC编写服务](https://medium.com/pantomath/how-we-use-grpc-to-build-a-client-server-system-in-go-dd20045fa1c2)
-- [gRPC配置中心 doing](https://github.com/micro-in-cn/grpc-config-center)
 
 ## 系列文章
 
 - [第一章 用户服务][第一章]
 - [第二章 权限服务][第二章]
 - [第三章 库存服务、订单服务、支付服务与Session管理][第三章]
-- [第五章 消息总线1][第五章] todo
+- [第五章 消息总线1][第五章] doing
 - [第六章 消息总线2][第六章] todo
 - [第七章 日志持久化][第四章] todo
 - [第八章 熔断、降级、容错与健康检查][第六章] todo
