@@ -1,19 +1,55 @@
-# 第五章 使用消息总线ing
+# 第五章 日志持久化
 
-首先什么是消息总线（BUS)，BUS与消息队列MQ在模型上不尽相同，尽管它们非常相通相似。我们不去过度探讨什么是队列什么是总线，甚至，我们也可以把它们当成是一回事。
+Micro的日志插件[go-log](https://github.com/micro/go-log)并没有提供日志持久化方案，它只一个基于github.com/go-log/log的日志打印接口。
 
-简而言之，总线就框架内部应用之间通信的交通枢纽，它与**request/response**模型不同，它强调消息或信息要经过它，而后者则是无状态无中转的。
+我们先看看**go-log**提供的接口
 
-微服务应用之间广播、侦听消息都可以经过总线管理，与此同时，根据业务需要，总线可以把经过它处理的消息持久化，针对不同类型应用隔离彼此间的通信等等。
+```go
+var (
+	// the local logger
+	logger log.Logger = golog.New()
+)
 
-故而，总线在一定程度上也会依赖MQ或其它类似的异步消息处理中间件，比如RabbitMQ、Kafka、NATs等等。
+// Log makes use of github.com/go-log/log.Log
+func Log(v ...interface{}) {
+	logger.Log(v...)
+}
 
-要在一篇文章中描述完整的总线功能的比较困难，实现更是难上加难。不过我们也会尽力去实现一个具有企业总线雏形的组件。因此，本章我们以最简单、最轻量的方式引入总线，并把总线作为消息枢纽，在其之上收发消息。
+// Logf makes use of github.com/go-log/log.Logf
+func Logf(format string, v ...interface{}) {
+	logger.Logf(format, v...)
+}
 
-简单描述一下我们要完成的总线功能
+// Fatal logs with Log and then exits with os.Exit(1)
+func Fatal(v ...interface{}) {
+	Log(v...)
+	os.Exit(1)
+}
 
-- Pub/Sub 广播及订阅
-- 隔离应用消息
+// Fatalf logs with Logf and then exits with os.Exit(1)
+func Fatalf(format string, v ...interface{}) {
+	Logf(format, v...)
+	os.Exit(1)
+}
+
+// SetLogger sets the local logger
+func SetLogger(l log.Logger) {
+	logger = l
+}
+```
+
+源码非常简单，关于打印的总得来说两个接口**Log**和**Fatal**。一个负责打印普通日志，一个则打印致命日志。
+
+还有一个**SetLogger**，则是用来设置默认的日志处理器的。有朋友可能就会产生疑问，特别是从Java转过来的伙伴，为什么没有debug/info/warn/error等常见的日志级别方法。
+
+接下来我们聊聊为什么不要，
+
+
+在实际的生产环境中，通常日志是要持久化到本地或者其它服务中的。
+
+## 参考阅读
+
+[聊聊日志打印](https://dave.cheney.net/2015/11/05/lets-talk-about-logging)
 
 ## 系列文章
 
@@ -21,12 +57,10 @@
 - [第二章 权限服务][第二章]
 - [第三章 库存服务、订单服务、支付服务与Session管理][第三章]
 - [第四章 使用配置中心][第四章]
-- [第六章 消息总线2][第六章]
-- [第七章 日志持久化][第七章] todo
-- [第八章 熔断、降级、容错与健康检查][第八章] todo
-- [第九章 链路追踪][第九章] todo
-- [第十章 容器化][第十章] todo
-- [第十一章 总结][第十一章] todo
+- [第六章 熔断、降级、容错与健康检查][第六章] todo
+- [第七章 链路追踪][第七章] todo
+- [第八章 容器化][第八章] todo
+- [第九章 总结][第九章] todo
 
 [第一章]: ../part1
 [第二章]: ../part2
@@ -37,5 +71,3 @@
 [第七章]: ../part7
 [第八章]: ../part8
 [第九章]: ../part9
-[第十章]: ../part10
-[第十一章]: ../part11

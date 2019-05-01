@@ -10,6 +10,7 @@
 
 ## 内容
 
+- [Micro消息总线](./micro-bus) todo
 - [MFC，Micro从零开始](./micro-from-scratch) todo
 - [使用Micro构建微服务](./microservice-in-micro)
 
