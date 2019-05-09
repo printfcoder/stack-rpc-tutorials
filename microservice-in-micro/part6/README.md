@@ -8,7 +8,7 @@
 go get github.com/afex/hystrix-go
 ```
 ### 如何使用Hystrix
-使用Hystrix我们需要根据具体情况配置一些参数，才能达到使用情况。
+使用Hystrix我们需要根据具体情况配置一些参数，才能达到使用效果。
 ```go
 // DefaultTimeout is how long to wait for command to complete, in milliseconds
 DefaultTimeout = 1000
@@ -29,7 +29,7 @@ VolumeThreshold就是单位时间内(10s)触发熔断的最低请求次数，默
 
 关于Hystrix的详细实现原理，可以查看官方[wiki](https://github.com/Netflix/Hystrix/wiki)。
 
-Hystrix其实就是包装客户端的RPC调用，在这个包装层里实现熔断策略。hystrix-go提供同步和异步两种方式来包装RPC调用。在go-plugins/wrapper/breaker/hystrix中micro已有一个现成插件：
+Hystrix其实就是包装客户端的RPC调用，在这个包装层里实现熔断策略。hystrix-go提供同步和异步两种方式来包装RPC调用。在**go-plugins/wrapper/breaker/hystrix**中micro已有一个现成插件：
 ```go
 package hystrix
 
@@ -57,7 +57,7 @@ func NewClientWrapper() client.Wrapper {
 	}
 }
 ```
-其中，hystrix.Do方法传入的第三个参数是nil,我们来看看方法的声明
+其中，**hystrix.Do**方法传入的第三个参数是nil,我们来看看方法的声明
 ```go
 type fallbackFunc func(error) error
 ...
@@ -92,7 +92,7 @@ micro.RegisterInterval(time.Second*20)
 ```
 Interval就是间隔多久服务会自动重新注册，TTL就是注册服务的过期时间，如果服务超过过期时间没有去重新注册，注册中心会将其删除。
 
-其实现在go-micro/server/rpc_server.go中,micro使用一个定时器按照设定的间隔时间去自动重新注册。当服务意外故障，无法向注册中心重新注册时，如果超过了设定的TTL时间，注册中心就会将服务删除。
+其实现在**go-micro/server/rpc_server.go**中,micro使用一个定时器按照设定的间隔时间去自动重新注册。当服务意外故障，无法向注册中心重新注册时，如果超过了设定的TTL时间，注册中心就会将服务删除。
 
 ![](../docs/part6_register_code.png)
 
@@ -124,3 +124,24 @@ web服务如下：
 ...
 
 ```
+
+## 系列文章
+
+- [第一章 用户服务][第一章]
+- [第二章 权限服务][第二章]
+- [第三章 库存服务、订单服务、支付服务与Session管理][第三章]
+- [第五章 日志持久化][第五章] doing
+- [第六章 熔断、降级、容错与健康检查][第六章]
+- [第七章 链路追踪][第七章] todo
+- [第八章 容器化][第八章] todo
+- [第九章 总结][第九章] todo
+
+[第一章]: ../part1
+[第二章]: ../part2
+[第三章]: ../part3
+[第四章]: ../part4
+[第五章]: ../part5
+[第六章]: ../part6
+[第七章]: ../part7
+[第八章]: ../part8
+[第九章]: ../part9
