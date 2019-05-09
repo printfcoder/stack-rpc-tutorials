@@ -93,6 +93,7 @@ func (l *Logger) loadCfg() {
 		l.zapConfig.OutputPaths = []string{"stderr"}
 	}
 
+	// 默认输出到程序运行目录的logs子目录
 	if l.Opts.LogFileDir == "" {
 		l.Opts.LogFileDir, _ = filepath.Abs(filepath.Dir(filepath.Join(".")))
 		l.Opts.LogFileDir += sp + "logs" + sp

@@ -56,7 +56,7 @@ func SetLogger(l log.Logger) {
 
 ## 为什么Micro中日志不分级
 
-在Go官方的(log包](https://golang.org/pkg/log/)中，打印日志的方法，并没有根据级别作区分。除非自己实现。更别谈可以像log4j那样的根据实际运行环境只打开某个级别以上日志的指令。
+在Go官方的[log包](https://golang.org/pkg/log/)中，打印日志的方法，并没有根据级别作区分。除非自己实现。更别谈可以像log4j那样的根据实际运行环境只打开某个级别以上日志的指令。
 
 golang官方也提供了相应带级别的日志版本[glog](https://godoc.org/github.com/golang/glog)，它支持如下级别的日志：
 
