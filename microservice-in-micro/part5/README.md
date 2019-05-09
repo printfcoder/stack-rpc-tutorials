@@ -6,9 +6,9 @@ Micro的日志插件[go-log](https://github.com/micro/go-log)并没有提供日�
 
 本章主要内容
 
-- [介绍go-log][go-log]
-- [micro中为什么日志不分级][为什么Micro中日志不分级]
-- [持久化日志][持久化日志]
+- [介绍go-log](go-log)
+- [micro中为什么日志不分级](#为什么Micro中日志不分级)
+- [持久化日志](持久化日志)
 
 ## go-log
 
