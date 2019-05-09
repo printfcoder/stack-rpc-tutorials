@@ -3,13 +3,15 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+	"strconv"
+	"time"
+
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
 	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/proto/payment"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
-	"net/http"
-	"strconv"
-	"time"
+	"github.com/micro/go-plugins/wrapper/breaker/hystrix"
 )
 
 var (
@@ -24,6 +26,9 @@ type Error struct {
 }
 
 func Init() {
+	client.DefaultClient.Init(
+		client.Wrap(hystrix.NewClientWrapper()),
+	)
 	serviceClient = payS.NewPaymentService("mu.micro.book.srv.payment", client.DefaultClient)
 	authClient = auth.NewService("mu.micro.book.srv.auth", client.DefaultClient)
 }

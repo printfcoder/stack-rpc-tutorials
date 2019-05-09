@@ -3,11 +3,13 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+	"time"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/plugins/session"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
-	"net/http"
-	"time"
+	"github.com/micro/go-plugins/wrapper/breaker/hystrix"
 
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
 	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/user-srv/proto/user"
@@ -25,6 +27,9 @@ type Error struct {
 }
 
 func Init() {
+	client.DefaultClient.Init(
+		client.Wrap(hystrix.NewClientWrapper()),
+	)
 	serviceClient = us.NewUserService("mu.micro.book.srv.user", client.DefaultClient)
 	authClient = auth.NewService("mu.micro.book.srv.auth", client.DefaultClient)
 }
