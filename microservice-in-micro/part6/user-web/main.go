@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/config"
@@ -12,7 +14,6 @@ import (
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 	"github.com/micro/go-web"
-	"time"
 )
 
 var (
@@ -36,6 +37,8 @@ func main() {
 	service := web.NewService(
 		web.Name(cfg.Name),
 		web.Version(cfg.Version),
+		web.RegisterTTL(time.Second*15),
+		web.RegisterInterval(time.Second*10),
 		web.Registry(micReg),
 		web.Address(cfg.Addr()),
 	)
