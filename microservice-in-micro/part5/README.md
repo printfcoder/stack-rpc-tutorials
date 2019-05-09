@@ -365,6 +365,15 @@ go run main.go plugin.go
 ## ...
 ```
 
+并在当前目录下的logs目录会有新的日志文件生成：
+
+```bash
+ls logs/
+
+## 日志文件
+app-debug.log   app-error.log   app-info.log    app-warn.log
+```
+
 ## 其它持久化方案
 
 - [filebeat](https://www.elastic.co/products/beats/filebeat) 侦听日志文件变动推送到ELK
