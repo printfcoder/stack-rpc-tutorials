@@ -23,6 +23,7 @@ var (
 	profiles                defaultProfiles
 	m                       sync.RWMutex
 	inited                  bool
+	sp                      = string(filepath.Separator)
 )
 
 // Init 初始化配置
@@ -38,13 +39,13 @@ func Init() {
 
 	// 加载yml配置
 	// 先加载基础配置
-	appPath, _ := filepath.Abs(filepath.Dir(filepath.Join("./", string(filepath.Separator))))
+	appPath, _ := filepath.Abs(filepath.Dir(filepath.Join("."+sp, sp)))
 
 	pt := filepath.Join(appPath, "conf")
 	os.Chdir(appPath)
 
 	// 找到application.yml文件
-	if err = config.Load(file.NewSource(file.WithPath(pt + "/application.yml"))); err != nil {
+	if err = config.Load(file.NewSource(file.WithPath(pt + sp + "application.yml"))); err != nil {
 		panic(err)
 	}
 
@@ -53,7 +54,7 @@ func Init() {
 		panic(err)
 	}
 
-	log.Logf("[Init] 加载配置文件：path: %s, %+v\n", pt+"/application.yml", profiles)
+	log.Logf("[Init] 加载配置文件：path: %s, %+v\n", pt+sp+"application.yml", profiles)
 
 	// 开始导入新文件
 	if len(profiles.GetInclude()) > 0 {
