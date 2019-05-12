@@ -7,10 +7,11 @@ import (
 	"strconv"
 	"time"
 
-	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
-	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/inventory-srv/proto/inventory"
-	orders "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/orders-srv/proto/orders"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/plugins/session"
+	hystrix_go "github.com/afex/hystrix-go/hystrix"
+	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/proto/auth"
+	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/inventory-srv/proto/inventory"
+	orders "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/orders-srv/proto/orders"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/session"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-plugins/wrapper/breaker/hystrix"
@@ -29,11 +30,11 @@ type Error struct {
 }
 
 func Init() {
-	client.DefaultClient.Init(
-		client.Wrap(hystrix.NewClientWrapper()),
-	)
-	serviceClient = orders.NewOrdersService("mu.micro.book.srv.orders", client.DefaultClient)
-	authClient = auth.NewService("mu.micro.book.srv.auth", client.DefaultClient)
+	hystrix_go.DefaultVolumeThreshold = 1
+	hystrix_go.DefaultErrorPercentThreshold = 1
+	cl := hystrix.NewClientWrapper()(client.DefaultClient)
+	serviceClient = orders.NewOrdersService("mu.micro.book.srv.orders", cl)
+	authClient = auth.NewService("mu.micro.book.srv.auth", cl)
 }
 
 // New 新增订单入口

@@ -6,13 +6,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/plugins/session"
+	hystrix_go "github.com/afex/hystrix-go/hystrix"
+	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/proto/auth"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/session"
+	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/user-srv/proto/user"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-plugins/wrapper/breaker/hystrix"
-
-	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
-	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/user-srv/proto/user"
 )
 
 var (
@@ -27,16 +27,15 @@ type Error struct {
 }
 
 func Init() {
-	client.DefaultClient.Init(
-		client.Wrap(hystrix.NewClientWrapper()),
-	)
-	serviceClient = us.NewUserService("mu.micro.book.srv.user", client.DefaultClient)
-	authClient = auth.NewService("mu.micro.book.srv.auth", client.DefaultClient)
+	hystrix_go.DefaultVolumeThreshold = 1
+	hystrix_go.DefaultErrorPercentThreshold = 1
+	cl := hystrix.NewClientWrapper()(client.DefaultClient)
+	serviceClient = us.NewUserService("mu.micro.book.srv.user", cl)
+	authClient = auth.NewService("mu.micro.book.srv.auth", cl)
 }
 
 // Login 登录入口
 func Login(w http.ResponseWriter, r *http.Request) {
-
 	// 只接受POST请求
 	if r.Method != "POST" {
 		log.Logf("非法请求")

@@ -2,12 +2,17 @@ package main
 
 import (
 	"fmt"
+	"net"
+	"net/http"
 	"time"
 
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/common"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/config"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/user-web/handler"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/breaker"
+
+	"github.com/afex/hystrix-go/hystrix"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/user-web/handler"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
 	"github.com/micro/go-log"
@@ -55,10 +60,15 @@ func main() {
 	}
 
 	// 注册登录接口
-	service.HandleFunc("/user/login", handler.Login)
+	handlerLogin := http.HandlerFunc(handler.Login)
+	service.Handle("/user/login", breaker.BreakerWrapper(handlerLogin))
 	// 注册退出接口
 	service.HandleFunc("/user/logout", handler.Logout)
 	service.HandleFunc("/user/test", handler.TestSession)
+
+	hystrixStreamHandler := hystrix.NewStreamHandler()
+	hystrixStreamHandler.Start()
+	go http.ListenAndServe(net.JoinHostPort("", "81"), hystrixStreamHandler)
 
 	// 运行服务
 	if err := service.Run(); err != nil {

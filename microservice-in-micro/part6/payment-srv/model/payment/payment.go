@@ -2,9 +2,9 @@ package payment
 
 import (
 	"fmt"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/common"
-	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/inventory-srv/proto/inventory"
-	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/orders-srv/proto/orders"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
+	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/inventory-srv/proto/inventory"
+	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/orders-srv/proto/orders"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/client"
 	"sync"

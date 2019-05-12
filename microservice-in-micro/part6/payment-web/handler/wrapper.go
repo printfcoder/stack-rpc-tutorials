@@ -2,9 +2,9 @@ package handler
 
 import (
 	"context"
-	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/common"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/plugins/session"
+	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/proto/auth"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/session"
 	"github.com/micro/go-log"
 	"net/http"
 )

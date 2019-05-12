@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/common"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/config"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/handler"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/model"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/payment-srv/handler"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/payment-srv/model"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
 	"github.com/micro/go-log"
@@ -16,7 +16,7 @@ import (
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/proto/payment"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/payment-srv/proto/payment"
 )
 
 var (

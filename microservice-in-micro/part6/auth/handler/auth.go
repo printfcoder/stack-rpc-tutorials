@@ -2,8 +2,8 @@ package handler
 
 import (
 	"context"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/model/access"
-	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/model/access"
+	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/proto/auth"
 	"github.com/micro/go-log"
 	"strconv"
 )

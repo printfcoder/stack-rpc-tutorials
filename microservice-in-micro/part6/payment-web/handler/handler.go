@@ -7,8 +7,9 @@ import (
 	"strconv"
 	"time"
 
-	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
-	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/proto/payment"
+	hystrix_go "github.com/afex/hystrix-go/hystrix"
+	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/proto/auth"
+	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/payment-srv/proto/payment"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-plugins/wrapper/breaker/hystrix"
@@ -26,11 +27,11 @@ type Error struct {
 }
 
 func Init() {
-	client.DefaultClient.Init(
-		client.Wrap(hystrix.NewClientWrapper()),
-	)
-	serviceClient = payS.NewPaymentService("mu.micro.book.srv.payment", client.DefaultClient)
-	authClient = auth.NewService("mu.micro.book.srv.auth", client.DefaultClient)
+	hystrix_go.DefaultVolumeThreshold = 1
+	hystrix_go.DefaultErrorPercentThreshold = 1
+	cl := hystrix.NewClientWrapper()(client.DefaultClient)
+	serviceClient = payS.NewPaymentService("mu.micro.book.srv.payment", cl)
+	authClient = auth.NewService("mu.micro.book.srv.auth", cl)
 }
 
 // PayOrder 支付订单

@@ -2,8 +2,8 @@ package orders
 
 import (
 	"fmt"
-	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/inventory-srv/proto/inventory"
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/orders-srv/proto/orders"
+	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/inventory-srv/proto/inventory"
+	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/orders-srv/proto/orders"
 	"github.com/micro/go-micro/client"
 	"sync"
 )
