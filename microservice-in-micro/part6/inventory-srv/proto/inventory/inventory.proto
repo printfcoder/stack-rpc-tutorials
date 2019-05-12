@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package mu.micro.book.srv.inventory;
+
+service Inventory {
+    rpc Sell (Request) returns (Response) {
+    }
+    rpc Confirm (Request) returns (Response) {
+    }
+}
+
+message Inv {
+    int64 id = 1;
+    int64 bookId = 2;
+    int64 unitPrice = 3;
+    int64 stock = 4;
+    int64 version = 5;
+    int64 createdTime = 6;
+    int64 updatedTime = 7;
+}
+
+message InvHistory {
+    int64 id = 1;
+    int64 bookId = 2;
+    int64 userId = 3;
+    int64 state = 4;
+}
+
+message Error {
+    int32 code = 1;
+    string detail = 2;
+}
+
+message Request {
+    int64 bookId = 1;
+    int64 userId = 2;
+    int64 historyId = 3;
+    int32 historyState = 4;
+
+}
+
+message Response {
+    bool success = 1;
+    Error error = 2;
+    Inv inv = 3;
+    InvHistory invH = 4;
+}
