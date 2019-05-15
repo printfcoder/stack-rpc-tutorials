@@ -193,6 +193,168 @@ func main() {
 
 我们使用hystrix实现一个Wrapper来包装登陆handler。当登陆服务无法正常工作触发熔断器打开时，返回我们预定义的消息，提示用户等待。
 
+## 重试
+ 
+在分布式系统中，经常会有服务出现故障，所以良好的重试机制可以大大的提高系统的容错性，可用性。下面主要分析micro的客户端重试机制，以及micro中如何设置。
+ 
+### micro 重试实现
+ micro框架提供方法设置客户端重试的次数。
+ 
+```go
+Client.Init(
+	client.Retries(3),
+)
+```
+
+当client请求失败时，客户端会根据selector的策略选择下一个节点重试请求。这样当一个服务实例故障时，客户端可以自动调用另一个实例。
+
+我们来看看micro 客户端内部重试的实现：
+> go-micro\client\rpc_client.go
+
+```go
+func (r *rpcClient) Call(ctx context.Context, request Request, response interface{}, opts ...CallOption) error {
+...
+    //客户端call 调用函数， 在下面的循环中调用
+	call := func(i int) error {
+		// call backoff first. Someone may want an initial start delay
+		t, err := callOpts.Backoff(ctx, request, i)
+		if err != nil {
+			return errors.InternalServerError("go.micro.client", "backoff error: %v", err.Error())
+		}
+
+		// only sleep if greater than 0
+		if t.Seconds() > 0 {
+			time.Sleep(t)
+		}
+
+		// 根据selector策略 选出 下一个节点
+		node, err := next()
+		if err != nil && err == selector.ErrNotFound {
+			return errors.NotFound("go.micro.client", "service %s: %v", request.Service(), err.Error())
+		} else if err != nil {
+			return errors.InternalServerError("go.micro.client", "error getting next %s node: %v", request.Service(), err.Error())
+		}
+
+		// 客户端调用
+		err = rcall(ctx, node, request, response, callOpts)
+		r.opts.Selector.Mark(request.Service(), node, err)
+		return err
+	}
+
+	ch := make(chan error, callOpts.Retries+1)
+	var gerr error
+    //根据设定的**Retries**（重试次数）循环调用 call，如果执行成功，调用超时或者设置的**Retry**函数执行出错则直接退出，不继续重试
+	for i := 0; i <= callOpts.Retries; i++ {
+		go func(i int) {
+			ch <- call(i)
+		}(i)
+
+		select {
+		case <-ctx.Done(): //超时
+			return errors.Timeout("go.micro.client", fmt.Sprintf("call timeout: %v", ctx.Err()))
+		case err := <-ch:
+			// if the call succeeded lets bail early
+			if err == nil {  //调用成功
+				return nil
+			}
+
+			retry, rerr := callOpts.Retry(ctx, request, i, err)
+			if rerr != nil {
+				return rerr
+			}
+
+			if !retry {
+				return err
+			}
+
+			gerr = err
+		}
+	}
+
+	return gerr
+}
+```
+
+micro将选举下一个节点，RPC调用封装到一个匿名函数中，然后根据设定的重试次数循环调用。如果调用成功或者超时则直接返回，不继续重试。其中，当**callOpts**里设定的**Retry**函数执行失败，即第一个返回值为false，或者第二个返回值为err不会nil时，也会退出循环直接返回。
+
+我们来看下Retry是什么：
+
+```go
+type CallOptions struct {
+	Retry RetryFunc
+}
+```
+
+client的CallOptions中定义了Retry，我们跳转到RetryFunc
+> go-micro\client\retry.go
+
+```go
+// note that returning either false or a non-nil error will result in the call not being retried
+type RetryFunc func(ctx context.Context, req Request, retryCount int, err error) (bool, error)
+
+// RetryAlways always retry on error
+func RetryAlways(ctx context.Context, req Request, retryCount int, err error) (bool, error) {
+	return true, nil
+}
+
+// RetryOnError retries a request on a 500 or timeout error
+func RetryOnError(ctx context.Context, req Request, retryCount int, err error) (bool, error) {
+	if err == nil {
+		return false, nil
+	}
+
+	e := errors.Parse(err.Error())
+	if e == nil {
+		return false, nil
+	}
+
+	switch e.Code {
+	// retry on timeout or internal server error
+	case 408, 500:
+		return true, nil
+	default:
+		return false, nil
+	}
+}
+```
+
+从中我们可以发现，作者预实现了两个**Retry**函数：**RetryAlways**、**RetryOnError**。
+**RetryAlways**直接返回**true, nil**，即不退出重试。
+**RetryOnError**只有当e.Code（上一次RPC调用结果）为408或者500时才会返回**true, nil**，继续重试。
+micro的默认**Retry**为**RetryOnError**，但是我们可以自定义并设置，下面的实验中将会演示。
+
+```go
+	DefaultRetry = RetryOnError
+	// DefaultRetries is the default number of times a request is tried
+	DefaultRetries = 1
+	// DefaultRequestTimeout is the default request timeout
+	DefaultRequestTimeout = time.Second * 5
+```
+
+### 设置
+
+我们修改**orders-web**下的服务，在handler的**Init**函数中设置客户端重试。
+
+```go
+func Init() {
+	hystrix_go.DefaultVolumeThreshold = 1
+	hystrix_go.DefaultErrorPercentThreshold = 1
+	cl := hystrix.NewClientWrapper()(client.DefaultClient)
+	cl.Init(
+		client.Retries(3),
+		//为了调试看log方便，始终返回true, nil，即会一直重试直至重试次数用尽
+		client.Retry(func(ctx context.Context, req client.Request, retryCount int, err error) (bool, error) {
+			log.Log(req.Method(), retryCount, " client retry")
+			return true, nil
+		}),
+	)
+	serviceClient = orders.NewOrdersService("mu.micro.book.srv.orders", cl)
+	authClient = auth.NewService("mu.micro.book.srv.auth", cl)
+}
+```
+
+当客户端请求另一个服务时，如果被请求的服务突然挂了，此时客户端尚未感知依旧会去请求，重试时客户端会请求另一个实例（有一定几率还会请求同一个实例，因为默认的selector策略是哈希随机）。
+
 ## 健康检查
 
 在微服务架构中，每个服务都会存在多个实例，可能部署在不同的主机中。因为有网络或者主机等不确定因素，所以每个服务都可能会出现故障。我们需要能够掌握每个服务实例的健康状态，当一个服务故障时，及时将它从注册中心删除。
@@ -256,7 +418,7 @@ kill 进程后，我们可以在consul的UI看到，consul的健康检查已经�
 
 ## 总结
 
-本章我们主要简单介绍了在micro中使用hystrix来实现熔断，降级提高系统容错性能的方法，以及micro中服务的健康检查原理。
+本章我们主要简单介绍了在micro中使用hystrix来实现熔断，降级提高系统容错性能的方法，以及micro中服务的健康检查原理和客户端重试机制。
 
 
 [下一篇][第七章]我们会讲解在micro中如何实现分布式链路追踪。
@@ -272,7 +434,7 @@ kill 进程后，我们可以在consul的UI看到，consul的健康检查已经�
 - [第三章 库存服务、订单服务、支付服务与Session管理][第三章]
 - [第四章 使用配置中心][第四章]
 - [第五章 日志持久化][第五章]
-- [第七章 链路追踪][第七章] todo
+- [第七章 链路追踪][第七章] doing
 - [第八章 容器化][第八章] todo
 - [第九章 总结][第九章] todo
 
