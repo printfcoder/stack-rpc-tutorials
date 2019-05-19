@@ -24,7 +24,7 @@ func main() {
 
 	// 创建新服务
 	service := web.NewService(
-		web.Name("go.micro.web.orders"),
+		web.Name("mu.micro.book.web.orders"),
 		web.Version("latest"),
 		web.Registry(micReg),
 		web.Address(":8091"),
