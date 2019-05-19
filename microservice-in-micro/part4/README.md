@@ -64,7 +64,7 @@ func main() {
 	// 新建grpc Server服务
 	service := grpc2.NewServer()
 	proto.RegisterSourceServer(service, new(Service))
-	ts, err := net.Listen("tcp", ":8600")
+	ts, err := net.Listen("tcp", ":9600")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -396,7 +396,7 @@ func registryOptions(ops *registry.Options) {
 func initCfg() {
 
 	source := grpc.NewSource(
-		grpc.WithAddress("127.0.0.1:8600"),
+		grpc.WithAddress("127.0.0.1:9600"),
 		grpc.WithPath("micro"),
 	)
 

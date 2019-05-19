@@ -42,7 +42,7 @@ func main() {
 	// 新建grpc Server服务
 	service := grpc2.NewServer()
 	proto.RegisterSourceServer(service, new(Service))
-	ts, err := net.Listen("tcp", ":8600")
+	ts, err := net.Listen("tcp", ":9600")
 	if err != nil {
 		log.Fatal(err)
 	}

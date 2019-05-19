@@ -76,7 +76,7 @@ func registryOptions(ops *registry.Options) {
 func initCfg() {
 
 	source := grpc.NewSource(
-		grpc.WithAddress("127.0.0.1:8600"),
+		grpc.WithAddress("127.0.0.1:9600"),
 		grpc.WithPath("micro"),
 	)
 
