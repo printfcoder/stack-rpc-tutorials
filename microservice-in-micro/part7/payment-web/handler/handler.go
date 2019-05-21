@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -36,6 +35,7 @@ func Init() {
 
 // PayOrder 支付订单
 func PayOrder(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 
 	// 只接受POST请求
 	if r.Method != "POST" {
@@ -49,7 +49,7 @@ func PayOrder(w http.ResponseWriter, r *http.Request) {
 	orderId, _ := strconv.ParseInt(r.Form.Get("orderId"), 10, 10)
 
 	// 调用后台服务
-	_, err := serviceClient.PayOrder(context.TODO(), &payS.Request{
+	_, err := serviceClient.PayOrder(ctx, &payS.Request{
 		OrderId: orderId,
 	})
 

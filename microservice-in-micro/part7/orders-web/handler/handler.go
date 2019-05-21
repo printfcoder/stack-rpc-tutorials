@@ -46,6 +46,7 @@ func Init() {
 
 // New 新增订单入口
 func New(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 
 	// 只接受POST请求
 	if r.Method != "POST" {
@@ -61,7 +62,7 @@ func New(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{}
 
 	// 调用后台服务
-	rsp, err := serviceClient.New(context.TODO(), &orders.Request{
+	rsp, err := serviceClient.New(ctx, &orders.Request{
 		BookId: bookId,
 		UserId: session.GetSession(w, r).Values["userId"].(int64),
 	})

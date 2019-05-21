@@ -2,8 +2,12 @@ package main
 
 import (
 	"fmt"
+	"time"
+
+	"github.com/Allenxuxu/microservices/lib/tracer"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/auth/handler"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/auth/model"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/auth/proto/auth"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/config"
@@ -13,9 +17,8 @@ import (
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
-	"time"
-
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/auth/proto/auth"
+	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	opentracing "github.com/opentracing/opentracing-go"
 )
 
 var (
@@ -35,12 +38,19 @@ func main() {
 	// 使用consul注册
 	micReg := consul.NewRegistry(registryOptions)
 
+	t, io, err := tracer.NewTracer(cfg.Name, "")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer io.Close()
+	opentracing.SetGlobalTracer(t)
 	// 新建服务
 	service := micro.NewService(
 		micro.Name(cfg.Name),
 		micro.Registry(micReg),
 		micro.Version(cfg.Version),
 		micro.Address(cfg.Addr()),
+		micro.WrapHandler(ocplugin.NewHandlerWrapper(opentracing.GlobalTracer())),
 	)
 
 	// 服务初始化
