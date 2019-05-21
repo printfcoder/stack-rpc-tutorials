@@ -1,15 +1,14 @@
 package handler
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"time"
 
 	hystrix_go "github.com/afex/hystrix-go/hystrix"
-	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/proto/auth"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/session"
-	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/user-srv/proto/user"
+	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/auth/proto/auth"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/session"
+	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/user-srv/proto/user"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-plugins/wrapper/breaker/hystrix"
@@ -36,6 +35,8 @@ func Init() {
 
 // Login 登录入口
 func Login(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
 	// 只接受POST请求
 	if r.Method != "POST" {
 		log.Logf("非法请求")
@@ -46,7 +47,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	// 调用后台服务
-	rsp, err := serviceClient.QueryUserByName(context.TODO(), &us.Request{
+	rsp, err := serviceClient.QueryUserByName(ctx, &us.Request{
 		UserName: r.Form.Get("userName"),
 	})
 	if err != nil {
@@ -68,7 +69,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		log.Logf("[Login] 密码校验完成，生成token...")
 
 		// 生成token
-		rsp2, err := authClient.MakeAccessToken(context.TODO(), &auth.Request{
+		rsp2, err := authClient.MakeAccessToken(ctx, &auth.Request{
 			UserId:   rsp.User.Id,
 			UserName: rsp.User.Name,
 		})
@@ -111,6 +112,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 // Logout 退出登录
 func Logout(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 
 	// 只接受POST请求
 	if r.Method != "POST" {
@@ -127,7 +129,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 删除token
-	_, err = authClient.DelUserAccessToken(context.TODO(), &auth.Request{
+	_, err = authClient.DelUserAccessToken(ctx, &auth.Request{
 		Token: tokenCookie.Value,
 	})
 	if err != nil {

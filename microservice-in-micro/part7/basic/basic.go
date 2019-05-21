@@ -1,7 +1,7 @@
 package basic
 
 import (
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/config"
 )
 
 var (

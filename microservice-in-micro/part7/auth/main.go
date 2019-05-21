@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/handler"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/model"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/auth/handler"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/auth/model"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/common"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/config"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
 	"github.com/micro/go-log"
@@ -15,7 +15,7 @@ import (
 	"github.com/micro/go-micro/registry/consul"
 	"time"
 
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/proto/auth"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/auth/proto/auth"
 )
 
 var (

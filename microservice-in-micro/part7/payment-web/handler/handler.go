@@ -8,8 +8,8 @@ import (
 	"time"
 
 	hystrix_go "github.com/afex/hystrix-go/hystrix"
-	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/proto/auth"
-	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/payment-srv/proto/payment"
+	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/auth/proto/auth"
+	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/payment-srv/proto/payment"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-plugins/wrapper/breaker/hystrix"

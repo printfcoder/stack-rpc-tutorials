@@ -1,6 +1,6 @@
 package jwt
 
-import "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic"
+import "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic"
 
 // Jwt 配置 接口
 type Jwt struct {

@@ -5,10 +5,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/config"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/orders-web/handler"
+	"github.com/Allenxuxu/microservices/lib/tracer"
+	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/Allenxuxu/microservices/lib/wrapper/tracer/opentracing/std2micro"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/common"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/orders-web/handler"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
 	"github.com/micro/go-log"
@@ -34,6 +37,12 @@ func main() {
 	// 使用consul注册
 	micReg := consul.NewRegistry(registryOptions)
 
+	t, io, err := tracer.NewTracer(cfg.Name, "")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer io.Close()
+	opentracing.SetGlobalTracer(t)
 	// 创建新服务
 	service := web.NewService(
 		web.Name(cfg.Name),
@@ -57,8 +66,8 @@ func main() {
 
 	// 新建订单接口
 	authHandler := http.HandlerFunc(handler.New)
-	service.Handle("/orders/new", handler.AuthWrapper(authHandler))
-	service.HandleFunc("/", handler.Hello)
+	service.Handle("/orders/new", std2micro.TracerWrapper(handler.AuthWrapper(authHandler)))
+	service.Handle("/", std2micro.TracerWrapper(http.HandlerFunc(handler.Hello)))
 
 	// 运行服务
 	if err := service.Run(); err != nil {

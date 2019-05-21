@@ -3,10 +3,10 @@ package payment
 import (
 	"context"
 	"fmt"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
-	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/inventory-srv/proto/inventory"
-	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/orders-srv/proto/orders"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/db"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/common"
+	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/inventory-srv/proto/inventory"
+	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/orders-srv/proto/orders"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/db"
 	"github.com/micro/go-log"
 )
 

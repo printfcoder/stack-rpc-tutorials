@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/micro/go-log"
 
-	inv "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/inventory-srv/model/inventory"
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/inventory-srv/proto/inventory"
+	inv "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/inventory-srv/model/inventory"
+	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/inventory-srv/proto/inventory"
 )
 
 var (

@@ -4,19 +4,22 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/config"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/inventory-srv/handler"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/inventory-srv/model"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/common"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/inventory-srv/handler"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/inventory-srv/model"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
+	"github.com/Allenxuxu/microservices/lib/tracer"
 
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/inventory-srv/proto/inventory"
+	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	opentracing "github.com/opentracing/opentracing-go"
+	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/inventory-srv/proto/inventory"
 )
 
 var (
@@ -36,6 +39,12 @@ func main() {
 	// 使用consul注册
 	micReg := consul.NewRegistry(registryOptions)
 
+	t, io, err := tracer.NewTracer(cfg.Name, "")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer io.Close()
+	opentracing.SetGlobalTracer(t)
 	// 新建服务
 	service := micro.NewService(
 		micro.Name(cfg.Name),
@@ -43,6 +52,7 @@ func main() {
 		micro.RegisterInterval(time.Second*10),
 		micro.Registry(micReg),
 		micro.Version(cfg.Version),
+		micro.WrapHandler(ocplugin.NewHandlerWrapper(opentracing.GlobalTracer())),
 	)
 
 	// 服务初始化
