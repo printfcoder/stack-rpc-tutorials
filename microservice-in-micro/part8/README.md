@@ -14,9 +14,9 @@
 
 接下来可能有朋友会问，为什么不用VMware、VirtualBox或者其它已经非常成熟虚拟化技术。我们引用[Docker](https://www.docker.com/resources/what-container)上的结构图说明：
 
-<img style="float: right;" src="../docs/part8_docker-containerized-appliction-blue-border_1.png">
-
-<img style="float: right;" src="../docs/part8_container-vm-whatcontainer_2.png">
+容器             |  虚拟机
+:-------------------------:|:-------------------------:
+![](../docs/part8_docker-containerized-appliction-blue-border_1.png)  |  ![](../docs/part8_container-vm-whatcontainer_2.png)
 
 虚拟机采用的是硬件级别的**系统级**虚拟化方案，需要CPU等硬件支持，而容器则是在虚拟机之上的更高级别的**进程级**虚拟化技术。
 
