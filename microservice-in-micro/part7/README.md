@@ -101,65 +101,36 @@ func TracerWrapper(h http.Handler) http.Handler {
 
 我在另一个仓库中，已有现成的实现，包括 API 网关和插件库。本项目中会直接引用： [仓库地址](https://github.com/Allenxuxu/microservices)
 
-```bash
-go get -u github.com/Allenxuxu/microservices
-```
+我们将相关插件复制到 plugins 目录下，将 API 网关 复制到 micro 目录下。
 
-在 [github.com/Allenxuxu/microservices](https://github.com/Allenxuxu/microservices) 仓库的 micro 目录中是注册各类插件的 micro API 网关，我们将其他本次实验中不需要的插件注释掉。
+micro 目录中是注册各类插件的 micro API 网关，我们将其他本次实验中不需要的插件删除掉并修改头文件。
 
 ```go
 package main
 
 import (
 	"log"
-	// "net"
-	// "net/http"
 
-	// "github.com/Allenxuxu/microservices/lib/token"
-	"github.com/Allenxuxu/microservices/lib/tracer"
-	// "github.com/Allenxuxu/microservices/lib/wrapper/auth"
-	// "github.com/Allenxuxu/microservices/lib/wrapper/breaker/hystrix"
-	// "github.com/Allenxuxu/microservices/lib/wrapper/metrics/prometheus"
-	"github.com/Allenxuxu/microservices/lib/wrapper/tracer/opentracing/stdhttp"
-
-	// ph "github.com/afex/hystrix-go/hystrix"
-	// "github.com/micro/go-plugins/micro/cors"
+	tracer "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/jaeger"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/opentracing/stdhttp"
+	
+	"github.com/micro/go-plugins/micro/cors"
 	"github.com/micro/micro/cmd"
 	"github.com/micro/micro/plugin"
 	opentracing "github.com/opentracing/opentracing-go"
 )
 
 func init() {
-	// token := &token.Token{}
-	// token.InitConfig("127.0.0.1:8500", "micro", "config", "jwt-key", "key")
+	plugin.Register(cors.NewPlugin())
 
-	// plugin.Register(cors.NewPlugin())
-
-	// plugin.Register(plugin.NewPlugin(
-	// 	plugin.WithName("auth"),
-	// 	plugin.WithHandler(
-	// 		auth.JWTAuthWrapper(token),
-	// 	),
-	// ))
 	plugin.Register(plugin.NewPlugin(
 		plugin.WithName("tracer"),
 		plugin.WithHandler(
 			stdhttp.TracerWrapper,
 		),
 	))
-	// plugin.Register(plugin.NewPlugin(
-	// 	plugin.WithName("breaker"),
-	// 	plugin.WithHandler(
-	// 		hystrix.BreakerWrapper,
-	// 	),
-	// ))
-	// plugin.Register(plugin.NewPlugin(
-	// 	plugin.WithName("metrics"),
-	// 	plugin.WithHandler(
-	// 		prometheus.MetricsWrapper,
-	// 	),
-	// ))
 }
+
 const name = "API gateway"
 
 func main() {
@@ -170,26 +141,19 @@ func main() {
 	defer io.Close()
 	opentracing.SetGlobalTracer(t)
 
-	// hystrixStreamHandler := ph.NewStreamHandler()
-	// hystrixStreamHandler.Start()
-	// go http.ListenAndServe(net.JoinHostPort("", "81"), hystrixStreamHandler)
-
 	cmd.Init()
 }
 ```
 
-然后编译并启动网关：
+然后启动网关：
 
 ```bash
-$  make
-$  ../build/microGW --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
+$  go run main.go --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
 ```
 
 ### web/api 服务opentracing插件
 
 对于 user-web orders-web payment-web 这类服务主要职责是接收 API 网关转发过来的HTTP请求并通过RPC调用相关的服务完成业务逻辑。所以此类服务的 opentracing 插件，就是要将 API 网关中注入HTTP头中的 SpanContexts 取出并注入 http.Request context。 在使用RPC调用时，传递此 context，这样下游被调用服务可以从 context 中取出 SpanContexts。 
-
-在[github.com/Allenxuxu/microservices/lib/wrapper/tracer/opentracing/std2micro](https://github.com/Allenxuxu/microservices/blob/master/lib/wrapper/tracer/opentracing/std2micro/std2micro.go)中，已有实现好的插件，我们只需在代码中注册插件即可。
 
 ```go
 // TracerWrapper tracer wrapper
@@ -231,14 +195,14 @@ func TracerWrapper(h http.Handler) http.Handler {
 package main
 
 import (
-	"github.com/Allenxuxu/microservices/lib/wrapper/tracer/opentracing/std2micro"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/opentracing/std2micro"
 	"fmt"
 	"net"
 	"net/http"
 	"time"
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/breaker"
-	"github.com/Allenxuxu/microservices/lib/tracer"
+	tracer "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/jaeger"
 	opentracing "github.com/opentracing/opentracing-go"
 
 	"github.com/afex/hystrix-go/hystrix"
@@ -342,6 +306,75 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
+
+...
+```
+
+### 采样率
+在生产环境中追踪系统不能影响到核心业务的性能，所以要进行采样，每个应用和服务可以自己设置采样率。采样率应该是在每个应用自己的配置里设置的，这样可以动态调节每个服务，对于刚上线的服务应该采样率调高一点。
+
+我们修改 TracerWrapper 插件, 增加一个简单的采样率设置功能。主要原理就是，设定采样率 n (百分之n， 0 <= n <= 100), 随机生成0～100的整数x， 如果 x < n, 则采样。但是，如果调用返回出错，则直接采样。
+
+opentracng 库提供 SamplingPriority 供设置，当设置为 0 时，即本次不采样，我们通过此方法来控制采样与否。
+
+```go
+// sf sampling frequency
+var sf = 100
+
+func init() {
+	rand.Seed(time.Now().Unix())
+}
+
+// SetSamplingFrequency 设置采样频率
+// 0 <= n <= 100
+func SetSamplingFrequency(n int) {
+	sf = n
+}
+
+// TracerWrapper tracer wrapper
+func TracerWrapper(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		spanCtx, _ := opentracing.GlobalTracer().Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(r.Header))
+		sp := opentracing.GlobalTracer().StartSpan(r.URL.Path, opentracing.ChildOf(spanCtx))
+		defer sp.Finish()
+
+		if err := opentracing.GlobalTracer().Inject(
+			sp.Context(),
+			opentracing.HTTPHeaders,
+			opentracing.HTTPHeadersCarrier(r.Header)); err != nil {
+			log.Println(err)
+		}
+
+		sct := &status_code.StatusCodeTracker{ResponseWriter: w, Status: http.StatusOK}
+		h.ServeHTTP(sct.WrappedResponseWriter(), r)
+
+		ext.HTTPMethod.Set(sp, r.Method)
+		ext.HTTPUrl.Set(sp, r.URL.EscapedPath())
+		ext.HTTPStatusCode.Set(sp, uint16(sct.Status))
+		if sct.Status >= http.StatusInternalServerError {
+			ext.Error.Set(sp, true)
+		} else if rand.Intn(100) > sf {
+			ext.SamplingPriority.Set(sp, 0)
+		}
+	})
+}
+```
+
+默认的采样率为 100%，需要设置采样率 只需要调用相应的**SetSamplingFrequency**方法设置即可。
+
+以 user_web 服务为例，只需要在main函数中，增加一行代码：
+
+```go
+...
+
++	//设置采样率
++	std2micro.SetSamplingFrequency(50)
+	// 注册登录接口
+	handlerLogin := http.HandlerFunc(handler.Login)
+	service.Handle("/user/login", std2micro.TracerWrapper(breaker.BreakerWrapper(handlerLogin)))
+	// 注册退出接口
+	service.Handle("/user/logout", std2micro.TracerWrapper(http.HandlerFunc(handler.Logout)))
+	service.Handle("/user/test", std2micro.TracerWrapper(http.HandlerFunc(handler.TestSession)))
 
 ...
 ```

@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/Allenxuxu/microservices/lib/wrapper/tracer/opentracing/std2micro"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/opentracing/std2micro"
 	"fmt"
 	"net"
 	"net/http"
 	"time"
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/breaker"
-	"github.com/Allenxuxu/microservices/lib/tracer"
+	tracer "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/jaeger"
 	opentracing "github.com/opentracing/opentracing-go"
 
 	"github.com/afex/hystrix-go/hystrix"
@@ -69,6 +69,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	//设置采样率
+	std2micro.SetSamplingFrequency(50)
 	// 注册登录接口
 	handlerLogin := http.HandlerFunc(handler.Login)
 	service.Handle("/user/login", std2micro.TracerWrapper(breaker.BreakerWrapper(handlerLogin)))

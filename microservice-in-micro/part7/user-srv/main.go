@@ -16,7 +16,7 @@ import (
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 
-	"github.com/Allenxuxu/microservices/lib/tracer"
+	tracer "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/jaeger"
 	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	opentracing "github.com/opentracing/opentracing-go"
 	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/user-srv/proto/user"

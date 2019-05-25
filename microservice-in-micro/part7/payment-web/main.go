@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Allenxuxu/microservices/lib/wrapper/tracer/opentracing/std2micro"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/opentracing/std2micro"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/config"
@@ -16,7 +16,7 @@ import (
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 	"github.com/micro/go-web"
-	"github.com/Allenxuxu/microservices/lib/tracer"
+	tracer "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/jaeger"
 	opentracing "github.com/opentracing/opentracing-go"
 )
 
@@ -64,6 +64,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	//设置采样率
+	std2micro.SetSamplingFrequency(50)
 	// 新建订单接口
 	authHandler := http.HandlerFunc(handler.PayOrder)
 	service.Handle("/payment/pay-order", std2micro.TracerWrapper(handler.AuthWrapper(authHandler)))
