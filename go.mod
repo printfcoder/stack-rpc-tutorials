@@ -8,8 +8,10 @@ require (
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/golang/protobuf v1.3.1
 	github.com/google/uuid v1.1.1
+	github.com/gorilla/sessions v1.1.3
 	github.com/micro/cli v0.1.0
 	github.com/micro/go-config v1.1.0
 	github.com/micro/go-log v0.1.0
 	github.com/micro/go-micro v1.1.0
+	github.com/micro/go-web v1.0.0
 )
