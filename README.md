@@ -11,7 +11,7 @@
 ## 内容
 
 - [Micro k8s](./micro-k8s) todo
-- [MFC，Micro从零开始](./micro-from-scratch) todo
+- [MFC，Micro从零开始](./micro-from-scratch) doing
 - [使用Micro构建微服务](./microservice-in-micro)
 
 **MFC，Micro从零开始**，MFC的意思是**Micro from scratch**，该系列侧重从Golang开始讲解，然后引入Micro，再逐层深入Micro。
