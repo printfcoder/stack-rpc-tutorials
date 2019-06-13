@@ -12,7 +12,6 @@ import (
 
 // PayOrder 支付订单
 func (s *service) PayOrder(orderId int64) (err error) {
-
 	// 获取支付单
 	orderRsp, err := ordSClient.GetOrder(context.TODO(), &ordS.Request{
 		OrderId: orderId,
@@ -70,6 +69,5 @@ func (s *service) PayOrder(orderId int64) (err error) {
 	s.sendPayDoneEvt(orderId, common.InventoryHistoryStateOut)
 
 	tx.Commit()
-
 	return
 }

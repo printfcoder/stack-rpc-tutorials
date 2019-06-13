@@ -2,15 +2,15 @@ package payment
 
 import (
 	"context"
+	"time"
+	
 	"github.com/google/uuid"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv/proto/payment"
 	"github.com/micro/go-log"
-	"time"
 )
 
 // sendPayDoneEvt 发送支付事件
 func (s *service) sendPayDoneEvt(orderId int64, state int32) {
-
 	// 构建事件
 	ev := &proto.PayEvent{
 		Id:       uuid.New().String(),

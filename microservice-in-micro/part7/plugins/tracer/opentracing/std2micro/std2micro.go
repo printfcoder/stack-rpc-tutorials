@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"time"
 
-	status_code "github.com/Allenxuxu/microservices/lib/http"
+	statusCode "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/breaker/http"
 	"github.com/micro/go-micro/metadata"
-	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 )
 
@@ -46,7 +46,7 @@ func TracerWrapper(h http.Handler) http.Handler {
 		ctx = metadata.NewContext(ctx, md)
 		r = r.WithContext(ctx)
 
-		sct := &status_code.StatusCodeTracker{ResponseWriter: w, Status: http.StatusOK}
+		sct := &statusCode.StatusCodeTracker{ResponseWriter: w, Status: http.StatusOK}
 		h.ServeHTTP(sct.WrappedResponseWriter(), r)
 
 		ext.HTTPMethod.Set(sp, r.Method)

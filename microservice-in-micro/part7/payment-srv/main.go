@@ -9,16 +9,16 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/payment-srv/handler"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/payment-srv/model"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/payment-srv/proto/payment"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/jaeger"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
-
-	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	opentracing "github.com/opentracing/opentracing-go"
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/payment-srv/proto/payment"
+	openTrace "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	"github.com/opentracing/opentracing-go"
 )
 
 var (
@@ -31,7 +31,6 @@ type appCfg struct {
 }
 
 func main() {
-
 	// 初始化配置、数据库等信息
 	initCfg()
 
@@ -43,6 +42,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer io.Close()
+
 	opentracing.SetGlobalTracer(t)
 	// 新建服务
 	service := micro.NewService(
@@ -52,7 +52,7 @@ func main() {
 		micro.RegisterInterval(time.Second*10),
 		micro.Registry(micReg),
 		micro.Address(cfg.Addr()),
-		micro.WrapHandler(ocplugin.NewHandlerWrapper(opentracing.GlobalTracer())),
+		micro.WrapHandler(openTrace.NewHandlerWrapper()),
 	)
 
 	// 服务初始化
@@ -75,7 +75,6 @@ func main() {
 }
 
 func registryOptions(ops *registry.Options) {
-
 	consulCfg := &common.Consul{}
 	err := config.C().App("consul", consulCfg)
 	if err != nil {
@@ -87,7 +86,6 @@ func registryOptions(ops *registry.Options) {
 }
 
 func initCfg() {
-
 	source := grpc.NewSource(
 		grpc.WithAddress("127.0.0.1:9600"),
 		grpc.WithPath("micro"),

@@ -3,12 +3,12 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	"github.com/micro/go-log"
 	"net/http"
 	"time"
 
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/auth/proto/auth"
 	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/user-srv/proto/user"
+	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
 )
 
@@ -30,7 +30,6 @@ func Init() {
 
 // Login 登录入口
 func Login(w http.ResponseWriter, r *http.Request) {
-
 	// 只接受POST请求
 	if r.Method != "POST" {
 		log.Logf("非法请求")
@@ -101,7 +100,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 // Logout 退出登录
 func Logout(w http.ResponseWriter, r *http.Request) {
-
 	// 只接受POST请求
 	if r.Method != "POST" {
 		log.Logf("非法请求")

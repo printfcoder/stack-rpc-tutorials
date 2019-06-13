@@ -2,22 +2,21 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/handler"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/model"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/proto/user"
 	"github.com/micro/cli"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
-	"time"
-
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/proto/user"
 )
 
 func main() {
-
 	// 初始化配置、数据库等信息
 	basic.Init()
 

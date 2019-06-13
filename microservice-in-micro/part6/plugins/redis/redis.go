@@ -1,12 +1,13 @@
 package redis
 
 import (
+	"strings"
+	"sync"
+
 	r "github.com/go-redis/redis"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/config"
 	"github.com/micro/go-log"
-	"strings"
-	"sync"
 )
 
 var (

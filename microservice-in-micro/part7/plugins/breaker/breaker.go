@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	status_code "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/breaker/http"
-
 	"github.com/afex/hystrix-go/hystrix"
+	statusCode "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/breaker/http"
 )
 
 //BreakerWrapper hystrix breaker
@@ -15,7 +14,7 @@ func BreakerWrapper(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		name := r.Method + "-" + r.RequestURI
 		hystrix.Do(name, func() error {
-			sct := &status_code.StatusCodeTracker{ResponseWriter: w, Status: http.StatusOK}
+			sct := &statusCode.StatusCodeTracker{ResponseWriter: w, Status: http.StatusOK}
 			h.ServeHTTP(sct.WrappedResponseWriter(), r)
 
 			if sct.Status >= http.StatusInternalServerError {

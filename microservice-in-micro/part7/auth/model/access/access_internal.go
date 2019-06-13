@@ -2,13 +2,13 @@ package access
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 // createTokenClaims Claims
 func (s *service) createTokenClaims(subject *Subject) (m *jwt.StandardClaims, err error) {
-
 	now := time.Now()
 	m = &jwt.StandardClaims{
 		ExpiresAt: now.Add(tokenExpiredDate).Unix(),
@@ -42,7 +42,6 @@ func (s *service) delTokenFromCache(subject *Subject) (err error) {
 
 // getTokenFromCache 从缓存获取token
 func (s *service) getTokenFromCache(subject *Subject) (token string, err error) {
-
 	// 获取
 	tokenCached, err := ca.Get(tokenIDKeyPrefix + subject.ID).Result()
 	if err != nil {
@@ -54,7 +53,6 @@ func (s *service) getTokenFromCache(subject *Subject) (token string, err error) 
 
 // parseToken 解析token
 func (s *service) parseToken(tk string) (c *jwt.StandardClaims, err error) {
-
 	token, err := jwt.Parse(tk, func(token *jwt.Token) (interface{}, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {
@@ -92,7 +90,6 @@ func (s *service) parseToken(tk string) (c *jwt.StandardClaims, err error) {
 
 // 把jwt的claim转成claims
 func mapClaimToJwClaim(claims jwt.MapClaims) *jwt.StandardClaims {
-
 	jC := &jwt.StandardClaims{
 		Subject: claims["sub"].(string),
 	}

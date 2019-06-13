@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-web/handler"
@@ -10,12 +13,9 @@ import (
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 	"github.com/micro/go-web"
-	"net/http"
-	"time"
 )
 
 func main() {
-
 	// 初始化配置
 	basic.Init()
 

@@ -19,7 +19,6 @@ type Mysql struct {
 }
 
 func initMysql() {
-
 	log.Logf("[initMysql] 初始化Mysql")
 
 	c := config.C()

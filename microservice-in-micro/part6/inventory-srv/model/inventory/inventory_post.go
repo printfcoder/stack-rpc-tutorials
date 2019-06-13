@@ -2,6 +2,7 @@ package inventory
 
 import (
 	"fmt"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/inventory-srv/proto/inventory"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/db"
@@ -10,7 +11,6 @@ import (
 
 // Sell 销存
 func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
-
 	// 获取数据库
 	tx, err := db.GetDB().Begin()
 	if err != nil {
@@ -32,7 +32,6 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 	// 销存方法，通过version字段避免脏写
 	var deductInv func() error
 	deductInv = func() (errIn error) {
-
 		// 查询
 		errIn = tx.QueryRow(querySQL, bookId).Scan(&inv.Id, &inv.BookId, &inv.UnitPrice, &inv.Stock, &inv.Version)
 		if errIn != nil {
@@ -80,13 +79,11 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 
 	// 忽略error
 	tx.Commit()
-
 	return
 }
 
 // Confirm 确认销存
 func (s *service) Confirm(id int64, state int) (err error) {
-
 	updateSQL := `UPDATE inventory_history SET state = ? WHERE id = ?;`
 
 	// 获取数据库
