@@ -3,13 +3,14 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+	"strconv"
+	"time"
+
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
 	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv/proto/payment"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
-	"net/http"
-	"strconv"
-	"time"
 )
 
 var (
@@ -30,7 +31,6 @@ func Init() {
 
 // PayOrder 支付订单
 func PayOrder(w http.ResponseWriter, r *http.Request) {
-
 	// 只接受POST请求
 	if r.Method != "POST" {
 		log.Logf("非法请求")

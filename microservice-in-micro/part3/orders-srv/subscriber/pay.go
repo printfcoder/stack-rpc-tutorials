@@ -2,6 +2,7 @@ package subscriber
 
 import (
 	"context"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/model/orders"
 	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv/proto/payment"
 	"github.com/micro/go-log"
@@ -18,8 +19,8 @@ func Init() {
 
 // PayOrder 订单支付消息
 func PayOrder(ctx context.Context, event *payS.PayEvent) (err error) {
-
 	log.Logf("[PayOrder] 收到支付订单通知，%d，%d", event.OrderId, event.State)
+
 	err = ordersService.UpdateOrderState(event.OrderId, int(event.State))
 	if err != nil {
 		log.Logf("[PayOrder] 收到支付订单通知，更新状态异常，%s", err)

@@ -16,7 +16,6 @@ var (
 
 // Init 初始化handler
 func Init() {
-
 	var err error
 	userService, err = us.GetService()
 	if err != nil {
@@ -27,7 +26,6 @@ func Init() {
 
 // QueryUserByName 通过参数中的名字返回用户
 func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Response) error {
-
 	user, err := userService.QueryUserByName(req.UserName)
 	if err != nil {
 		rsp.Error = &s.Error{

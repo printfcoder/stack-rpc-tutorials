@@ -2,10 +2,10 @@ package handler
 
 import (
 	"context"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/model/orders"
-	"github.com/micro/go-log"
 
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/model/orders"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/orders"
+	"github.com/micro/go-log"
 )
 
 var (
@@ -38,8 +38,7 @@ func (e *Orders) New(ctx context.Context, req *proto.Request, rsp *proto.Respons
 }
 
 // GetOrder 获取订单
-func (e *Orders) GetOrder(ctx context.Context, req *proto.Request, rsp *proto.Response) (err error) {
-
+func (e *Orders) GetOrder(ctx context.Context, req *proto.Request, rsp *proto.Response) (err error) 
 	log.Logf("[GetOrder] 收到获取订单请求，%d", req.OrderId)
 
 	rsp.Order, err = ordersService.GetOrder(req.OrderId)

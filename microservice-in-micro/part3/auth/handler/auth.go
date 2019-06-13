@@ -2,10 +2,11 @@ package handler
 
 import (
 	"context"
+	"strconv"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/model/access"
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
 	"github.com/micro/go-log"
-	"strconv"
 )
 
 var (
@@ -63,8 +64,7 @@ func (s *Service) DelUserAccessToken(ctx context.Context, req *auth.Request, rsp
 }
 
 // GetCachedAccessToken 获取缓存的token
-func (s *Service) GetCachedAccessToken(ctx context.Context, req *auth.Request, rsp *auth.Response) error {
-
+func (s *Service) GetCachedAccessToken(ctx context.Context, req *auth.Request, rsp *auth.Response) error 
 	log.Logf("[GetCachedAccessToken] 获取缓存的token，%d", req.UserId)
 	token, err := accessService.GetCachedAccessToken(&access.Subject{
 		ID: strconv.FormatInt(req.UserId, 10),

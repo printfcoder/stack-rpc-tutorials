@@ -32,8 +32,7 @@ func Init() {
 }
 
 // New 新增订单入口
-func New(w http.ResponseWriter, r *http.Request) {
-
+func New(w http.ResponseWriter, r *http.Request)
 	// 只接受POST请求
 	if r.Method != "POST" {
 		log.Logf("非法请求")
