@@ -17,9 +17,9 @@ import (
 	"github.com/micro/go-micro/registry/consul"
 
 	tracer "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/jaeger"
-	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	opentracing "github.com/opentracing/opentracing-go"
 	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/user-srv/proto/user"
+	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	openTrace "github.com/opentracing/opentracing-go"
 )
 
 var (
@@ -44,7 +44,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer io.Close()
-	opentracing.SetGlobalTracer(t)
+	openTrace.SetGlobalTracer(t)
 	// 新建服务
 	service := micro.NewService(
 		micro.Name("mu.micro.book.srv.user"),
@@ -52,7 +52,7 @@ func main() {
 		micro.RegisterInterval(time.Second*10),
 		micro.Registry(micReg),
 		micro.Version("latest"),
-		micro.WrapHandler(ocplugin.NewHandlerWrapper(opentracing.GlobalTracer())),
+		micro.WrapHandler(ocplugin.NewHandlerWrapper()),
 	)
 
 	// 服务初始化
