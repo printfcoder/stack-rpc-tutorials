@@ -897,7 +897,6 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 - [第六章 熔断、降级、容错与健康检查][第六章]
 - [第七章 链路追踪][第七章] todo
 - [第八章 容器化][第八章] todo
-- [第九章 总结][第九章] todo
 
 ## 延伸阅读
 
@@ -921,4 +920,3 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 [第六章]: ../part6
 [第七章]: ../part7
 [第八章]: ../part8
-[第九章]: ../part9
