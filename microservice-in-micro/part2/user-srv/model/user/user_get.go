@@ -6,7 +6,7 @@ import (
 	"github.com/micro/go-log"
 )
 
-func (s *service) QueryUserByName(userName string) (ret *proto.User, err error)
+func (s *service) QueryUserByName(userName string) (ret *proto.User, err error) {
 	queryString := `SELECT user_id, user_name, pwd FROM user WHERE user_name = ?`
 
 	// 获取数据库
