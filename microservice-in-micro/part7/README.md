@@ -61,7 +61,7 @@ func NewHandlerWrapper(ot opentracing.Tracer) server.HandlerWrapper {
  service := micro.NewService(
          micro.Name(name),
          micro.Version("latest"),
-+        micro.WrapHandler(opentracing.NewHandlerWrapper(opentracing.GlobalTracer())),
++        micro.WrapHandler(opentracing.NewHandlerWrapper()),
     )
 ```
 
