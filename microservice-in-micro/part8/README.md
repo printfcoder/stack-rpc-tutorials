@@ -68,24 +68,20 @@ Makefile
 ```makefile
 GOPATH:=$(shell go env GOPATH)
 
-.PHONY: proto
-proto:
-	protoc --proto_path=${GOPATH}/src:. --micro_out=. --go_out=. proto/orders/orders.proto
-
 .PHONY: build
 build: proto
-
 	GOOS=linux GOARCH=amd64 go build -o orders-srv main.go plugin.go
-
-.PHONY: test
-test:
-	go test -v ./... -cover
-
+    
 .PHONY: docker
 docker:
 	docker build . -t orders-srv:latest
 ```
 
+.PHONY意思忽略与其后名称一样的文件，详情可见资料[.PHONY][.PHONY]，这里大家可以不用管它的作用。
+
+在Makefile中我们声明了4个子命令proto、build、test、docker
+
+### 启动参数
 
 ## 相关资料
 
@@ -99,3 +95,5 @@ docker:
 
 [Docker内部原理]: https://medium.com/@nagarwal/understanding-the-docker-internals-7ccb052ce9fe
 [为什么使用Docker]: https://runnable.com/docker/why-use-docker
+
+[.PHONY]: https://stackoverflow.com/questions/2145590/what-is-the-purpose-of-phony-in-a-makefile
