@@ -29,7 +29,7 @@ var (
 )
 
 // Init 初始化配置
-func Init()
+func Init() {
 	m.Lock()
 	defer m.Unlock()
 
