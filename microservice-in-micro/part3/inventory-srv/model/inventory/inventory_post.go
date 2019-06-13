@@ -79,7 +79,6 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 
 	// 忽略error
 	tx.Commit()
-
 	return
 }
 

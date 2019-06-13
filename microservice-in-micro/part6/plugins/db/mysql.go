@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/config"
 	"github.com/micro/go-log"
 )
@@ -19,7 +20,6 @@ type Mysql struct {
 }
 
 func initMysql() {
-
 	log.Logf("[initMysql] 初始化Mysql")
 
 	c := config.C()

@@ -33,6 +33,5 @@ func (e *Service) PayOrder(ctx context.Context, req *proto.Request, rsp *proto.R
 	}
 
 	rsp.Success = true
-
 	return
 }

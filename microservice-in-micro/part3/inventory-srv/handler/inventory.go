@@ -34,7 +34,6 @@ func (e *Service) Sell(ctx context.Context, req *proto.Request, rsp *proto.Respo
 	}
 
 	rsp.Success = true
-
 	return nil
 }
 
@@ -48,6 +47,5 @@ func (e *Service) Confirm(ctx context.Context, req *proto.Request, rsp *proto.Re
 	}
 
 	rsp.Success = true
-
 	return nil
 }

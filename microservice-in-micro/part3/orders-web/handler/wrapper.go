@@ -2,17 +2,18 @@ package handler
 
 import (
 	"context"
+	"net/http"
+
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/plugins/session"
 	"github.com/micro/go-log"
-	"net/http"
 )
 
 // AuthWrapper 认证wrapper
 func AuthWrapper(h http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) 
-	ck, _ := r.Cookie(common.RememberMeCookieName)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ck, _ := r.Cookie(common.RememberMeCookieName)
 		// token不存在，则状态异常，无权限
 		if ck == nil {
 			http.Error(w, "非法请求", 400)
@@ -20,13 +21,13 @@ func AuthWrapper(h http.Handler) http.Handler {
 		}
 
 		sess := session.GetSession(w, r)
-		if sess.ID != "" 
-	// 检测是否通过验证
+		if sess.ID != "" {
+			// 检测是否通过验证
 			if sess.Values["valid"] != nil {
 				h.ServeHTTP(w, r)
 				return
-			} else 
-	userId := sess.Values["userId"].(int64)
+			} else {
+				userId := sess.Values["userId"].(int64)
 				if userId != 0 {
 					rsp, err := authClient.GetCachedAccessToken(context.TODO(), &auth.Request{
 						UserId: userId,

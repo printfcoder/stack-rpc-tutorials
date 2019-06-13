@@ -11,7 +11,6 @@ import (
 
 // New 新增订单
 func (s *service) New(bookId int64, userId int64) (orderId int64, err error) {
-
 	// 请求销存
 	rsp, err := invClient.Sell(context.TODO(), &invS.Request{
 		BookId: bookId, UserId: userId,
@@ -36,7 +35,6 @@ func (s *service) New(bookId int64, userId int64) (orderId int64, err error) {
 
 // UpdateOrderState 更新订单状态
 func (s *service) UpdateOrderState(orderId int64, state int) (err error) {
-
 	updateSQL := `UPDATE orders SET state = ? WHERE id = ?`
 
 	// 获取数据库

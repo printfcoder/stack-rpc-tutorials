@@ -1,11 +1,12 @@
 package session
 
 import (
-	"github.com/google/uuid"
-	"github.com/gorilla/sessions"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/gorilla/sessions"
 )
 
 var (
@@ -21,7 +22,6 @@ func init() {
 
 // GetSession 获取当前会话session
 func GetSession(w http.ResponseWriter, r *http.Request) *sessions.Session {
-
 	// sessionId
 	var sId string
 

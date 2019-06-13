@@ -2,10 +2,11 @@ package access
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/broker"
-	"time"
 )
 
 var (
@@ -26,7 +27,6 @@ type Subject struct {
 
 // MakeAccessToken 生成token并保存到redis
 func (s *service) MakeAccessToken(subject *Subject) (ret string, err error) {
-
 	m, err := s.createTokenClaims(subject)
 	if err != nil {
 		return "", fmt.Errorf("[MakeAccessToken] 创建token Claim 失败，err: %s", err)
@@ -60,7 +60,6 @@ func (s *service) GetCachedAccessToken(subject *Subject) (ret string, err error)
 
 // DelUserAccessToken 清除用户token
 func (s *service) DelUserAccessToken(tk string) (err error) {
-
 	// 解析token字符串
 	claims, err := s.parseToken(tk)
 	if err != nil {

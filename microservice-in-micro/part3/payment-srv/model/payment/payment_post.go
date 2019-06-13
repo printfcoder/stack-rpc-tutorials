@@ -70,6 +70,5 @@ func (s *service) PayOrder(orderId int64) (err error) {
 	s.sendPayDoneEvt(orderId, common.InventoryHistoryStateOut)
 
 	tx.Commit()
-
 	return
 }

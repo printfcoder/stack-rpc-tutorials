@@ -37,6 +37,5 @@ func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Re
 	}
 
 	rsp.User = user
-
 	return nil
 }

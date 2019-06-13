@@ -43,7 +43,6 @@ func (s *Service) MakeAccessToken(ctx context.Context, req *auth.Request, rsp *a
 	}
 
 	rsp.Token = token
-
 	return nil
 }
 

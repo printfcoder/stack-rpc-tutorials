@@ -2,12 +2,13 @@ package access
 
 import (
 	"fmt"
+	"sync"
+
 	r "github.com/go-redis/redis"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/jwt"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/redis"
 	"github.com/micro/go-log"
-	"sync"
 )
 
 var (
