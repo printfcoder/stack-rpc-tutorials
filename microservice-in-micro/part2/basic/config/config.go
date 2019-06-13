@@ -1,14 +1,15 @@
 package config
 
 import (
-	"github.com/micro/go-config"
-	"github.com/micro/go-config/source"
-	"github.com/micro/go-config/source/file"
-	"github.com/micro/go-log"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
+
+	"github.com/micro/go-config"
+	"github.com/micro/go-config/source"
+	"github.com/micro/go-config/source/file"
+	"github.com/micro/go-log"
 )
 
 var (
@@ -28,8 +29,7 @@ var (
 )
 
 // Init 初始化配置
-func Init() {
-
+func Init()
 	m.Lock()
 	defer m.Unlock()
 

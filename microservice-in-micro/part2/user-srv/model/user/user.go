@@ -2,8 +2,9 @@ package user
 
 import (
 	"fmt"
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/user-srv/proto/user"
 	"sync"
+
+	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/user-srv/proto/user"
 )
 
 var (

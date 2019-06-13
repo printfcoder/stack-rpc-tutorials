@@ -73,8 +73,7 @@ func (s redisSentinel) GetMaster() string {
 }
 
 // GetNodes redis 哨兵节点列表
-func (s redisSentinel) GetNodes() []string {
-
+func (s redisSentinel) GetNodes() []string
 	if len(s.Nodes) != 0 {
 		for _, v := range strings.Split(s.Nodes, ",") {
 			v = strings.TrimSpace(v)
