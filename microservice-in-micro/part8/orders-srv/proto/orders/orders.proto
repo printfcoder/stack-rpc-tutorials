@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package mu.micro.book.srv.orders;
+
+service Orders {
+    rpc New (Request) returns (Response) {
+    }
+    rpc GetOrder (Request) returns (Response) {
+    }
+}
+
+message Request {
+    int64 userId = 1;
+    int64 bookId = 2;
+    int64 orderId = 3;
+}
+
+message Order {
+    int64 id = 1;
+    int64 userId = 2;
+    int64 bookId = 3;
+    int64 invHistoryId = 4;
+    int64 state = 5;
+    int64 createdTime = 6;
+    int64 updatedTime = 7;
+}
+
+message Response {
+    bool success = 1;
+    Error error = 2;
+    Order order = 3;
+}
+
+message Error {
+    int32 code = 1;
+    string detail = 2;
+}

@@ -71,7 +71,7 @@ GOPATH:=$(shell go env GOPATH)
 .PHONY: build
 build: proto
 	GOOS=linux GOARCH=amd64 go build -o orders-srv main.go plugin.go
-    
+
 .PHONY: docker
 docker:
 	docker build . -t orders-srv:latest
@@ -82,6 +82,21 @@ docker:
 在Makefile中我们声明了4个子命令proto、build、test、docker
 
 ### 启动参数
+
+我们知道**Go-Micro**应用可以通过命令行配置启动参数，那在docker中如何把这些参数传递过去呢。
+
+1. **Env**
+
+**Micro**提供了Env环境变量方式指定flag，所以我们可以基于该特性，在启动时设置docker实例。
+
+```
+docker run -e --server_address=127.0.0.1:8888
+```
+
+2. **CMD**
+
+
+
 
 ## 相关资料
 
