@@ -397,9 +397,8 @@ app-debug.log   app-error.log   app-info.log    app-warn.log
 - [第三章 库存服务、订单服务、支付服务与Session管理][第三章]
 - [第四章 使用配置中心][第四章]
 - [第六章 熔断、降级、容错与健康检查][第六章]
-- [第七章 链路追踪][第七章] todo
-- [第八章 容器化][第八章] todo
-- [第九章 总结][第九章] todo
+- [第七章 链路追踪][第七章]
+- [第八章 容器化][第八章]
 
 [第一章]: ../part1
 [第二章]: ../part2
@@ -409,5 +408,4 @@ app-debug.log   app-error.log   app-info.log    app-warn.log
 [第六章]: ../part6
 [第七章]: ../part7
 [第八章]: ../part8
-[第九章]: ../part9
 [zap]: https://github.com/uber-go/zap

@@ -61,7 +61,7 @@ func NewHandlerWrapper(ot opentracing.Tracer) server.HandlerWrapper {
  service := micro.NewService(
          micro.Name(name),
          micro.Version("latest"),
-+        micro.WrapHandler(opentracing.NewHandlerWrapper(opentracing.GlobalTracer())),
++        micro.WrapHandler(opentracing.NewHandlerWrapper()),
     )
 ```
 
@@ -448,7 +448,6 @@ $ go run main.go plugin.go
 - [第五章 日志持久化][第五章]
 - [第六章 熔断、降级、容错与健康检查][第六章]
 - [第八章 容器化][第八章] doing
-- [第九章 总结][第九章] todo
 
 [第一章]: ../part1
 [第二章]: ../part2
@@ -458,4 +457,3 @@ $ go run main.go plugin.go
 [第六章]: ../part6
 [第七章]: ../part7
 [第八章]: ../part8
-[第九章]: ../part9

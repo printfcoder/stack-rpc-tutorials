@@ -18,7 +18,6 @@ func Init() {
 
 // PayOrder 订单支付消息
 func PayOrder(ctx context.Context, event *payS.PayEvent) (err error) {
-
 	log.Logf("[PayOrder] 收到支付订单通知，%d，%d", event.OrderId, event.State)
 	err = ordersService.UpdateOrderState(event.OrderId, int(event.State))
 	if err != nil {

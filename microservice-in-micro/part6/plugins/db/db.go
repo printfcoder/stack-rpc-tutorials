@@ -3,10 +3,10 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"sync"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic"
 	"github.com/micro/go-log"
-
-	"sync"
 )
 
 var (

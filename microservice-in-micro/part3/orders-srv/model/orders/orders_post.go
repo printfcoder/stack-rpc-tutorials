@@ -2,16 +2,15 @@ package orders
 
 import (
 	"context"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/db"
-	"github.com/micro/go-log"
-
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/inventory"
+	"github.com/micro/go-log"
 )
 
 // New 新增订单
 func (s *service) New(bookId int64, userId int64) (orderId int64, err error) {
-
 	// 请求销存
 	rsp, err := invClient.Sell(context.TODO(), &invS.Request{
 		BookId: bookId, UserId: userId,
@@ -36,7 +35,6 @@ func (s *service) New(bookId int64, userId int64) (orderId int64, err error) {
 
 // UpdateOrderState 更新订单状态
 func (s *service) UpdateOrderState(orderId int64, state int) (err error) {
-
 	updateSQL := `UPDATE orders SET state = ? WHERE id = ?`
 
 	// 获取数据库

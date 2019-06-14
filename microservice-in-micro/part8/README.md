@@ -20,22 +20,80 @@
 
 虚拟机采用的是硬件级别的**系统级**虚拟化方案，需要CPU等硬件支持，而容器则是在虚拟机之上的更高级别的**进程级**虚拟化技术。
 
-可见，容器依赖虚拟机但是比虚拟机虚拟出的系统更轻量，因为它并非为了派生操作系统，而是为了精简系统、复用虚拟机并在其之上运行软件。
-
+可见，容器依赖虚拟机但是比虚拟机虚拟出的系统更轻量，因为它并非为了派生操作系统，而是为了精简系统、复用虚拟机技术并在其之上运行软件。
 
 启动时间             | 启动时间             |  停止时间
 :-------------------------|:-------------------------:|:-------------------------:
 容器（Docker）    | < 50 ms| < 50 ms
 虚拟机 | 30-45 sec| 5-10 sec
 
-## 在Docker中运行micro
+[引伸阅读][Docker内部原理]
 
+### Dockerfile
 
+前面我们稍稍提到过镜像，镜像就好比一个程序的安装包，而这个安装包只能运行在Docker容器中，但与安装包不同的是，镜像自包含了独立的运行基础环境。
+
+该基础环境便是镜像分层结构中的第一**层**，每个Docker镜像都通过一个叫作Dockerfile的文本文件描述。而Dockerfile则由**层**（**layer**）组成：
+
+Dockerfile
+
+```text
+FROM ubuntu:18.04
+COPY . /app
+RUN make /app
+CMD python /app/app.py
+```
+
+每一行就是一层，下一层基于上一层进行增量叠加。上面的示例中镜像文件所表达的意思大概是：
+
+```text
+1.基于ubuntu版本号18.04的系统运行程序
+2.把当前目录复制到第1步中的系统中根目录下的app目录
+3.在make编译app目录下的程序
+4.执行脚本命令，通常是指运行脚本
+```
+
+我们再大概解释一下具体过程，Dockerfile需要声明一个基础镜像，该镜像在运行的时候就是一个操作系统（tiny linux)，我们为了能在该系统中运行服务，那么就需要把源码在这个系统中进行编译，所以就有了接下来的**COPY**与**RUN make**指令。编译好后就可以通过CMD命令执行脚本。
+
+# 打包Go-Micro应用
+
+接下来我们可以演示使用，在前面的章节中我们在使用**micro new**指令生成模板时，都会生成两个文件：Makefile与Dockerfile。
+
+通常情况下，我们知道我们的服务要在哪种服务器中运行的，所以我们可以在实体机中使用Makefile打好包再把二进制文件搬到docker中，加上golang交叉编译的特性，我们更可以不用在Docker中去编译我们的代码，便可以直接运行。
+
+我们用OrderSrv服务的Makefile演示：
+
+Makefile
+
+```makefile
+GOPATH:=$(shell go env GOPATH)
+
+.PHONY: build
+build: proto
+	GOOS=linux GOARCH=amd64 go build -o orders-srv main.go plugin.go
+    
+.PHONY: docker
+docker:
+	docker build . -t orders-srv:latest
+```
+
+.PHONY意思忽略与其后名称一样的文件，详情可见资料[.PHONY][.PHONY]，这里大家可以不用管它的作用。
+
+在Makefile中我们声明了4个子命令proto、build、test、docker
+
+### 启动参数
 
 ## 相关资料
 
 [Docker内部原理][Docker内部原理]
+
 [为什么使用Docker][为什么使用Docker]
+
+[Docker的基础镜像比较](https://nickjanetakis.com/blog/the-3-biggest-wins-when-using-alpine-as-a-base-docker-image)
+
+[理解Dockerfile](https://docs.docker.com/engine/reference/builder/)
 
 [Docker内部原理]: https://medium.com/@nagarwal/understanding-the-docker-internals-7ccb052ce9fe
 [为什么使用Docker]: https://runnable.com/docker/why-use-docker
+
+[.PHONY]: https://stackoverflow.com/questions/2145590/what-is-the-purpose-of-phony-in-a-makefile

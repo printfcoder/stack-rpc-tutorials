@@ -4,15 +4,16 @@ import (
 	"context"
 	"crypto/md5"
 	"fmt"
+	"net"
+	"strings"
+	"sync"
+	"time"
+
 	"github.com/micro/go-config"
 	"github.com/micro/go-config/source/file"
 	proto "github.com/micro/go-config/source/grpc/proto"
 	"github.com/micro/go-log"
 	grpc2 "google.golang.org/grpc"
-	"net"
-	"strings"
-	"sync"
-	"time"
 )
 
 var (
@@ -25,7 +26,6 @@ var (
 type Service struct{}
 
 func main() {
-
 	// 灾难恢复
 	defer func() {
 		if r := recover(); r != nil {
@@ -56,7 +56,6 @@ func main() {
 }
 
 func (s Service) Read(ctx context.Context, req *proto.ReadRequest) (rsp *proto.ReadResponse, err error) {
-
 	appName := parsePath(req.Path)
 
 	rsp = &proto.ReadResponse{
@@ -66,7 +65,6 @@ func (s Service) Read(ctx context.Context, req *proto.ReadRequest) (rsp *proto.R
 }
 
 func (s Service) Watch(req *proto.WatchRequest, server proto.Source_WatchServer) (err error) {
-
 	appName := parsePath(req.Path)
 	rsp := &proto.WatchResponse{
 		ChangeSet: getConfig(appName),
@@ -80,7 +78,6 @@ func (s Service) Watch(req *proto.WatchRequest, server proto.Source_WatchServer)
 }
 
 func loadAndWatchConfigFile() (err error) {
-
 	// 加载每个应用的配置文件
 	for _, app := range apps {
 		if err := config.Load(file.NewSource(
@@ -114,7 +111,6 @@ func loadAndWatchConfigFile() (err error) {
 }
 
 func getConfig(appName string) *proto.ChangeSet {
-
 	bytes := config.Get(appName).Bytes()
 
 	log.Logf("[getConfig] appName：%s", appName)
@@ -127,7 +123,6 @@ func getConfig(appName string) *proto.ChangeSet {
 }
 
 func parsePath(path string) (appName string) {
-
 	paths := strings.Split(path, "/")
 
 	if paths[0] == "" && len(paths) > 1 {

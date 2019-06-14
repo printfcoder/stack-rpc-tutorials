@@ -25,7 +25,6 @@ type userCfg struct {
 }
 
 func main() {
-
 	// 初始化配置
 	initCfg()
 
@@ -64,7 +63,6 @@ func main() {
 }
 
 func registryOptions(ops *registry.Options) {
-
 	consulCfg := &common.Consul{}
 	err := config.C().App("consul", consulCfg)
 	if err != nil {
@@ -76,7 +74,6 @@ func registryOptions(ops *registry.Options) {
 }
 
 func initCfg() {
-
 	source := grpc.NewSource(
 		grpc.WithAddress("127.0.0.1:9600"),
 		grpc.WithPath("micro"),

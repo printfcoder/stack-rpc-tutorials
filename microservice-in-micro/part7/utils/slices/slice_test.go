@@ -5,7 +5,6 @@ import (
 )
 
 func TestContains(t *testing.T) {
-
 	in := []string{"a", "b", "c", "zzabyycdxx", "aba", "中文字符"}
 
 	out := Contains(in, "d")

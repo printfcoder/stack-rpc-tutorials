@@ -1,20 +1,18 @@
 package main
 
 import (
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/opentracing/std2micro"
 	"fmt"
 	"net"
 	"net/http"
 	"time"
 
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/breaker"
-	tracer "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/jaeger"
-	opentracing "github.com/opentracing/opentracing-go"
-
 	"github.com/afex/hystrix-go/hystrix"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/breaker"
+	tracer "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/jaeger"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/opentracing/std2micro"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/user-web/handler"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
@@ -22,6 +20,7 @@ import (
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 	"github.com/micro/go-web"
+	"github.com/opentracing/opentracing-go"
 )
 
 var (
@@ -34,7 +33,6 @@ type userCfg struct {
 }
 
 func main() {
-
 	// 初始化配置
 	initCfg()
 
@@ -89,7 +87,6 @@ func main() {
 }
 
 func registryOptions(ops *registry.Options) {
-
 	consulCfg := &common.Consul{}
 	err := config.C().App("consul", consulCfg)
 	if err != nil {
@@ -101,7 +98,6 @@ func registryOptions(ops *registry.Options) {
 }
 
 func initCfg() {
-
 	source := grpc.NewSource(
 		grpc.WithAddress("127.0.0.1:9600"),
 		grpc.WithPath("micro"),

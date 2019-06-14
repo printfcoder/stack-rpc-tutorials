@@ -17,7 +17,6 @@ type Options struct {
 type Option func(o *Options)
 
 func Init(opts ...config.Option) {
-
 	// 初始化配置
 	config.Init(opts...)
 

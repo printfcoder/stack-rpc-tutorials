@@ -3,6 +3,7 @@ package payment
 import (
 	"context"
 	"fmt"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/inventory-srv/proto/inventory"
 	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/orders-srv/proto/orders"
@@ -12,7 +13,6 @@ import (
 
 // PayOrder 支付订单
 func (s *service) PayOrder(orderId int64) (err error) {
-
 	// 获取支付单
 	orderRsp, err := ordSClient.GetOrder(context.TODO(), &ordS.Request{
 		OrderId: orderId,
@@ -70,6 +70,5 @@ func (s *service) PayOrder(orderId int64) (err error) {
 	s.sendPayDoneEvt(orderId, common.InventoryHistoryStateOut)
 
 	tx.Commit()
-
 	return
 }

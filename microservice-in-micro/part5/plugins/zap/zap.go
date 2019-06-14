@@ -5,7 +5,6 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
 	"path/filepath"
 	"sync"

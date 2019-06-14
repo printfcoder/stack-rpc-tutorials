@@ -1,10 +1,11 @@
 package redis
 
 import (
+	"sync"
+
 	"github.com/go-redis/redis"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/config"
 	"github.com/micro/go-log"
-	"sync"
 )
 
 var (
@@ -27,7 +28,6 @@ func Init() {
 
 	// 打开才加载
 	if redisConfig != nil && redisConfig.GetEnabled() {
-
 		log.Log("初始化Redis...")
 
 		// 加载哨兵模式

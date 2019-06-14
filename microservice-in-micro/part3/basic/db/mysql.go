@@ -2,12 +2,12 @@ package db
 
 import (
 	"database/sql"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/config"
 	"github.com/micro/go-log"
 )
 
 func initMysql() {
-
 	var err error
 
 	// 创建连接

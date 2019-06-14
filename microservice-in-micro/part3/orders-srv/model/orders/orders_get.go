@@ -8,7 +8,6 @@ import (
 
 // GetOrder 获取订单
 func (s *service) GetOrder(orderId int64) (order *proto.Order, err error) {
-
 	order = &proto.Order{}
 
 	// 获取数据库

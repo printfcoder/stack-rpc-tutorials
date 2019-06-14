@@ -9,17 +9,17 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/orders-srv/handler"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/orders-srv/model"
+	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/orders-srv/proto/orders"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/orders-srv/subscriber"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/tracer/jaeger"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
-
-	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	opentracing "github.com/opentracing/opentracing-go"
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/orders-srv/proto/orders"
+	openTrace "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	"github.com/opentracing/opentracing-go"
 )
 
 var (
@@ -32,7 +32,6 @@ type appCfg struct {
 }
 
 func main() {
-
 	// 初始化配置、数据库等信息
 	initCfg()
 
@@ -53,7 +52,7 @@ func main() {
 		micro.Registry(micReg),
 		micro.Version(cfg.Version),
 		micro.Address(cfg.Addr()),
-		micro.WrapHandler(ocplugin.NewHandlerWrapper(opentracing.GlobalTracer())),
+		micro.WrapHandler(openTrace.NewHandlerWrapper()),
 	)
 
 	// 服务初始化
@@ -69,7 +68,7 @@ func main() {
 	)
 
 	// 侦听订单支付消息
-	err := micro.RegisterSubscriber(common.TopicPaymentDone, service.Server(), subscriber.PayOrder)
+	err = micro.RegisterSubscriber(common.TopicPaymentDone, service.Server(), subscriber.PayOrder)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -87,7 +86,6 @@ func main() {
 }
 
 func registryOptions(ops *registry.Options) {
-
 	consulCfg := &common.Consul{}
 	err := config.C().App("consul", consulCfg)
 	if err != nil {
@@ -99,7 +97,6 @@ func registryOptions(ops *registry.Options) {
 }
 
 func initCfg() {
-
 	source := grpc.NewSource(
 		grpc.WithAddress("127.0.0.1:9600"),
 		grpc.WithPath("micro"),

@@ -21,7 +21,6 @@ func init() {
 
 // GetSession 获取当前会话session
 func GetSession(w http.ResponseWriter, r *http.Request) *sessions.Session {
-
 	// sessionId
 	var sId string
 

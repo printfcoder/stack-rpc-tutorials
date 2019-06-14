@@ -106,8 +106,7 @@ Golang，gRPC，Mysql，Redis，Docker，K8s，Go-micro/Micro
 - [第五章 日志持久化][第五章]
 - [第六章 熔断、降级、容错与健康检查][第六章]
 - [第七章 链路追踪][第七章]
-- [第八章 容器化][第八章] doing
-- [第九章 总结][第九章] doing
+- [第八章 容器化][第八章]
 
 ## 特别声明
 
@@ -133,4 +132,3 @@ Golang，gRPC，Mysql，Redis，Docker，K8s，Go-micro/Micro
 [第六章]: ./part6
 [第七章]: ./part7
 [第八章]: ./part8
-[第九章]: ./part9

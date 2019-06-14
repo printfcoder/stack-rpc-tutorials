@@ -39,7 +39,6 @@ func (e *Orders) New(ctx context.Context, req *proto.Request, rsp *proto.Respons
 
 // GetOrder 获取订单
 func (e *Orders) GetOrder(ctx context.Context, req *proto.Request, rsp *proto.Response) (err error) {
-
 	log.Logf("[GetOrder] 收到获取订单请求，%d", req.OrderId)
 
 	rsp.Order, err = ordersService.GetOrder(req.OrderId)

@@ -2,9 +2,10 @@ package access
 
 import (
 	"fmt"
+	"sync"
+
 	r "github.com/go-redis/redis"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/basic/redis"
-	"sync"
 )
 
 var (
