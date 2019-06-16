@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package mu.micro.book.srv.payment;
+
+service Payment {
+    rpc PayOrder (Request) returns (Response) {
+    }
+}
+
+// PayEvent
+message PayEvent {
+    string id = 1;
+    int64 sentTime = 2;
+    int64 orderId = 3;
+    int32 state = 4;
+}
+
+message Payments {
+    int64 id = 1;
+    int64 userId = 2;
+    int64 bookId = 3;
+    int64 orderId = 4;
+    int64 invHistoryId = 5;
+    int32 state = 6;
+    int64 createdTime = 7;
+    int64 updatedTime = 8;
+}
+
+message Request {
+    int64 orderId = 1;
+    int64 price = 2;
+}
+
+message Response {
+    bool success = 1;
+    Error error = 2;
+}
+
+message Error {
+    int32 code = 1;
+    string detail = 2;
+}
