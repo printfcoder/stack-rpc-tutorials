@@ -31,7 +31,7 @@ func AuthWrapper(h http.Handler) http.Handler {
 					rsp, err := authClient.GetCachedAccessToken(context.TODO(), &auth.Request{
 						UserId: userId,
 					})
-					
+
 					if err != nil {
 						log.Logf("[AuthWrapper]，err：%s", err)
 						http.Error(w, "非法请求", 400)
