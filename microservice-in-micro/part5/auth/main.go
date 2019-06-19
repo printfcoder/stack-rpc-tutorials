@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/auth/handler"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/auth/model"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/auth/proto/auth"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/config"
@@ -14,9 +17,6 @@ import (
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 	"go.uber.org/zap"
-	"time"
-
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/auth/proto/auth"
 )
 
 var (

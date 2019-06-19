@@ -2,6 +2,7 @@ package inventory
 
 import (
 	"fmt"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/common"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/inventory-srv/proto/inventory"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/db"
