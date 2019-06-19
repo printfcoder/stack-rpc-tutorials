@@ -4,7 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part8/basic/config"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 )
 
 type db struct {

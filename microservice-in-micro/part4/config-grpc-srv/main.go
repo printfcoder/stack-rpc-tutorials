@@ -7,7 +7,7 @@ import (
 	"github.com/micro/go-config"
 	"github.com/micro/go-config/source/file"
 	proto "github.com/micro/go-config/source/grpc/proto"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 	grpc2 "google.golang.org/grpc"
 	"net"
 	"strings"

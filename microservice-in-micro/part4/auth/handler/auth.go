@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/model/access"
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 	"strconv"
 )
 

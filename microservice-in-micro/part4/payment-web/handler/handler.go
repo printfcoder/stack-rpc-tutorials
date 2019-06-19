@@ -3,13 +3,14 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
-	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/proto/payment"
-	"github.com/micro/go-log"
-	"github.com/micro/go-micro/client"
 	"net/http"
 	"strconv"
 	"time"
+
+	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
+	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/proto/payment"
+	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (

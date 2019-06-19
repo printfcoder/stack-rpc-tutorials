@@ -3,7 +3,7 @@ package orders
 import (
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/orders-srv/proto/orders"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/db"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 )
 
 // GetOrder 获取订单

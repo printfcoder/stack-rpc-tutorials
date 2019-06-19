@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/config"
 	"github.com/micro/go-micro/config/source"
 	"github.com/micro/go-micro/config/source/file"

@@ -7,7 +7,7 @@ import (
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/inventory-srv/proto/inventory"
 	orders "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/orders-srv/proto/orders"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/session"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/client"
 	"net/http"
 	"strconv"

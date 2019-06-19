@@ -9,7 +9,7 @@ import (
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/auth/proto/auth"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/session"
 	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/user-srv/proto/user"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-plugins/wrapper/breaker/hystrix"
 )

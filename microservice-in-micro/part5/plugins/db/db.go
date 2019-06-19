@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 
 	"sync"
 )

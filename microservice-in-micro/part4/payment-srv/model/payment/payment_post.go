@@ -3,11 +3,12 @@ package payment
 import (
 	"context"
 	"fmt"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/common"
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/inventory-srv/proto/inventory"
 	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/orders-srv/proto/orders"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/plugins/db"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 )
 
 // PayOrder 支付订单

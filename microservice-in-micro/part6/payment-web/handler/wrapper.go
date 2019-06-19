@@ -7,7 +7,7 @@ import (
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/proto/auth"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/session"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 )
 
 // AuthWrapper 认证wrapper

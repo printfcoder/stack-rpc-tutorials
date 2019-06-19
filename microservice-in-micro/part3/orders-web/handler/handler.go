@@ -11,7 +11,7 @@ import (
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/inventory-srv/proto/inventory"
 	orders "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/orders"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/plugins/session"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/client"
 )
 

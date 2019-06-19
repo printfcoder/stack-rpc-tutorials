@@ -16,7 +16,7 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part8/user-web/handler"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 	"github.com/micro/go-micro/web"

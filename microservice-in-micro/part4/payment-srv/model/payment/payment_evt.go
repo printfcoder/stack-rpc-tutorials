@@ -2,10 +2,11 @@ package payment
 
 import (
 	"context"
+	"time"
+
 	"github.com/google/uuid"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/proto/payment"
-	"github.com/micro/go-log"
-	"time"
+	"github.com/micro/go-micro/util/log"
 )
 
 // sendPayDoneEvt 发送支付事件

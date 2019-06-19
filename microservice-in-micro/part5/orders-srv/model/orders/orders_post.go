@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/db"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/inventory-srv/proto/inventory"
 )

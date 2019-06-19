@@ -7,7 +7,7 @@ import (
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/inventory-srv/proto/inventory"
 	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/orders-srv/proto/orders"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/db"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 )
 
 // PayOrder 支付订单
