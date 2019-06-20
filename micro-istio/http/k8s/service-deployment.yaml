@@ -1,0 +1,94 @@
+# Copyright 2017 Istio Authors
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
+##################################################################################################
+# SRV service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-micro-srv-sample
+  labels:
+    app: go-micro-srv-sample
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: go-micro-srv-sample
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: go-micro-srv-sample-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: go-micro-srv-sample
+        version: v1
+    spec:
+      containers:
+      - name: go-micro-srv-sample
+        command: [
+          "/sample",
+          "-server_address=0.0.0.0:9080",
+          "-client_call_address=:9080",
+        ]
+        image: hbchen/go-micro-istio-srv-sample:v0.0.4
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+---
+##################################################################################################
+# API service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-micro-api-sample
+  labels:
+    app: go-micro-api-sample
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: go-micro-api-sample
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: go-micro-api-sample-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: go-micro-api-sample
+        version: v1
+    spec:
+      containers:
+      - name: go-micro-api-sample
+        command: [
+          "/sample",
+          "-server_address=0.0.0.0:9080",
+          "-client_call_address=:9080",
+        ]
+        image: hbchen/go-micro-istio-api-sample:v0.0.6
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+---
