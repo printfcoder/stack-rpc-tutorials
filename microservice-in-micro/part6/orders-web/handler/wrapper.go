@@ -2,11 +2,12 @@ package handler
 
 import (
 	"context"
+	"net/http"
+
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/proto/auth"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/session"
-	"github.com/micro/go-log"
-	"net/http"
+	"github.com/micro/go-micro/util/log"
 )
 
 // AuthWrapper 认证wrapper
@@ -31,7 +32,7 @@ func AuthWrapper(h http.Handler) http.Handler {
 					rsp, err := authClient.GetCachedAccessToken(context.TODO(), &auth.Request{
 						UserId: userId,
 					})
-					
+
 					if err != nil {
 						log.Logf("[AuthWrapper]，err：%s", err)
 						http.Error(w, "非法请求", 400)

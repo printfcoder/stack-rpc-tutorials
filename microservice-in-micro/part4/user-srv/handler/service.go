@@ -2,10 +2,10 @@ package handler
 
 import (
 	"context"
-	"github.com/micro/go-log"
 
 	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/user-srv/model/user"
 	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/user-srv/proto/user"
+	"github.com/micro/go-micro/util/log"
 )
 
 type Service struct{}

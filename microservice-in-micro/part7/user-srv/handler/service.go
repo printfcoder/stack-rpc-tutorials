@@ -2,7 +2,7 @@ package handler
 
 import (
 	"context"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 
 	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/user-srv/model/user"
 	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/user-srv/proto/user"

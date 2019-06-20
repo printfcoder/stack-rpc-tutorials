@@ -2,9 +2,10 @@ package subscriber
 
 import (
 	"context"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/orders-srv/model/orders"
 	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/proto/payment"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (

@@ -2,12 +2,13 @@ package payment
 
 import (
 	"fmt"
+	"sync"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/common"
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/inventory-srv/proto/inventory"
 	ordS "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/orders-srv/proto/orders"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/client"
-	"sync"
 )
 
 var (

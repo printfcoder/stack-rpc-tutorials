@@ -6,7 +6,7 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/basic/common"
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/inventory-srv/proto/inventory"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part7/plugins/db"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 )
 
 // New 新增订单

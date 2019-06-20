@@ -2,21 +2,21 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/orders-srv/handler"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/orders-srv/model"
+	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/orders-srv/proto/orders"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/orders-srv/subscriber"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
-	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
-	"time"
-
-	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/orders-srv/proto/orders"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (

@@ -2,11 +2,12 @@ package handler
 
 import (
 	"context"
+	"net/http"
+
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/auth/proto/auth"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/session"
-	"github.com/micro/go-log"
-	"net/http"
+	"github.com/micro/go-micro/util/log"
 )
 
 // AuthWrapper 认证wrapper

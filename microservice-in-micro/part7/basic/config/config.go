@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/micro/go-config"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (

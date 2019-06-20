@@ -2,10 +2,11 @@ package inventory
 
 import (
 	"fmt"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part8/basic/common"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part8/inventory-srv/proto/inventory"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part8/plugins/db"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 )
 
 // Sell 销存

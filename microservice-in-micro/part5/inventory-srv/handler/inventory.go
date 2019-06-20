@@ -2,10 +2,10 @@ package handler
 
 import (
 	"context"
-	"github.com/micro/go-log"
 
 	inv "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/inventory-srv/model/inventory"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/inventory-srv/proto/inventory"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (

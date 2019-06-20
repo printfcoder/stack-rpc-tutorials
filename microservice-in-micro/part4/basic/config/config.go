@@ -2,9 +2,10 @@ package config
 
 import (
 	"fmt"
-	"github.com/micro/go-config"
-	"github.com/micro/go-log"
 	"sync"
+
+	"github.com/micro/go-config"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (

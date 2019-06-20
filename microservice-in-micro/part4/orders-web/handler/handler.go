@@ -3,15 +3,16 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+	"strconv"
+	"time"
+
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
 	invS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/inventory-srv/proto/inventory"
 	orders "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/orders-srv/proto/orders"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/plugins/session"
-	"github.com/micro/go-log"
 	"github.com/micro/go-micro/client"
-	"net/http"
-	"strconv"
-	"time"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (

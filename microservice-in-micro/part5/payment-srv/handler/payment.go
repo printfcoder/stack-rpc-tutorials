@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/payment-srv/model/payment"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/payment-srv/proto/payment"
 )

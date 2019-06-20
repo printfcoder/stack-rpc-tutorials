@@ -8,7 +8,7 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/jwt"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/redis"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (

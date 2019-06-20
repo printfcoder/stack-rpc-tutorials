@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part8/basic"
-	"github.com/micro/go-log"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (
