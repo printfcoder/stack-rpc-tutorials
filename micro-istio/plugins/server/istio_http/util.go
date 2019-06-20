@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strings"
 
-	api "github.com/micro/go-api/proto"
+	api "github.com/micro/go-micro/api/proto"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/selector"
 )

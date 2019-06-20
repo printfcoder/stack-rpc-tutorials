@@ -12,9 +12,9 @@ import (
 	"sync"
 
 	"github.com/gorilla/mux"
-	"github.com/micro/go-api"
-	ha "github.com/micro/go-api/handler/api"
 	"github.com/micro/go-log"
+	"github.com/micro/go-micro/api"
+	ha "github.com/micro/go-micro/api/handler/api"
 	"github.com/micro/go-micro/cmd"
 	"github.com/micro/go-micro/errors"
 	"github.com/micro/go-micro/server"

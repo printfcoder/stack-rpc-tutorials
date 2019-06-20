@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 
 	"context"
-	api "github.com/micro/go-api/proto"
 	"github.com/micro/go-log"
+	api "github.com/micro/go-micro/api/proto"
 	"github.com/micro/go-micro/errors"
 
 	apiClient "github.com/micro-in-cn/tutorials/micro-istio/http/api/client"

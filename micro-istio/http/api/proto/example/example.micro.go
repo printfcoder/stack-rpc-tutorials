@@ -6,7 +6,7 @@ package go_micro_api_sample
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	proto1 "github.com/micro/go-api/proto"
+	proto1 "github.com/micro/go-micro/api/proto"
 	math "math"
 )
 
