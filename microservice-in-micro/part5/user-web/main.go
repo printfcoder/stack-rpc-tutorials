@@ -11,7 +11,7 @@ import (
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
-	"github.com/micro/go-web"
+	"github.com/micro/go-micro/web"
 	"time"
 )
 

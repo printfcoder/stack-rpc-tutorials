@@ -11,7 +11,7 @@
 ## 内容
 
 - [Micro k8s](./micro-k8s) todo
-- [Micro istio](./micro-istio) todo
+- [Micro istio](./micro-istio) doing
 - [MFC，Micro从零开始](./micro-from-scratch) doing
 - [使用Micro构建微服务](./microservice-in-micro)
 
