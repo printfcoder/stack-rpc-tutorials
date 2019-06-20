@@ -8,7 +8,7 @@
 `istio`支持的`http`、`gRPC`在`go-micro`插件中都有实现，只需要在此基础上做下改造便可以适用`mesh`场景，
 使用`http`或`gRPC`自然`transport`也不存在，剩下的就是剥离掉`registry`和`selector`。
 
-[hb-go/micro-plugins](https://github.com/hb-go/micro-plugins)是改造好的`istio`插件。
+[plugins](plugins)是改造好的`istio`插件。
 
 - Support
     - [x] HTTP

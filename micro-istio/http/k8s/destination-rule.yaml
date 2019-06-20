@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: go-micro-api-sample
+spec:
+  host: go-micro-api-sample
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: go-micro-srv-sample
+spec:
+  host: go-micro-srv-sample
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+---

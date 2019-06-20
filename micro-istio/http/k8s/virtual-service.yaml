@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: go-micro-api-sample
+spec:
+  hosts:
+  - go-micro-api-sample
+  http:
+  - route:
+    - destination:
+        host: go-micro-api-sample
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: go-micro-srv-sample
+spec:
+  hosts:
+  - go-micro-srv-sample
+  http:
+  - route:
+    - destination:
+        host: go-micro-srv-sample
+        subset: v1
