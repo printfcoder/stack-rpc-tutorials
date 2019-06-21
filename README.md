@@ -23,13 +23,12 @@
 ## 其它系列
 
 - [Micro全中文示例][cn-examples]
-- [Micro中文博客][cn-blogs] todo
+- [Micro中文博客][cn-blogs]
 - [Micro中文文档][cn-docs] todo
-- [Micro源码解读][./]
 
 [cn-examples]: https://github.com/micro-in-cn/all-in-one
-[cn-blogs]: https://github.com/micro-in-cn/blogs
-[cn-docs]: https://github.com/micro-in-cn/docs
+[cn-blogs]: https://micro.mu/blog/cn/
+[cn-docs]: https://micro.mu/docs/cn/
 
 ## 贡献
 
