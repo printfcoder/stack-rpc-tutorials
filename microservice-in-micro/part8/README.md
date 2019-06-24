@@ -79,7 +79,7 @@ docker:
 
 .PHONY意思忽略与其后名称一样的文件，详情可见资料[.PHONY][.PHONY]，这里大家可以不用管它的作用。
 
-在Makefile中我们声明了4个子命令proto、build、test、docker
+在Makefile中我们声明了两个子命令build、docker
 
 ### 启动参数
 
@@ -90,13 +90,25 @@ docker:
 **Micro**提供了Env环境变量方式指定flag，所以我们可以基于该特性，在启动时设置docker实例。
 
 ```
-docker run -e --server_address=127.0.0.1:8888
+docker run -e MICRO_REGISTRY_ADDRESS=192.168.13.2:8500 -i orders-srv
+```
+
+不过我们不会这么做，这样会把docker启动指令搞得又臭又长，我们把**Env**放到Dockerfile中：
+
+```dockerfile
+FROM alpine
+ENV MICRO_REGISTRY_ADDRESS 192.168.13.2:8500
+ADD orders-srv /orders-srv
+ENTRYPOINT [ "/orders-srv" ]
 ```
 
 2. **CMD**
 
+dockerfile
 
+### 构建之前
 
+因为我们把程序都放到容器这中运行，因此网络情况有所变化，故而需要把代码中部分写死的地址改成容器能访问到的地址，我们修改部分代码，使其变成可配置的地址。
 
 ## 相关资料
 
