@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part8/basic"
@@ -88,8 +89,9 @@ func registryOptions(ops *registry.Options) {
 }
 
 func initCfg() {
+	configAddr := os.Getenv("MICRO_BOOK_CONFIG_GRPC_ADDR")
 	source := grpc.NewSource(
-		grpc.WithAddress("127.0.0.1:9600"),
+		grpc.WithAddress(configAddr),
 		grpc.WithPath("micro"),
 	)
 
