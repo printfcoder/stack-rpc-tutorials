@@ -5,12 +5,12 @@ micro:
     port: 9030
   consul:
     enabled: true
-    host: 127.0.0.1
+    host: 192.168.13.2
     port: 8500
   db:
     mysql:
       enabled: true
-      url: root:123@(127.0.0.1:3306)/micro_book_mall?charset=utf8&parseTime=true&loc=Asia%2FShanghai
+      url: root:123@(192.168.13.2:3306)/micro_book_mall?charset=utf8&parseTime=true&loc=Asia%2FShanghai
       maxIdleConnection: 100
       maxOpenConnection: 130
   inv_srv:

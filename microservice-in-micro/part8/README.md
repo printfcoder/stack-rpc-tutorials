@@ -97,18 +97,64 @@ docker run -e MICRO_REGISTRY_ADDRESS=192.168.13.2:8500 -i orders-srv
 
 ```dockerfile
 FROM alpine
+
 ENV MICRO_REGISTRY_ADDRESS 192.168.13.2:8500
+ENV MICRO_BOOK_CONFIG_GRPC_ADDR 192.168.13.2:9600
+
+RUN apk update && apk add tzdata && cp -r -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
 ADD orders-srv /orders-srv
+
 ENTRYPOINT [ "/orders-srv" ]
 ```
 
-2. **CMD**
+其中我们多加了个RUN指令，这是因为alpine镜像使用的是UTC时区，我们在+8区，故而我们需要设置一下时区，这样日志看起来顺眼些
 
-dockerfile
+> 其它传参的方式比如**CMD**、**ENTRYPOINT**大家可以自行研究，没有Env简单、方便、直观，我们不多赘述。
 
 ### 构建之前
 
-因为我们把程序都放到容器这中运行，因此网络情况有所变化，故而需要把代码中部分写死的地址改成容器能访问到的地址，我们修改部分代码，使其变成可配置的地址。
+因为我们把程序都放到容器这中运行，因此网络情况有所变化，故而需要把代码中部分写死的地址改成容器能访问到的地址，我们修改部分代码，使其变成可配置的地址。主要是配置中心的地址：
+
+```golang
+func initCfg() {
+	configAddr := os.Getenv("MICRO_BOOK_CONFIG_GRPC_ADDR")
+	source := grpc.NewSource(
+		grpc.WithAddress(configAddr),
+		grpc.WithPath("micro"),
+	)
+	
+	// ...
+}
+```
+
+我们将以前的**127.0.0.1:9600**改为使用环境变量的方式**os.Getenv("MICRO_BOOK_CONFIG_GRPC_ADDR")**。
+
+### 打包
+
+```bash
+make build
+make docker
+```
+
+然后我们可以查看刚打好包的镜像：
+
+```bash
+docker images 
+
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+orders-srv              latest              4f4b6df3e32b        3 seconds ago       32.6MB
+```
+
+### 运行docker镜像实例
+
+```bash
+docker run --name orders-srv -d orders-srv 
+```
+
+## 总结
+
+本小篇我们给大家演示使用docker打包我们的应用，我们用了这系列的8章给大家介绍如何使用Micro编写微服务，至此，本系列也已完结，不过，我们从始至终会一直坚持文档或教程也是项目的原则，写完后并不会将其搁置在一边，而是会随时保持与最新代码一致，不过，由于人力与精力有限，并不会实时保持最新，但是至少我们会让大家尽可能尽早吃到最香最新鲜的Micro！所以，未来本系列的章节结构也可能会有适当调整与丰富。
 
 ## 相关资料
 

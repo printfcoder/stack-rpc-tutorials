@@ -1,16 +1,10 @@
 
 GOPATH:=$(shell go env GOPATH)
 
-
 .PHONY: build
-build:
-
-	go build -o payment-web main.go plugin.go
-
-.PHONY: test
-test:
-	go test -v ./... -cover
+build: proto
+	GOOS=linux GOARCH=amd64 go build -o payment-web main.go plugin.go
 
 .PHONY: docker
-docker:
+docker:docker
 	docker build . -t payment-web:latest
