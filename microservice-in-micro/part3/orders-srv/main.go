@@ -12,10 +12,10 @@ import (
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/orders"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/subscriber"
 	"github.com/micro/cli"
-	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
+	"github.com/micro/go-micro/util/log"
 )
 
 func main() {
