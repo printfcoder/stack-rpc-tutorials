@@ -13,10 +13,10 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part8/plugins/tracer/jaeger"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
-	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
+	"github.com/micro/go-micro/util/log"
 	openTrace "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	"github.com/opentracing/opentracing-go"
 )

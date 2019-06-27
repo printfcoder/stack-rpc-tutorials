@@ -13,10 +13,10 @@ import (
 	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part7/user-srv/proto/user"
 	"github.com/micro/cli"
 	"github.com/micro/go-config/source/grpc"
-	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
+	"github.com/micro/go-micro/util/log"
 	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	openTrace "github.com/opentracing/opentracing-go"
 )
