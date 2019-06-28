@@ -78,9 +78,58 @@ micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-
 
 ```
 
+有些目录比如subscriber，example等目前我们是用不到或者名称不是我们想要的，我们需要手动改一下：
+
+handler/example.go改成user.go，proto也一样改成user/user.proto，详见下面的目录结构
+
+```text
+.
+├── main.go
+├── plugin.go
+├── basic
+│   └── config               * 配置类
+│   │   └── config.go        * 初始化配置类
+│   │   └── consul.go        * consul配置结构体
+│   │   └── mysql.go         * mysql配置结构体
+│   │   └── profiles.go      * 配置文件树辅助类
+│   └── db                   * 数据库相关
+│   │    └── db.go           * 初始化数据库
+│   │    └── mysql.go        * mysql数据库相关
+│   └── basic                * 初始化基础组件
+├── conf                     * 配置文件目录
+├── handler
+│   └── user.go              * 将名称改为user
+├── model                    * 增加模型层，用于与数据库交换数据
+│   └── user                 * 用户模型类
+│   │   └── user.go          * 初始化用户模型类
+│   │   └── user_get.go      * 封装获取用户数据类业务
+│   └── model.go             * 初始化模型层
+├── proto/user    
+│   └── user.proto           * 将名称改为user
+├── Dockerfile
+├── Makefile
+└── README.md
+```
+
+其中加`*`的便是我们修改过的结构，其后跟的描述是目录或文件的功能或作用。可能大家会觉得改动这么大，模板命令还有什么用呢？
+
+其实模板只是生成基础目录，把大家引进一个风格的项目中，这样管理起来会轻松许多。下面我们解释一下为什么要新增两个目录：**basic**，**model**和**config**。
+
+**basic**和**model**其实和Micro无关，只是为了满足我们为**user-srv**的业务定位，它是一个**MVC**应用后台，而C交给了**user-web**，其中的**M**才是它的主要功能。
+
+- **basic** 负责初始化基础组件，比如数据库、配置等
+
+- **model** 负责封装业务逻辑
+
+- **conf** 配置文件目录，现在我们还没用配置中心，暂先用文件的方式
+
+有朋友会问，那**handler**目录呢？刚说**user-srv**本质上是一个MVC应用的后台，它弱化了C成handler，只负责接收请求，不改动业务数据**值**，但可能改动结构以便回传。
+
+下面我们开始处理业务方面的东西
+
 ### 定义User原型
 
-我们需要在service.proto中定义User原型，暂且定义以下字段，足够登录，显示用户基本信息、异常信息即可;
+我们需要在user.proto中定义User原型，暂且定义以下字段，足够登录，显示用户基本信息、异常信息即可;
 
 ```proto
 syntax = "proto3";
@@ -126,6 +175,8 @@ message Response {
 protoc --proto_path=. --go_out=. --micro_out=. proto/user/user.proto
 ```
 
+下面是代码生成的main.go
+
 ```go
 package main
 
@@ -158,7 +209,7 @@ func main() {
 
 ```
 
-生成的**main**方法比较简单，根据我们当前的需要，我们把不要的pubsub（发布订阅）都删掉，变成：
+生成的**main**方法比较简单，根据我们当前的需求，我们把不要的pubsub（发布订阅）都删掉，变成：
 
 ```go
 package main
@@ -183,61 +234,9 @@ func main() {
         log.Fatal(err)
     }
 }
-
 ```
 
 朋友们可能已经发现，如果我们要从数据库里获取数据，模块提供的代码是远远不够的，那下面我们就真正开始编写代码。
-
-### 开始写代码
-
-上面的生成的目录部分，我们需要手动改一下：
-
-生成的部分代码我们用不到，把它们删掉，加上我们需要的文件与目录。结构如下
-
-```text
-.
-├── main.go
-├── plugin.go
-├── basic
-│   └── config               * 配置类
-│   │   └── config.go        * 初始化配置类
-│   │   └── consul.go * consul配置结构体
-│   │   └── mysql.go  * mysql配置结构体
-│   │   └── profiles.go      * 配置文件树辅助类
-│   └── db                   * 数据库相关
-│   │    └── db.go           * 初始化数据库
-│   │    └── mysql.go        * mysql数据库相关
-│   └── basic                * 初始化基础组件
-├── conf                     * 配置文件目录
-├── handler
-│   └── user.go              * 将名称改为user
-├── model                    * 增加模型层，用于与数据库交换数据
-│   └── user                 * 用户模型类
-│   │   └── user.go          * 初始化用户模型类
-│   │   └── user_get.go      * 封装获取用户数据类业务
-│   └── model.go             * 初始化模型层
-├── proto/user    
-│   └── user.proto           * 将名称改为user
-├── Dockerfile
-├── Makefile
-└── README.md
-```
-
-其中加`*`的便是我们修改过的结构，其后跟的描述是目录或文件的功能或作用。可能大家会觉得改动这么大，模板命令还有什么用呢？
-
-其实模板只是生成基础目录，把大家引进一个风格的项目中，这样管理起来会轻松许多。下面我们解释一下为什么要新增两个目录：**basic**，**model**和**config**。
-
-**basic**和**model**其实和Micro无关，只是为了满足我们为**user-srv**的业务定位，它是一个**MVC**应用后台，而C交给了**user-web**，其中的**M**才是它的主要功能。
-
-- **basic** 负责初始化基础组件，比如数据库、配置等
-
-- **model** 负责封装业务逻辑
-
-- **conf** 配置文件目录，现在我们还没用配置中心，暂先用文件的方式
-
-有朋友会问，那**handler**目录呢？刚说**user-srv**本质上是一个MVC应用的后台，它弱化了C成handler，只负责接收请求，不改动业务数据**值**，但可能改动结构以便回传。
-
-下面我们开始处理业务方面的东西
 
 ### 创建User表
 
@@ -259,7 +258,6 @@ CREATE TABLE `user`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='用户表';
 ```
-
 
 预置一条数据，*为了简化，我们的账户密码暂时使用明文*，后面的章节会加盐hash后再存储、匹配。
 
