@@ -697,7 +697,7 @@ $ go run main.go plugin.go
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
 [micro-new-code]: https://github.com/micro/micro/tree/master/new
 [go-micro]: https://github.com/micro/go-micro
-[go-config]: https://github.com/micro/go-config
+[go-config]: https://github.com/micro/go-micro/config
 [go-web]: https://github.com/micro/go-web
 [go-broker]: https://github.com/micro/go-micro/broker
 [jwt]: https://jwt.io/introduction/
