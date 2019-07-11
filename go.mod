@@ -7,7 +7,6 @@ replace github.com/testcontainers/testcontainer-go => github.com/testcontainers/
 replace github.com/golang/lint => github.com/golang/lint v0.0.0-20190227174305-8f45f776aaf1
 
 require (
-	contrib.go.opencensus.io/integrations/ocsql v0.1.4 // indirect
 	github.com/Masterminds/sprig v2.18.0+incompatible // indirect
 	github.com/RoaringBitmap/roaring v0.4.17 // indirect
 	github.com/aclements/go-gg v0.0.0-20170323211221-abd1f791f5ee // indirect
@@ -23,20 +22,18 @@ require (
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/golang/gddo v0.0.0-20190312205958-5a2505f3dbf0 // indirect
 	github.com/golang/protobuf v1.3.1
-	github.com/google/subcommands v1.0.1 // indirect
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.7.2
 	github.com/gorilla/sessions v1.1.3
 	github.com/influxdata/line-protocol v0.0.0-20190220025226-a3afd890113f // indirect
 	github.com/kevinburke/go-bindata v3.13.0+incompatible // indirect
-	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/mattn/go-sqlite3 v1.10.0 // indirect
 	github.com/mattn/go-zglob v0.0.1 // indirect
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-config v1.1.1-0.20190603113547-03fb75f2f1e4
 	github.com/micro/go-log v0.1.0
-	github.com/micro/go-micro v1.5.0
-	github.com/micro/go-plugins v1.1.0 // indirect
+	github.com/micro/go-micro v1.7.1-0.20190627135301-d8e998ad85fe
+	github.com/micro/go-plugins v1.1.1 // indirect
 	github.com/micro/go-web v1.0.0
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/pkg/term v0.0.0-20190109203006-aa71e9d9e942 // indirect
@@ -49,10 +46,6 @@ require (
 	github.com/uber/jaeger-client-go v2.16.0+incompatible
 	github.com/uber/jaeger-lib v2.0.0+incompatible // indirect
 	go4.org v0.0.0-20190313082347-94abd6928b1d // indirect
-	golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5 // indirect
 	golang.org/x/perf v0.0.0-20190312170614-0655857e383f // indirect
-	golang.org/x/tools v0.0.0-20190606050223-4d9ae51c2468 // indirect
-	google.golang.org/genproto v0.0.0-20190605220351-eb0b1bdb6ae6 // indirect
 	gotest.tools v2.3.0+incompatible // indirect
-	honnef.co/go/tools v0.0.0-20190605142022-0a11fc526260 // indirect
 )
