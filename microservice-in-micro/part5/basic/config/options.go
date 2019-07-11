@@ -1,6 +1,6 @@
 package config
 
-import "github.com/micro/go-config/source"
+import "github.com/micro/go-micro/config/source"
 
 type Options struct {
 	Apps    map[string]interface{}
