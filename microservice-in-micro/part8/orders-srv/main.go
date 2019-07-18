@@ -53,7 +53,7 @@ func main() {
 		micro.Registry(micReg),
 		micro.Version(cfg.Version),
 		micro.Address(cfg.Addr()),
-		micro.WrapHandler(openTrace.NewHandlerWrapper()),
+		micro.WrapHandler(openTrace.NewHandlerWrapper(opentracing.GlobalTracer())),
 	)
 
 	// 服务初始化
