@@ -14,6 +14,7 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 - [Micro istio](./micro-istio) in progress
 - [MFC，Micro从零开始](./micro-from-scratch) in progress
 - [使用Micro构建微服务](./microservice-in-micro)
+- [使用Micro监控平台](./platform-web) in progress
 - [源码解读](./source-code-guide) in progress
 
 **MFC，Micro从零开始**，MFC的意思是**Micro from scratch**，该系列侧重从Golang开始讲解，然后引入Micro，再逐层深入Micro。
