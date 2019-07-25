@@ -10,25 +10,18 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 ## 内容
 
-- [Micro k8s](./micro-k8s) todo
-- [Micro istio](./micro-istio) in progress
-- [MFC，Micro从零开始](./micro-from-scratch) in progress
-- [使用Micro构建微服务](./microservice-in-micro)
+- [Micro k8s](./micro-k8s) todo Micro如何与K8s集成
+- [Micro Istio](./micro-istio) in progress Micro如何与Istio集成
+- [MFC，Micro从零开始](./micro-from-scratch) in progress 意思是**Micro from scratch**，该系列侧重从Golang开始讲解，然后引入Micro，再逐层深入Micro
+- [使用Micro构建微服务](./microservice-in-micro) 假设读者有Golang以及Micro的基础知识，在如何使用Micro构建微服务上，给大家一些使用范例。
+- [使用Micro监控平台](./platform-web) in progress 介绍如何使用监控平台
 - [源码解读](./source-code-guide) in progress
-
-**MFC，Micro从零开始**，MFC的意思是**Micro from scratch**，该系列侧重从Golang开始讲解，然后引入Micro，再逐层深入Micro。
-
-**使用Micro构建微服务**，假设读者有Golang以及Micro的基础知识，在如何使用Micro构建微服务上，给大家一些使用范例。
 
 ## 其它系列
 
 - [Micro全中文示例][cn-examples]
 - [Micro中文博客][cn-blogs]
 - [Micro中文文档][cn-docs] todo
-
-[cn-examples]: https://github.com/micro-in-cn/all-in-one
-[cn-blogs]: https://micro.mu/blog/cn/
-[cn-docs]: https://micro.mu/docs/cn/
 
 ## 贡献
 
@@ -39,3 +32,7 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 ## 讨论
 
 朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
+
+[cn-examples]: https://github.com/micro-in-cn/all-in-one
+[cn-blogs]: https://micro.mu/blog/cn/
+[cn-docs]: https://micro.mu/docs/cn/
