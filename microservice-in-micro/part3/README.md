@@ -693,7 +693,7 @@ $ go run main.go plugin.go
 
 [gorilla-session][gorilla-session]
 
-[micro-new]: https://github.com/micro-in-cn/all-in-one/tree/master/middle-practices/micro-new
+[micro-new]: https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
 [micro-new-code]: https://github.com/micro/micro/tree/master/new
 [go-micro]: https://github.com/micro/go-micro

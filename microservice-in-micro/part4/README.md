@@ -14,15 +14,15 @@ go-config在Micro体系中工作层次如下图所示：
 
 go-config所有使用方式，包括本地与中心服务可参考下列示例
 
-- [Env](https://github.com/micro-in-cn/all-in-one/tree/master/middle-practices/micro-config/env) 本地 基于环境变量
-- [File](https://github.com/micro-in-cn/all-in-one/tree/master/basic-practices/micro-config) 本地 基于配置文件
-- [Flag](https://github.com/micro-in-cn/all-in-one/tree/master/middle-practices/micro-config/flag) 本地 基于命令行Flag参数文件
-- [memory](https://github.com/micro-in-cn/all-in-one/tree/master/middle-practices/micro-config/memory) 本地 基于内存方式配置
-- [microcli](https://github.com/micro-in-cn/all-in-one/tree/master/middle-practices/micro-config/microcli) 本地 基于MicroCli参数配置
-- [gRPC](https://github.com/micro-in-cn/all-in-one/tree/master/senior-practices/micro-config/gRPC) 使用gRPC服务作为配置中心
-- [Consul](https://github.com/micro-in-cn/all-in-one/tree/master/senior-practices/micro-config/consul) 使用Consul服务作为配置中心
-- [etcd](https://github.com/micro-in-cn/all-in-one/tree/master/senior-practices/micro-config/consul) 使用etcd服务作为配置中心
-- [k8s](https://github.com/micro-in-cn/all-in-one/tree/master/senior-practices/micro-config/consul) 使用K8s服务作为配置中心
+- [Env](https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-config/env) 本地 基于环境变量
+- [File](https://github.com/micro-in-cn/tutorials/examples/tree/master/basic-practices/micro-config) 本地 基于配置文件
+- [Flag](https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-config/flag) 本地 基于命令行Flag参数文件
+- [memory](https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-config/memory) 本地 基于内存方式配置
+- [microcli](https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-config/microcli) 本地 基于MicroCli参数配置
+- [gRPC](https://github.com/micro-in-cn/tutorials/examples/tree/master/senior-practices/micro-config/gRPC) 使用gRPC服务作为配置中心
+- [Consul](https://github.com/micro-in-cn/tutorials/examples/tree/master/senior-practices/micro-config/consul) 使用Consul服务作为配置中心
+- [etcd](https://github.com/micro-in-cn/tutorials/examples/tree/master/senior-practices/micro-config/consul) 使用etcd服务作为配置中心
+- [k8s](https://github.com/micro-in-cn/tutorials/examples/tree/master/senior-practices/micro-config/consul) 使用K8s服务作为配置中心
 
 ## gRPC Server
 

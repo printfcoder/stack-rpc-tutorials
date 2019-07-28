@@ -10,6 +10,7 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 ## 内容
 
+- [示例](./examples) micro使用示例
 - [Micro k8s](./micro-k8s) todo Micro如何与K8s集成
 - [Micro Istio](./micro-istio) in progress Micro如何与Istio集成
 - [MFC，Micro从零开始](./micro-from-scratch) in progress 意思是**Micro from scratch**，该系列侧重从Golang开始讲解，然后引入Micro，再逐层深入Micro
@@ -37,6 +38,6 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
 
-[cn-examples]: https://github.com/micro-in-cn/all-in-one
+[cn-examples]: https://github.com/micro-in-cn/tutorials/examples
 [cn-blogs]: https://micro.mu/blog/cn/
 [cn-docs]: https://micro.mu/docs/cn/

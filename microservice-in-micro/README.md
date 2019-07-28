@@ -114,14 +114,14 @@ Golang，gRPC，Mysql，Redis，Docker，K8s，Go-micro/Micro
 
 ## 引伸阅读
 
-- [Micro中文示例](https://github.com/micro-in-cn/all-in-one)
+- [Micro中文示例](https://github.com/micro-in-cn/tutorials/examples)
 - [使用Golang编写微服务](https://ewanvalentine.io/microservices-in-golang-part-1/)
 
 ## 讨论
 
 朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
 
-[examples]: https://github.com/micro-in-cn/all-in-one
+[examples]: https://github.com/micro-in-cn/tutorials/examples
 [gRPC]: https://grpc.io/
 
 [第一章]: ./part1
