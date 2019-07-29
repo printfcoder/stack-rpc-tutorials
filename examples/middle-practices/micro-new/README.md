@@ -16,13 +16,12 @@ USAGE:
    micro new [command options] [arguments...]
 
 OPTIONS:
-   --namespace "go.micro"                       Namespace for the service e.g com.example
-   --type "srv"                                 Type of service e.g api, fnc, srv, web
-   --fqdn                                       FQDN of service e.g com.example.srv.service (defaults to namespace.type.alias)
-   --alias                                      Alias is the short name used as part of combined name if specified
-   --plugin [--plugin option --plugin option]   Specify plugins e.g --plugin=registry=etcd:broker=nats or use flag multiple times
-   --gopath                                     Create the service in the gopath. Defaults to true.
-
+   --namespace value  Namespace for the service e.g com.example (default: "go.micro")
+   --type value       Type of service e.g api, fnc, srv, web (default: "srv")
+   --fqdn value       FQDN of service e.g com.example.srv.service (defaults to namespace.type.alias)
+   --alias value      Alias is the short name used as part of combined name if specified
+   --plugin value     Specify plugins e.g --plugin=registry=etcd:broker=nats or use flag multiple times
+   --gopath           Create the service in the gopath. Defaults to true.
 ```
 
 当我们创建新服务时，有两点我们要确认
@@ -143,22 +142,57 @@ package main
 
 func main() {
     // New Service
-    service := micro.NewService(
-        micro.Name("go.micro.api.apiType"),
-        micro.Version("latest"),
-    )
+	service := micro.NewService(
+		micro.Name("go.micro.api.apiType"),
+		micro.Version("latest"),
+	)
 
-    // Initialise service
-    service.Init(
-        // create wrap for the Example srv client
-        micro.WrapHandler(client.ExampleWrapper(service)),
-    )
+	// Initialise service
+	service.Init(
+		// create wrap for the ApiType srv client
+		micro.WrapHandler(client.ApiTypeWrapper(service)),
+	)
 
-    // ...
+	// Register Handler
+	apiType.RegisterApiTypeHandler(service.Server(), new(handler.ApiType))
+
+	// Run service
+	if err := service.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
 ```
 
 如生成的代码所示，服务名中的类型部分变成了**api**。
+
+需要注意的是Handler目录下的接口类，它的接口文件目录需要我们手动生成后复制进来
+
+```go
+import (
+	// ...
+	apiType "path/to/service/proto/apiType"
+)
+```
+
+安装grpc工具链及protoc，[参考](https://grpc.io/docs/quickstart/go/)
+
+生成接口文件
+
+```bash
+protoc --proto_path=.:$GOPATH/src --go_out=. --micro_out=. proto/apiType/apiType.proto
+```
+
+然后我们就可以看到在**proto/apiType/** 目录下生成了我们需要的接口文件：
+
+```text
+└── proto
+    └── apiType
+        ├── apiType.micro.go
+        ├── apiType.pb.go
+        └── apiType.proto
+``` 
+
+现在可以复制proto/api的相对GOPATH目录，然后把`path/to/service/proto/apiType`换成`github.com/micro-in-cn/tutorials/examples/middle-practices/micro-new/apiType/proto/apiType`。
 
 ### 指定FQDN
 
@@ -250,4 +284,4 @@ import (
 
 ### 不使用GOPATH
 
-目前不提倡这么做，Golang 1.11版本的**modules**现在还不100%成熟，大家就先默默使用GOPATH。等稳定后，我们再更新文档。
+Micro new目前不支持自定义module目录，且Golang 1.11版本的**modules**现在还不100%成熟，大家就先默默使用GOPATH。
