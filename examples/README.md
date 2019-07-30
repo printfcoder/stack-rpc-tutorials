@@ -53,6 +53,8 @@ $ go get -u github.com/micro/micro
   - [*service](./basic-practices/micro-service/service)
   - [**自定义broker](./middle-practices/micro-service/custom-broker)
   - [**关闭应用](./middle-practices/micro-service/shutdown)
+- [micro-web](./basic-practices/micro-web) 
+  - [*web-pub](./basic-practices/micro-web/web-pub) web与pub结合
 - [**micro-wrapper](./middle-practices/micro-wrapper) 
   - [**基础用法](./middle-practices/micro-wrapper/basic)
 - grpc

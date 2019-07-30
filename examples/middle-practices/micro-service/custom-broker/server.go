@@ -17,7 +17,6 @@ func (g *Greeter) Hello(ctx context.Context, req *proto.HelloRequest, rsp *proto
 }
 
 func main() {
-
 	// 新建broker
 	bk1 := broker.NewBroker(
 		broker.Addrs(fmt.Sprintf("%s:%d", "127.0.0.1", 11089)),
