@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/cmd"
+	"github.com/micro/go-micro/config/cmd"
 )
 
 var (
@@ -33,7 +33,7 @@ func pub() {
 }
 
 func sub() {
-	_, err := broker.Subscribe(topic, func(p broker.Publication) error {
+	_, err := broker.Subscribe(topic, func(p broker.Event) error {
 		fmt.Printf("[sub] Received Body: %s, Header: %s", string(p.Message().Body), p.Message().Header)
 		return nil
 	}, broker.Queue("mu.micro.book.topic.queue"))
