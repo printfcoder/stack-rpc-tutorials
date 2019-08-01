@@ -19,7 +19,6 @@ require (
 	github.com/fortytw2/leaktest v1.3.0 // indirect
 	github.com/fsouza/go-dockerclient v1.4.2 // indirect
 	github.com/glycerine/goconvey v0.0.0-20190315024820-982ee783a72e // indirect
-	github.com/go-kit/kit v0.9.0 // indirect
 	github.com/go-redis/redis v6.15.2+incompatible
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/golang/gddo v0.0.0-20190312205958-5a2505f3dbf0 // indirect
@@ -31,8 +30,7 @@ require (
 	github.com/gorilla/sessions v1.1.3
 	github.com/influxdata/line-protocol v0.0.0-20190220025226-a3afd890113f // indirect
 	github.com/kevinburke/go-bindata v3.13.0+incompatible // indirect
-	github.com/kevinburke/ssh_config v0.0.0-20190630040420-2e50c441276c // indirect
-	github.com/kr/pty v1.1.8 // indirect
+	github.com/lucas-clemente/quic-go v0.11.2 // indirect
 	github.com/marten-seemann/qtls v0.3.2 // indirect
 	github.com/mattn/go-sqlite3 v1.10.0 // indirect
 	github.com/mattn/go-zglob v0.0.1 // indirect
@@ -40,12 +38,10 @@ require (
 	github.com/micro/go-bot v0.1.0 // indirect
 	github.com/micro/go-config v1.1.1-0.20190603113547-03fb75f2f1e4
 	github.com/micro/go-log v0.1.0
-	github.com/micro/go-micro v1.7.1-0.20190627135301-d8e998ad85fe
-	github.com/micro/go-plugins v1.1.1 // indirect
+	github.com/micro/go-micro v1.8.0
+	github.com/micro/go-plugins v1.1.1
 	github.com/micro/go-web v1.0.0
-	github.com/miekg/dns v1.1.15 // indirect
 	github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f // indirect
-	github.com/nats-io/nkeys v0.1.0 // indirect
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/pkg/term v0.0.0-20190109203006-aa71e9d9e942 // indirect
 	github.com/rogpeppe/fastuuid v1.0.0 // indirect
@@ -58,7 +54,6 @@ require (
 	github.com/uber/jaeger-lib v2.0.0+incompatible // indirect
 	go4.org v0.0.0-20190313082347-94abd6928b1d // indirect
 	golang.org/x/exp v0.0.0-20190718202018-cfdd5522f6f6 // indirect
-	golang.org/x/image v0.0.0-20190703141733-d6a02ce849c9 // indirect
 	golang.org/x/mobile v0.0.0-20190719004257-d2bd2a29d028 // indirect
 	golang.org/x/net v0.0.0-20190724013045-ca1201d0de80 // indirect
 	golang.org/x/perf v0.0.0-20190312170614-0655857e383f // indirect
@@ -66,6 +61,5 @@ require (
 	golang.org/x/tools v0.0.0-20190723021737-8bb11ff117ca // indirect
 	gopkg.in/bsm/sarama-cluster.v2 v2.1.15 // indirect
 	gopkg.in/go-playground/validator.v9 v9.29.1 // indirect
-	gopkg.in/src-d/go-billy.v4 v4.3.1 // indirect
 	gotest.tools v2.3.0+incompatible // indirect
 )

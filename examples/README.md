@@ -28,8 +28,9 @@ $ go get -u github.com/micro/micro
   - [*event-handler](./basic-practices/micro-api/event) event模式
   - [*meta-handler](./basic-practices/micro-api/meta) meta模式
 - [micro-broker](./basic-practices/micro-broker) 
-  - [*发布与订阅](./basic-practices/micro-broker/basic) 
-  - [*rabbitMQ](./basic-practices/micro-broker/rabbitmq) 
+  - [*发布与订阅](./basic-practices/micro-broker/basic) 基础篇
+  - [*rabbitMQ](./basic-practices/micro-broker/rabbitmq) 使用rabbitMQ作为消息中间件
+  - [*nats](./basic-practices/micro-broker/nats) 使用NATs作为消息中间件
 - [micro-cli](./middle-practices/micro-cli) 如何使用命令行接口
   - [**flag](./middle-practices/micro-cli/flags) 如何使用flag
 - micro-config 如何读取配置
