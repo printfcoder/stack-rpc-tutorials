@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package go.micro.srv.pubsub;
+
+message Event {
+	string id = 1;
+	int64 timestamp = 2;
+	string message = 3;
+}
+
