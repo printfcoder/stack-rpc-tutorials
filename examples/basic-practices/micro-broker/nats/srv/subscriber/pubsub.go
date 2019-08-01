@@ -1,12 +1,11 @@
 package subscriber
 
 import (
-	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/broker"
-	_ "github.com/micro/go-plugins/broker/nats"
+	"github.com/micro/go-micro/util/log"
 )
 
 func Handler(event broker.Event) error {
-	log.Logf("[sub] received messages: %v, %v", event.Message().Header, string(event.Message().Body))
+	log.Logf("[sub] 收到消息，请查收: %v, %v", event.Message().Header, string(event.Message().Body))
 	return nil
 }

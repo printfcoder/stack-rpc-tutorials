@@ -1,10 +1,9 @@
 package main
 
 import (
-	"github.com/brucewangno1/go-micro-pubsub-with-nats/srv/subscriber"
+	"github.com/micro-in-cn/tutorials/examples/basic-practices/micro-broker/nats/srv/subscriber"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/util/log"
-	_ "github.com/micro/go-plugins/broker/nats"
 )
 
 func main() {

@@ -1,51 +1,35 @@
-# go-micro-pubsub-with-nats
+# NATs Pubsub
 
-Original Repository: https://github.com/BruceWangNo1/go-micro-pubsub-with-nats
+本篇演示如何使用NATs使用消息中间件来编写Micro的Pubsub服务，本篇由[Bruce Wang](https://github.com/BruceWangNo1/go-micro-pubsub-with-nats)提供，略作删改。
 
-A PubSub microservice example with NATS as the broker using Go-Micro microservice framework
+- [cli](cli) 客户端
+- [srv](srv) 服务端## Generating srv Service Template
 
-## Generating srv Service Template
 
-```bash
-micro new --namespace=go.micro.pubsub --type=srv --alias=pubsub github.com/brucewangno1/go-micro-pubsub-with-nats/srv
-```
+## 预置条件
 
-## Generating cli Service Template
+安装NatsServer，教程参考，[安装NATs Server](https://nats-io.github.io/docs/nats_server/installation.html)
 
-```bash
-micro new --namespace=go.micro.pubsub --type=srv --alias=pubsub github.com/brucewangno1/go-micro-pubsub-with-nats/cli
-```
-
-## Writing Code
-
-Templates are just templates. Look through the code to learn how to write microservices.
-
-## Getting NATS Started in The Background
+然后运行NATs服务（操作系统不一运行指令不一样）。
 
 ```bash
 nats-server
 ```
 
-## Getting Consul Started in The Background
+## 运行示例服务
+
+先打开一个终端窗口，切到我们的示例**服务**目录：
 
 ```bash
-consul agent -dev -node localmachine -ui
-```
-
-## Run Services
-
-In one terminal windows, do this:
-
-```bash
-cd $GOPATH/github.com/brucewangno1/go-micro-pubsub-with-nats/srv
+cd srv
 go run main.go --broker=nats --broker_address=127.0.0.1:4222
 ```
 
-In another one, do this:
+再打开一个终端窗口，切到我们的示例**客户端**目录：
 
 ```bash
-cd $GOPATH/github.com/brucewangno1/go-micro-pubsub-with-nats/cli
+cd cli
 go run main.go --broker=nats --broker_address=127.0.0.1:4222
 ```
 
-All right. All right. All right. You can check whether PubSub is utilizing nats by stopping nats.
+Thanks: https://github.com/BruceWangNo1/go-micro-pubsub-with-nats

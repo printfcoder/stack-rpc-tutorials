@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/brucewangno1/go-micro-pubsub-with-nats/cli/publisher"
+	"github.com/micro-in-cn/tutorials/examples/basic-practices/micro-broker/nats/cli/publisher"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/util/log"
 )
