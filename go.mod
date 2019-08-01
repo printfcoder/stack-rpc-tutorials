@@ -6,6 +6,8 @@ replace github.com/testcontainers/testcontainer-go => github.com/testcontainers/
 
 replace github.com/golang/lint => github.com/golang/lint v0.0.0-20190227174305-8f45f776aaf1
 
+replace github.com/nats-io/nats.go v1.8.2-0.20190607221125-9f4d16fe7c2d => github.com/nats-io/nats.go v1.8.1
+
 require (
 	cloud.google.com/go v0.43.0 // indirect
 	github.com/Masterminds/sprig v2.18.0+incompatible // indirect
