@@ -39,6 +39,6 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
 
-[cn-examples]: https://github.com/micro-in-cn/tutorials/examples
+[cn-examples]: /examples
 [cn-blogs]: https://micro.mu/blog/cn/
 [cn-docs]: https://micro.mu/docs/cn/
