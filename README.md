@@ -13,7 +13,7 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 - [示例](./examples) micro使用示例
 - [Micro k8s](./micro-k8s) todo Micro如何与K8s集成
 - [Micro Istio](./micro-istio) in progress Micro如何与Istio集成
-- [Micro Sync](./micro-sync) 分布式同步锁
+- [Micro Sync](./micro-sync) 分布式同步锁 in progress
 - [MFC，Micro从零开始](./micro-from-scratch) in progress 意思是**Micro from scratch**，该系列侧重从Golang开始讲解，然后引入Micro，再逐层深入Micro
 - [使用Micro构建微服务](./microservice-in-micro) 假设读者有Golang以及Micro的基础知识，在如何使用Micro构建微服务上，给大家一些使用范例。
 - [使用Micro监控平台](./platform-web) in progress 介绍如何使用监控平台
@@ -27,7 +27,11 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 ## 贡献
 
-欢迎大家PR投稿！
+我们很多工程师的职业生涯，其实就是从“模仿”到“创作”、“传播”的过程，当大家从这个或那个渠道到达这个系列时，说明我们正在通过某种方式在或快或慢传播着。
+
+我们彼此作为一个传播者，用我们的眼睛、手指去看见、尝试新的技术，能让别人看见我们、尝试我们的想法，是非常幸运的事情。
+
+所以，欢迎大家PR投稿！推广Micro！
 
 大家如果有建议或者问题，也可以新建issue，我们会一一回复。
 
