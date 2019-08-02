@@ -6,6 +6,14 @@ Micro中的模块[Sync](https://github.com/micro/go-micro/tree/master/sync)用�
 
 而如果微服务自身要去实现CAP组件，则会非常复杂与过重，故而，一般微服务框架都会选择第三方数据库或者事件系统来完成CAP要素要求。Micro利用第三方数据库（目前使用的是Consul）来完成同步机制。
 
+我们用三个服务**Order订单**、**Payment支付服务**、**Inventory库存服务**来演示如何分布式锁。
+
+![](docs/services.png)
+
+简单描述下业务场景：当用户下单时，后台需要有扣单、等支付、支付后出库这几个流程，在整套流程链中，每个环节都不能出错。
+
+[业务时序图]
+
 ## Micro Sync 组件
 
 -- Leader
@@ -16,6 +24,5 @@ Micro中的模块[Sync](https://github.com/micro/go-micro/tree/master/sync)用�
 ## 参考阅读
 
 [什么是CAP][CAP]
-
 
 [CAP]:(https://zh.wikipedia.org/wiki/CAP%E5%AE%9A%E7%90%86)
