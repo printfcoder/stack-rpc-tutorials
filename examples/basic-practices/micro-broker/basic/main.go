@@ -2,14 +2,16 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/micro/go-micro/broker"
+	"github.com/micro/go-micro/config/cmd"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (
 	topic = "mu.micro.book.topic.payment.done"
+	b broker.Broker
 )
 
 func pub() {
@@ -22,10 +24,11 @@ func pub() {
 			},
 			Body: []byte(fmt.Sprintf("%d: %s", i, time.Now().String())),
 		}
+		log.Infof(broker.String())
 		if err := broker.Publish(topic, msg); err != nil {
-			log.Printf("[pub] 发布消息失败： %v", err)
+			log.Infof("[pub] Message publication failed: %v", err)
 		} else {
-			fmt.Println("[pub] 发布消息：", string(msg.Body))
+			fmt.Println("[pub] Message published: ", string(msg.Body))
 		}
 		i++
 	}
@@ -33,7 +36,7 @@ func pub() {
 
 func sub() {
 	_, err := broker.Subscribe(topic, func(p broker.Event) error {
-		fmt.Printf("[sub] Received Body: %s, Header: %s", string(p.Message().Body), p.Message().Header)
+		log.Infof("[sub] Received Body: %s, Header: %s\n", string(p.Message().Body), p.Message().Header)
 		return nil
 	})
 	if err != nil {
@@ -42,15 +45,20 @@ func sub() {
 }
 
 func main() {
+	// cmd.Init() parses flags and env variables.
+	// If you leave out cmd.Init(),
+	// broker "http" will be used as default
+	// other than ones like nats you have specified.
+	cmd.Init()
 	if err := broker.Init(); err != nil {
-		log.Fatalf("Broker 初始化错误：%v", err)
+		log.Fatalf("broker.Init() error: %v", err)
 	}
 	if err := broker.Connect(); err != nil {
-		log.Fatalf("Broker 连接错误：%v", err)
+		log.Fatalf("broker.Connect() error: %v", err)
 	}
 
 	go pub()
 	go sub()
 
-	<-time.After(time.Second * 10)
+	<-time.After(time.Second * 20)
 }
