@@ -36,5 +36,11 @@ go run server.go
 我们可以看到日志打印如下信息
 
 ```text
-
+2019/08/05 23:54:48 Receive info: Id 0 & Timestamp 1565020484
+2019/08/05 23:54:48 Receive info: Id 1 & Timestamp 1565020485
+2019/08/05 23:54:48 Receive info: Id 2 & Timestamp 1565020486
+2019/08/05 23:54:48 Receive info: Id 3 & Timestamp 1565020487
+2019/08/05 23:54:48 Receive info: Id 4 & Timestamp 1565020488
+2019/08/05 23:54:49 Receive info: Id 5 & Timestamp 1565020489
+2019/08/05 23:54:50 Receive info: Id 6 & Timestamp 1565020490
 ```
