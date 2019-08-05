@@ -1,9 +1,6 @@
 # NATs Pubsub
 
-本篇演示如何使用NATs使用消息中间件来编写Micro的Pubsub服务，本篇由[Bruce Wang](https://github.com/BruceWangNo1/go-micro-pubsub-with-nats)提供，略作删改。
-
-- [cli](cli) 客户端
-- [srv](srv) 服务端
+本篇演示如何使用NATs消息中间件来编写Micro的Pubsub服务，原稿由[Bruce Wang](https://github.com/BruceWangNo1/go-micro-pubsub-with-nats)提供，略作删改。
 
 ## 预置条件
 
@@ -14,6 +11,11 @@
 ```bash
 nats-server
 ```
+
+## 目录
+
+- [cli](cli) 客户端
+- [srv](srv) 服务端
 
 ## 运行示例服务
 
