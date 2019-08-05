@@ -17,7 +17,6 @@ func main() {
 			nsq.WithLookupdAddrs(nsqLookupdAddrs),
 			broker.Addrs(nsqdAddrs...),
 		)),
-		micro.RegisterInterval(10 * time.Second),
 	)
 
 	srv.Init()

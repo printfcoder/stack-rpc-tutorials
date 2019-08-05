@@ -6,7 +6,6 @@ import (
 	"github.com/micro/go-micro/server"
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-plugins/broker/nsq"
-	"time"
 )
 
 func main() {
@@ -16,7 +15,6 @@ func main() {
 			nsq.WithLookupdAddrs(nsqLookupdAddrs),
 			broker.Addrs(nsqdAddrs...),
 		)),
-		micro.RegisterInterval(10 * time.Second),
 	)
 
 	srv.Init()
