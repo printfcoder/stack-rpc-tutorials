@@ -35,6 +35,10 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 大家如果有建议或者问题，也可以新建issue，我们会一一回复。
 
+## 捐赠
+
+谢谢大家支持我们的社区，请维护者喝杯奶茶吧。[微店](https://weidian.com/item.html?itemID=2915044579&spider_token=3b21)
+
 ## 讨论
 
 朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
