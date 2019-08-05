@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/micro-in-cn/tutorials/examples/basic-practices/micro-broker/nsq/config"
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-broker/nsq/proto"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/broker"
@@ -14,14 +15,14 @@ func main() {
 	srv := micro.NewService(
 		micro.Name("mu.micro.cli.demo"),
 		micro.Broker(nsq.NewBroker(
-			nsq.WithLookupdAddrs(nsqLookupdAddrs),
-			broker.Addrs(nsqdAddrs...),
+			nsq.WithLookupdAddrs(config.NsqLookupdAddrs),
+			broker.Addrs(config.NsqdAddrs...),
 		)),
 	)
 
 	srv.Init()
 
-	pub := micro.NewPublisher(topic, srv.Client())
+	pub := micro.NewPublisher(config.Topic, srv.Client())
 	go func() {
 		for i := 0; i < 10; i++ {
 			time.Sleep(1 * time.Second)
