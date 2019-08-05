@@ -121,7 +121,7 @@ Golang，gRPC，Mysql，Redis，Docker，K8s，Go-micro/Micro
 
 朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
 
-[examples]: https://github.com/micro-in-cn/tutorials/examples
+[examples]: /examples
 [gRPC]: https://grpc.io/
 
 [第一章]: ./part1
