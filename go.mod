@@ -35,6 +35,7 @@ require (
 	github.com/micro/go-plugins v1.1.1
 	github.com/micro/go-web v1.0.0
 	github.com/micro/micro v1.7.1-0.20190627121529-410a2eba67f1
+	github.com/montanaflynn/stats v0.5.0 // indirect
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/uber/jaeger-client-go v2.16.0+incompatible
 	github.com/uber/jaeger-lib v2.0.0+incompatible // indirect
