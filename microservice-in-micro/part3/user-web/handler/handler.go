@@ -31,7 +31,6 @@ func Init() {
 
 // Login 登录入口
 func Login(w http.ResponseWriter, r *http.Request) {
-
 	// 只接受POST请求
 	if r.Method != "POST" {
 		log.Logf("非法请求")
@@ -56,7 +55,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if rsp.User.Pwd == r.Form.Get("pwd") {
-		response["success"] = rsp.Success
+		response["success"] = true
 
 		// 干掉密码返回
 		rsp.User.Pwd = ""

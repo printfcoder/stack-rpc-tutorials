@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/handler"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/model"
 	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
@@ -51,6 +49,5 @@ func main() {
 
 func registryOptions(ops *registry.Options) {
 	consulCfg := config.GetConsulConfig()
-	ops.Timeout = time.Second * 5
 	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
 }
