@@ -4,13 +4,13 @@
 
 ## 运行环境
 
-Go-Micro: v1.8.0
+以下测试目前在单机上执行
 
-### 单机
-
-操作系统：MacOSX 10.14.5 (18F203)
-内存：32G
-处理器：2.2 GHz Intel Core i7
+- Go-Version: go version go1.12.6 darwin/amd64
+- Go-Micro: v1.8.0
+- 操作系统：MacOSX 10.14.5 (18F203)
+- 内存：32G
+- 处理器：2.2 GHz Intel Core i7
 
 ## Transport 对比
 
@@ -26,10 +26,6 @@ gRpcTransport|100|3.158|2.572|38.030|0.190|5.201|20|30102
 gRpc-TcpTransport|100|4.377|3.173|59.223|0.260|9.368|22|21734
 
 ### Http Transport
-
-Go-Micro默认的Transport是HttpTransport
-
-运行指令
 
 ```bash
 $ cd _default
