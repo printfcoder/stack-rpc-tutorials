@@ -18,7 +18,7 @@ func main() {
 	m := *total / n
 
 	service := grpc.NewService(micro.Name("go.micro.benchmark.hello.client"))
-	cl := pb.NewHelloService("go.micro.benchmark.hello.grpc", service.Client())
+	cl := pb.NewHelloService("go.micro.benchmark.hello.grpc_transport", service.Client())
 
 	internal.ClientRun(m, n, cl)
 }

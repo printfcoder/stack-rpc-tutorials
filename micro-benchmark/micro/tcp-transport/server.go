@@ -2,26 +2,24 @@ package main
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/micro-in-cn/tutorials/micro-benchmark/micro/internal"
 	"github.com/micro-in-cn/tutorials/micro-benchmark/pb"
 	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/service/grpc"
+	"github.com/micro/go-plugins/transport/tcp"
 )
 
 func main() {
-	service := grpc.NewService(
-		micro.Name("go.micro.benchmark.hello.grpc"),
-		micro.RegisterTTL(time.Second*30),
-		micro.RegisterInterval(time.Second*10),
+	service := micro.NewService(
+		micro.Name("go.micro.benchmark.hello.tcp_transport"),
+		micro.Version("latest"),
+		micro.Transport(tcp.NewTransport()),
 	)
 
 	service.Init()
 
 	pb.RegisterHelloHandler(service.Server(), &internal.HelloS{})
 
-	// Run the server
 	if err := service.Run(); err != nil {
 		fmt.Println(err)
 	}

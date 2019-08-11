@@ -18,7 +18,7 @@ func main() {
 	n := *concurrency
 	m := *total / n
 
-	service := grpc.NewService(micro.Name("go.micro.benchmark.hello.client_grpc_tcp"), micro.Transport(tcp.NewTransport()), )
+	service := grpc.NewService(micro.Name("go.micro.benchmark.hello.client"), micro.Transport(tcp.NewTransport()), )
 	c := pb.NewHelloService("go.micro.benchmark.hello.grpc_tcp", service.Client(), )
 
 	internal.ClientRun(m, n, c)
