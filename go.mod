@@ -20,28 +20,23 @@ require (
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/protobuf v1.3.2
 	github.com/google/uuid v1.1.1
-	github.com/gorilla/handlers v1.4.2 // indirect
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.1.3
 	github.com/gorilla/websocket v1.4.0
-	github.com/grpc-ecosystem/grpc-gateway v1.9.2
-	github.com/lucas-clemente/quic-go v0.11.2 // indirect
+	github.com/grpc-ecosystem/grpc-gateway v1.9.5
 	github.com/lusis/go-slackbot v0.0.0-20180109053408-401027ccfef5 // indirect
 	github.com/lusis/slack-test v0.0.0-20190426140909-c40012f20018 // indirect
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-config v1.1.1-0.20190603113547-03fb75f2f1e4
 	github.com/micro/go-log v0.1.0
 	github.com/micro/go-micro v1.8.0
-	github.com/micro/go-plugins v1.1.1
+	github.com/micro/go-plugins v1.2.0
 	github.com/micro/go-web v1.0.0
-	github.com/micro/micro v1.7.1-0.20190627121529-410a2eba67f1
-	github.com/montanaflynn/stats v0.5.0 // indirect
+	github.com/micro/micro v1.8.0
+	github.com/montanaflynn/stats v0.5.0
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/uber/jaeger-client-go v2.16.0+incompatible
-	github.com/uber/jaeger-lib v2.0.0+incompatible // indirect
 	go.uber.org/zap v1.10.0
-	golang.org/x/net v0.0.0-20190724013045-ca1201d0de80 // indirect
-	golang.org/x/sys v0.0.0-20190712062909-fae7ac547cb7 // indirect
 	google.golang.org/genproto v0.0.0-20190716160619-c506a9f90610
-	google.golang.org/grpc v1.22.0
+	google.golang.org/grpc v1.22.1
 )

@@ -15,7 +15,8 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 - [MFC，Micro从零开始](./micro-from-scratch) in progress 意思是**Micro from scratch**，该系列侧重从Golang开始讲解，然后引入Micro，再逐层深入Micro
 - [使用Micro构建微服务](./microservice-in-micro) 假设读者有Golang以及Micro的基础知识，在如何使用Micro构建微服务上，给大家一些使用范例。
 - [使用Micro监控平台](./platform-web) in progress 介绍如何使用监控平台
-- [源码解读](./source-code-guide) in progress
+- [源码解读](./source-code-guide)
+- [性能测试与解读](./micro-benchmark) in progress Micro内部组件性能对比，与第三方框架对比，差异原因等资料
 
 ## 其它系列
 
