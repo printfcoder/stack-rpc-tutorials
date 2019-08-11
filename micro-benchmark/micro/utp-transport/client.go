@@ -6,6 +6,7 @@ import (
 	"github.com/micro-in-cn/tutorials/micro-benchmark/micro/internal"
 	"github.com/micro-in-cn/tutorials/micro-benchmark/pb"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-plugins/transport/utp"
 )
 
 var concurrency = flag.Int("c", 1, "concurrency")
@@ -16,8 +17,8 @@ func main() {
 	n := *concurrency
 	m := *total / n
 
-	service := micro.NewService(micro.Name("go.micro.benchmark.hello.client"))
-	c := pb.NewHelloService("go.micro.benchmark.hello.default", service.Client())
+	service := micro.NewService(micro.Name("go.micro.benchmark.hello.client"), micro.Transport(utp.NewTransport()), )
+	c := pb.NewHelloService("go.micro.benchmark.hello.utp_transport", service.Client(), )
 
 	internal.ClientRun(m, n, c)
 }

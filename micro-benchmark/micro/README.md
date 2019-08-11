@@ -4,35 +4,34 @@
 
 ## 运行环境
 
-Go-Micro: v1.8.0
+以下测试目前在单机上执行
 
-### 单机
-
-操作系统：MacOSX 10.14.5 (18F203)
-内存：32G
-处理器：2.2 GHz Intel Core i7
+- Go-Version: go version go1.12.6 darwin/amd64
+- Go-Micro: v1.8.0
+- 操作系统：MacOSX 10.14.5 (18F203)
+- 内存：32G
+- 处理器：2.2 GHz Intel Core i7
 
 ## Transport 对比
 
-我们先对比目前Micro中提供有的transport，它们分别是Http（默认）、grpc、memery、quic、tcp（插件）、nats（插件）、rabbitmq（插件）、utp（插件）
+我们先对比目前Micro中提供有的transport，它们分别是Http（默认）、grpc、memory、quic、tcp（插件）、nats（插件）、rabbitmq（插件）、utp（插件）
+
+其中quic因为其go包经常变动，修改麻烦，暂不提供测试。未来Micro会改成基于更加稳定的kcp协议，二者都是基于UDP开发的协议。
 
 ### 对比结果
 
--|T+S|平均<br/>(ms)|中位<br/>(ms)|最大<br/>(ms)|最小<br/>(ms)|P90<br/>(ms)|P99<br/>(ms)|TPS
----|---|---|---|---|---|---|---|---
-HttpTransport|100|148.780|113.004|802.520|0.437|302.865|396|664
-TcpTransport|100|2.047|1.485|67.188|0.109|3.646|23|45310
-gRpcTransport|100|3.158|2.572|38.030|0.190|5.201|20|30102
-gRpc-TcpTransport|100|4.377|3.173|59.223|0.260|9.368|22|21734
+-|平均<br/>(ms)|中位<br/>(ms)|最大<br/>(ms)|最小<br/>(ms)|P90<br/>(ms)|P99<br/>(ms)|TPS
+---|---|---|---|---|---|---|---
+HttpTransport|148.780|113.004|802.520|0.437|302.865|396|664
+TcpTransport|2.047|1.485|67.188|0.109|3.646|23|45310
+gRpcTransport|3.158|2.572|38.030|0.190|5.201|20|30102
+gRpc-TcpTransport|4.377|3.173|59.223|0.260|9.368|22|21734
+UtpTransport|6.757|6.583|41.935|0.136|8.402|24|14388
 
 ### Http Transport
 
-Go-Micro默认的Transport是HttpTransport
-
-运行指令
-
 ```bash
-$ cd _default
+$ cd http-transport
 $ go run server.go
 # 切换窗口到同目录
 $ go run client.go  -c 100 -n 100000
@@ -55,7 +54,7 @@ requests per client: 1000
 ### TCP Transport
 
 ```bash
-$ cd default-tcp-transport
+$ cd tcp-transport
 $ go run server.go
 # 切换窗口到同目录
 $ go run client.go  -c 100 -n 100000
@@ -78,7 +77,7 @@ requests per client: 1000
 ### grpc Transport
 
 ```bash
-$ cd grpc
+$ cd grpc-transport
 $ go run server.go
 # 切换窗口到同目录
 $ go run client.go  -c 100 -n 100000
@@ -119,4 +118,27 @@ requests per client: 1000
 2019/08/11 22:21:19 concurrency mean    median  max     min     p90     p99     TPS
 2019/08/11 22:21:19 100         4376550ns       3173000ns       59223000ns      260000ns        21572500ns      9368000ns       21734
 2019/08/11 22:21:19 100         4.377ms 3.173ms 59.223ms        0.260ms 9.368ms 22ms    21734
+```
+
+### UTP Transport
+
+```bash
+$ cd utp-transport
+$ go run server.go
+# 切换窗口到同目录
+$ go run client.go  -c 100 -n 100000
+
+2019/08/11 23:33:58 concurrency: 100
+requests per client: 1000
+
+2019/08/11 23:33:58 message size: 677 bytes
+
+2019/08/11 23:34:05 took 6950 ms for 100000 requests
+2019/08/11 23:34:05 sent     requests    : 100000
+2019/08/11 23:34:05 received requests    : 100000
+2019/08/11 23:34:05 received requests_OK : 100000
+2019/08/11 23:34:05 throughput  (TPS)    : 14388
+2019/08/11 23:34:05 concurrency mean    median  max     min     p90     p99     TPS
+2019/08/11 23:34:05 100         6757423ns       6583000ns       41935000ns      136000ns        24452000ns      8402000ns       14388
+2019/08/11 23:34:05 100         6.757ms 6.583ms 41.935ms        0.136ms 8.402ms 24ms    14388
 ```
