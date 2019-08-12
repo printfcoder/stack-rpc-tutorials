@@ -7,7 +7,7 @@
 以下测试目前在单机上执行
 
 - Go-Version: go version go1.12.6 darwin/amd64
-- Go-Micro: v1.8.0
+- Go-Micro: v1.8.3
 - 操作系统：MacOSX 10.14.5 (18F203)
 - 内存：32G
 - 处理器：2.2 GHz Intel Core i7
@@ -22,11 +22,15 @@
 
 -|平均<br/>(ms)|中位<br/>(ms)|最大<br/>(ms)|最小<br/>(ms)|P90<br/>(ms)|P99<br/>(ms)|TPS
 ---|---|---|---|---|---|---|---
-HttpTransport|148.780|113.004|802.520|0.437|302.865|396|664
+HttpTransport（*）|148.780|113.004|802.520|0.437|302.865|396|664
 TcpTransport|2.047|1.485|67.188|0.109|3.646|23|45310
 gRpcTransport|3.158|2.572|38.030|0.190|5.201|20|30102
-gRpc-TcpTransport|4.377|3.173|59.223|0.260|9.368|22|21734
+gRpc-TcpTransport|3.064|2.562|36.174|0.214|4.871|19|30911
 UtpTransport|6.757|6.583|41.935|0.136|8.402|24|14388
+NatsTransport|17.515|16.564|70.035|1.942|26.396|51|5582
+
+* http模式与具体服务器对Http请求的出入限制配置有关，待优化配置再测试
+上面的表格中可见，TCP>grpc≈grpc-tcp>utp>nats
 
 ### Http Transport
 
@@ -105,19 +109,18 @@ $ go run server.go
 # 切换窗口到同目录
 $ go run client.go  -c 100 -n 100000
 
-2019/08/11 22:21:15 concurrency: 100
+2019/08/11 22:21:20 concurrency: 100
 requests per client: 1000
 
-2019/08/11 22:21:15 message size: 677 bytes
+2019/08/11 22:21:20 message size: 677 bytes
 
-2019/08/11 22:21:19 took 4601 ms for 100000 requests
-2019/08/11 22:21:19 sent     requests    : 100000
-2019/08/11 22:21:19 received requests    : 100000
-2019/08/11 22:21:19 received requests_OK : 100000
-2019/08/11 22:21:19 throughput  (TPS)    : 21734
-2019/08/11 22:21:19 concurrency mean    median  max     min     p90     p99     TPS
-2019/08/11 22:21:19 100         4376550ns       3173000ns       59223000ns      260000ns        21572500ns      9368000ns       21734
-2019/08/11 22:21:19 100         4.377ms 3.173ms 59.223ms        0.260ms 9.368ms 22ms    21734
+2019/08/12 22:21:20 sent     requests    : 100000
+2019/08/12 22:21:20 received requests    : 100000
+2019/08/12 22:21:20 received requests_OK : 100000
+2019/08/12 22:21:20 throughput  (TPS)    : 30911
+2019/08/12 22:21:20 concurrency mean    median  max     min     p90     p99     TPS
+2019/08/12 22:21:20 100         3064103ns       2562000ns       36174000ns      214000ns        18531500ns      4871000ns       30911
+2019/08/12 22:21:20 100         3.064ms 2.562ms 36.174ms        0.214ms 4.871ms 19ms    30911
 ```
 
 ### UTP Transport
@@ -141,4 +144,27 @@ requests per client: 1000
 2019/08/11 23:34:05 concurrency mean    median  max     min     p90     p99     TPS
 2019/08/11 23:34:05 100         6757423ns       6583000ns       41935000ns      136000ns        24452000ns      8402000ns       14388
 2019/08/11 23:34:05 100         6.757ms 6.583ms 41.935ms        0.136ms 8.402ms 24ms    14388
+```
+
+### NATs Transport
+
+```bash
+$ cd nats-transport
+$ go run server.go
+# 切换窗口到同目录
+$ go run client.go  -c 100 -n 100000
+
+2019/08/11 23:33:58 concurrency: 100
+requests per client: 1000
+
+2019/08/11 23:33:58 message size: 677 bytes
+
+2019/08/12 22:17:38 took 17914 ms for 100000 requests
+2019/08/12 22:17:38 sent     requests    : 100000
+2019/08/12 22:17:38 received requests    : 100000
+2019/08/12 22:17:38 received requests_OK : 100000
+2019/08/12 22:17:38 throughput  (TPS)    : 5582
+2019/08/12 22:17:38 concurrency mean    median  max     min     p90     p99     TPS
+2019/08/12 22:17:38 100         17514776ns      16563500ns      70035000ns      1942000ns       51078000ns      26396000ns      5582
+2019/08/12 22:17:38 100         17.515ms        16.564ms        70.035ms        1.942ms 26.396ms        51ms    5582
 ```
