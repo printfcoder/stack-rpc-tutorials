@@ -70,8 +70,6 @@ func registryOptions(ops *registry.Options) {
 	if err != nil {
 		panic(err)
 	}
-
-	ops.Timeout = time.Second * 5
 	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.Host, consulCfg.Port)}
 }
 

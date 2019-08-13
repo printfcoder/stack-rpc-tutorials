@@ -2,9 +2,6 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"time"
-
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/config"
@@ -15,6 +12,7 @@ import (
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/web"
 	"github.com/micro/go-plugins/config/source/grpc"
+	"net/http"
 )
 
 var (
@@ -70,7 +68,6 @@ func registryOptions(ops *registry.Options) {
 		panic(err)
 	}
 
-	ops.Timeout = time.Second * 5
 	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.Host, consulCfg.Port)}
 }
 

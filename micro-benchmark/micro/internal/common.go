@@ -3,6 +3,7 @@ package internal
 import (
 	"context"
 	"flag"
+
 	"reflect"
 	"runtime"
 	"sync"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/micro-in-cn/tutorials/micro-benchmark/pb"
+	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/util/log"
 	"github.com/montanaflynn/stats"
 )
@@ -71,7 +73,9 @@ func PrepareArgs() *pb.BenchmarkMessage {
 	return &args
 }
 
-func ClientRun(m, n int, c pb.HelloService) {
+type NewClient func() client.Client
+
+func ClientRun(m, n int, serviceName string, nc NewClient) {
 	selected := -1
 
 	log.Infof("concurrency: %d\nrequests per client: %d\n\n", n, m)
@@ -97,8 +101,10 @@ func ClientRun(m, n int, c pb.HelloService) {
 		selected = selected + 1
 
 		go func(i int, selected int) {
+			helloClient := nc()
+			c := pb.NewHelloService(serviceName, helloClient)
 
-			//warmup
+			// warmup
 			for j := 0; j < 5; j++ {
 				c.Say(context.Background(), args)
 			}

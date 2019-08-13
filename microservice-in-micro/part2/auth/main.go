@@ -51,6 +51,5 @@ func main() {
 
 func registryOptions(ops *registry.Options) {
 	consulCfg := config.GetConsulConfig()
-	ops.Timeout = time.Second * 5
 	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
 }
