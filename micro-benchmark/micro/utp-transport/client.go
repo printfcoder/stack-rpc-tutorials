@@ -2,10 +2,9 @@ package main
 
 import (
 	"flag"
-
 	"github.com/micro-in-cn/tutorials/micro-benchmark/micro/internal"
-	"github.com/micro-in-cn/tutorials/micro-benchmark/pb"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/client"
 	"github.com/micro/go-plugins/transport/utp"
 )
 
@@ -17,8 +16,11 @@ func main() {
 	n := *concurrency
 	m := *total / n
 
-	service := micro.NewService(micro.Name("go.micro.benchmark.hello.client"), micro.Transport(utp.NewTransport()), )
-	c := pb.NewHelloService("go.micro.benchmark.hello.utp_transport", service.Client(), )
-
-	internal.ClientRun(m, n, c)
+	internal.ClientRun(m, n, "go.micro.benchmark.hello.utp_transport", func() client.Client {
+		service := micro.NewService(
+			micro.Name("go.micro.benchmark.hello.client"),
+			micro.Transport(utp.NewTransport()),
+		)
+		return service.Client()
+	})
 }

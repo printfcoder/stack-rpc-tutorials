@@ -4,9 +4,8 @@ import (
 	"flag"
 
 	"github.com/micro-in-cn/tutorials/micro-benchmark/micro/internal"
-	"github.com/micro-in-cn/tutorials/micro-benchmark/pb"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/service/grpc"
+	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/client/grpc"
 )
 
 var concurrency = flag.Int("c", 1, "concurrency")
@@ -17,8 +16,9 @@ func main() {
 	n := *concurrency
 	m := *total / n
 
-	service := grpc.NewService(micro.Name("go.micro.benchmark.hello.client"))
-	cl := pb.NewHelloService("go.micro.benchmark.hello.grpc_transport", service.Client())
-
-	internal.ClientRun(m, n, cl)
+	internal.ClientRun(m, n, "go.micro.benchmark.hello.grpc_transport",
+		func() client.Client {
+			return grpc.NewClient()
+		},
+	)
 }

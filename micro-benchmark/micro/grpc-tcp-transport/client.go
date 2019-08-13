@@ -2,11 +2,9 @@ package main
 
 import (
 	"flag"
-
 	"github.com/micro-in-cn/tutorials/micro-benchmark/micro/internal"
-	"github.com/micro-in-cn/tutorials/micro-benchmark/pb"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/service/grpc"
+	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/client/grpc"
 	"github.com/micro/go-plugins/transport/tcp"
 )
 
@@ -18,8 +16,11 @@ func main() {
 	n := *concurrency
 	m := *total / n
 
-	service := grpc.NewService(micro.Name("go.micro.benchmark.hello.client"), micro.Transport(tcp.NewTransport()), )
-	c := pb.NewHelloService("go.micro.benchmark.hello.grpc_tcp", service.Client(), )
-
-	internal.ClientRun(m, n, c)
+	internal.ClientRun(m, n, "go.micro.benchmark.hello.grpc_tcp",
+		func() client.Client {
+			return grpc.NewClient(
+				client.Transport(tcp.NewTransport()),
+			)
+		},
+	)
 }
