@@ -38,13 +38,8 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 谢谢大家支持我们的社区，请维护者喝杯奶茶吧。
 
-<div style="text-align: left; width:30%"> 
- <img src="https://github.com/micro-in-cn/tutorials/raw/master/donation/donation_wx.jpg"> 
-</div>
- 
-<div style="text-align: left; width:30%"> 
- <img src="https://github.com/micro-in-cn/tutorials/raw/master/donation/donation_zfb.jpg"> 
-</div>
+ <img style="float: left; width:30%" src="https://github.com/micro-in-cn/tutorials/raw/master/donation/donation_zfb.jpg"> 
+ <img style="float: left; width:30%" src="https://github.com/micro-in-cn/tutorials/raw/master/donation/donation_wx.jpg"> 
 
 [捐赠列表](./donation/users.md)
 
