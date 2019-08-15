@@ -36,7 +36,23 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 ## 捐赠
 
-谢谢大家支持我们的社区，请维护者喝杯奶茶吧。[微店](https://weidian.com/item.html?itemID=2915044579&spider_token=3b21)
+谢谢大家支持我们的社区，请维护者喝杯奶茶吧。
+
+<div style="text-align: left;width:30%"> 
+
+![](./donation/donation_wx.jpg) 
+
+</div>
+ 
+<div style="text-align: left;width:30%"> 
+ 
+ ![](./donation/donation_zfb.jpg) 
+ 
+</div>
+
+[捐赠列表](./donation/users.md)
+
+目前因为社区没有向政府注册成组织机构，无法以组织身份收取大家的捐赠，故而我们先使用私人账号收取，所得捐赠我们会以月为单位按提交、解答的量与质量分给参与者，并向大家公开资金去向。
 
 ## 讨论
 
