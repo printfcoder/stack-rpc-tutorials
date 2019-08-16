@@ -33,6 +33,8 @@ $ go get -u github.com/micro/micro
   - [*nats](./basic-practices/micro-broker/nats) 使用NATs作为消息中间件
 - [micro-cli](./middle-practices/micro-cli) 如何使用命令行接口
   - [**flag](./middle-practices/micro-cli/flags) 如何使用flag
+- [micro-client](./middle-practices/micro-client) 如何使用Micro客户端
+  - [**JSON](./middle-practices/micro-client/json) JSON客户端
 - micro-config 如何读取配置
   - local  本地
     - [*file](./basic-practices/micro-config) 基于文件配置
