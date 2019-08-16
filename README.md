@@ -4,8 +4,6 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 于是，我们就着手开始编写本系列教程。
 
-需要说明的是，本系列不同于文档，示例，它更专注在Micro的使用范例上，同时希望在对大家实施Micro应用生产时，提供尽可能的帮助与指导。
-
 教程系列会逐渐完善，并不断更新原始内容，使其与Micro最新设计、代码一致，不过，由于工作量巨大，维护资源与开发系统难度相当，我们可能不会实时更新，不过，会尽一切可能保证资源的新鲜！
 
 ## 内容
@@ -40,12 +38,14 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 谢谢大家支持我们的社区，请维护者喝杯奶茶吧。
 
- <img style="float: left; width:30%" src="https://github.com/micro-in-cn/tutorials/raw/master/donation/donation_zfb.jpg"> 
- <img style="float: left; width:30%" src="https://github.com/micro-in-cn/tutorials/raw/master/donation/donation_wx.jpg"> 
+<div style="float:left">
+ <img src="https://github.com/micro-in-cn/tutorials/raw/master/donation/donation_zfb.jpg" width="30%"> 
+ <img src="https://github.com/micro-in-cn/tutorials/raw/master/donation/donation_wx.jpg" width="30%"> 
+</div>
 
 [捐赠列表](./donation/users.md)
 
-目前因为社区没有向政府注册成组织机构，无法以组织身份收取大家的捐赠，故而我们先使用私人账号收取，所得捐赠我们会以月为单位按提交、解答的量与质量分给参与者，并向大家公开资金去向。
+目前因为社区没有向政府注册成组织机构，无法以组织身份接受大家的捐赠，故而我们先使用私人账号，所得捐赠我们会以月为单位按提交、解答的量与质量分给参与者，并向大家公开资金去向。
 
 ## 讨论
 
