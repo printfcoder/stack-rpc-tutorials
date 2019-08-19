@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/handler"

@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"time"
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/common"
@@ -15,6 +13,7 @@ import (
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/web"
 	"github.com/micro/go-plugins/config/source/grpc"
+	"net/http"
 )
 
 var (

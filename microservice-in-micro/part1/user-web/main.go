@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-web/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-web/basic/config"
