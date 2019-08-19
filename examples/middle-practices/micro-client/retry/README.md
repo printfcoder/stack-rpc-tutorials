@@ -2,9 +2,9 @@
 
 演示如何使用客户端容错重试
 
-[客户端](./client.go) 
-[错误服务端](./FailureServer.go) 
-[成功服务端](./SuccessServer.go) 
+- [client.go](./client.go) 客户端
+- [FailureServer.go](./FailureServer.go) 错误服务端
+- [SuccessServer.go](./SuccessServer.go) 成功服务端
 
 ## 运行
 

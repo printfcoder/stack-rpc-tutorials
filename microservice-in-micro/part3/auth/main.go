@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/handler"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/model"
 	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
