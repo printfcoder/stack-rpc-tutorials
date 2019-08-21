@@ -35,6 +35,7 @@ $ go get -u github.com/micro/micro
   - [**flag](./middle-practices/micro-cli/flags) 如何使用flag
 - [micro-client](./middle-practices/micro-client) 如何使用Micro客户端
   - [**JSON](./middle-practices/micro-client/json) JSON客户端
+  - [**Retry](./middle-practices/micro-client/retry) 客户端重试
 - micro-config 如何读取配置
   - local  本地
     - [*file](./basic-practices/micro-config) 基于文件配置
