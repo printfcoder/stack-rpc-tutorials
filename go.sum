@@ -742,6 +742,7 @@ github.com/micro/go-micro v1.8.0/go.mod h1:RUJTXVb+qUnGx6jBK2yMCOzuB/xEKh/vdZc3u
 github.com/micro/go-micro v1.8.2/go.mod h1:oO5ShfJrdzayFLPUueZF85tZoez8VYLcXuTOTaHxROI=
 github.com/micro/go-micro v1.8.3 h1:PQwadLrWx3eHuyhNv8ed5BK/MGVNaNrJOyaXWGv5YLI=
 github.com/micro/go-micro v1.8.3/go.mod h1:duT+Yo83/MnUMmRAeCDKaZdqwqpYJt70eHoEdPTZGmc=
+github.com/micro/go-micro v1.9.0 h1:shtFXlQfqsesS/DSDYSBDwWsOfPOJFGmgRzuo+fRV6k=
 github.com/micro/go-micro v1.9.0/go.mod h1:duT+Yo83/MnUMmRAeCDKaZdqwqpYJt70eHoEdPTZGmc=
 github.com/micro/go-plugins v1.1.1 h1:emOQGG9p/r2t3hPRqOjfoyd2gnd01Ia0Gkkzs4RSL7k=
 github.com/micro/go-plugins v1.1.1/go.mod h1:HiA5x8eoCKZYg3PoeWjalKmncpbK1z/bjdGHPUQ+Xhk=
