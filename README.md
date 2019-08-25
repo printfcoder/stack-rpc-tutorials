@@ -51,6 +51,11 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
 
+关注微信公众号
+<div style="float:left">
+<img src="https://github.com/micro-in-cn/tutorials/raw/master/donation/wx_qrcode.jpg" width="30%"> 
+</div>
+
 [cn-examples]: /examples
 [cn-blogs]: https://micro.mu/blog/cn/
 [cn-docs]: https://micro.mu/docs/cn/
