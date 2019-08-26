@@ -3,16 +3,15 @@ package main
 import (
 	"flag"
 
+	"github.com/micro-in-cn/tutorials/micro-istio/http/srv/handler"
+	example "github.com/micro-in-cn/tutorials/micro-istio/http/srv/proto/example"
 	httpClient "github.com/micro-in-cn/tutorials/micro-istio/plugins/client/istio_http"
 	httpServer "github.com/micro-in-cn/tutorials/micro-istio/plugins/server/istio_http"
 	"github.com/micro/cli"
-	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/server"
-
-	"github.com/micro-in-cn/tutorials/micro-istio/http/srv/handler"
-	example "github.com/micro-in-cn/tutorials/micro-istio/http/srv/proto/example"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (

@@ -28,7 +28,6 @@ require (
 	github.com/lusis/slack-test v0.0.0-20190426140909-c40012f20018 // indirect
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-config v1.1.1-0.20190603113547-03fb75f2f1e4
-	github.com/micro/go-log v0.1.0
 	github.com/micro/go-micro v1.9.0
 	github.com/micro/go-plugins v1.2.0
 	github.com/micro/go-web v1.0.0
