@@ -6,12 +6,12 @@ import (
 	"html/template"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-web"
+	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/web"
 )
 
 // exampleCall 方法负责处理/example/call路由

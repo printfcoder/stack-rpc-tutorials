@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-api/rpc/proto"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/util/log"

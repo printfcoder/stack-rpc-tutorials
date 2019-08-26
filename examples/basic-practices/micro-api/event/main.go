@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 
-	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
 	proto "github.com/micro/go-micro/api/proto"
+	"github.com/micro/go-micro/util/log"
 )
 
 // 切记，事件订阅结构的所有公有方法都会被执行 方法名没有限制，但是方法一定要接收ctx，event

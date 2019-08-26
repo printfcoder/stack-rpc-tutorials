@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-api/rpc/proto"
-	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/util/log"
 )
 
 type Example struct{}

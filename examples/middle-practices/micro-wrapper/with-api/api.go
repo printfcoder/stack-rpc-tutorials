@@ -7,11 +7,11 @@ import (
 
 	proto2 "github.com/gogo/protobuf/proto"
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-api/api/proto"
-	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
 	api "github.com/micro/go-micro/api/proto"
 	"github.com/micro/go-micro/errors"
 	"github.com/micro/go-micro/server"
+	"github.com/micro/go-micro/util/log"
 )
 
 type Example struct{}
