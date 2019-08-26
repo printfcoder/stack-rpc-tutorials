@@ -2,9 +2,9 @@ package handler
 
 import (
 	"context"
-	"github.com/micro/go-log"
 
 	example "github.com/micro-in-cn/tutorials/micro-istio/http/srv/proto/example"
+	"github.com/micro/go-micro/util/log"
 )
 
 type Example struct{}

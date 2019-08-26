@@ -1,10 +1,10 @@
 package subscriber
 
 import (
-	"github.com/micro/go-log"
-
 	"context"
+
 	example "github.com/micro-in-cn/tutorials/micro-istio/http/srv/proto/example"
+	"github.com/micro/go-micro/util/log"
 )
 
 type Example struct{}

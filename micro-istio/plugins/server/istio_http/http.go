@@ -4,6 +4,7 @@ package http
 import (
 	"context"
 	"fmt"
+	"github.com/micro/go-micro/util/log"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -12,10 +13,9 @@ import (
 	"sync"
 
 	"github.com/gorilla/mux"
-	"github.com/micro/go-log"
 	"github.com/micro/go-micro/api"
 	ha "github.com/micro/go-micro/api/handler/api"
-	"github.com/micro/go-micro/cmd"
+	"github.com/micro/go-micro/config/cmd"
 	"github.com/micro/go-micro/errors"
 	"github.com/micro/go-micro/server"
 )

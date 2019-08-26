@@ -16,12 +16,12 @@ import (
 
 	"github.com/micro/go-micro/broker"
 	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/cmd"
+	"github.com/micro/go-micro/client/selector"
 	"github.com/micro/go-micro/codec"
+	"github.com/micro/go-micro/config/cmd"
 	"github.com/micro/go-micro/errors"
 	"github.com/micro/go-micro/metadata"
 	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/selector"
 	"github.com/micro/go-micro/transport"
 )
 
@@ -36,10 +36,10 @@ func init() {
 
 func (h *httpClient) next(request client.Request, opts client.CallOptions) (selector.Next, error) {
 	// return remote address
-	if len(opts.Address) > 0 && opts.Address[:1] != ":" {
+	if len(opts.Address) > 0 {
 		return func() (*registry.Node, error) {
 			return &registry.Node{
-				Address: opts.Address,
+				Address: opts.Address[0],
 			}, nil
 		}, nil
 	}
@@ -53,10 +53,6 @@ func (h *httpClient) next(request client.Request, opts client.CallOptions) (sele
 	// 	addr += "." + ns + "svc.cluster.local"
 	// }
 
-	if opts.Address[:1] == ":" {
-		addr += opts.Address
-	}
-
 	return func() (*registry.Node, error) {
 		return &registry.Node{
 			Address: addr,
@@ -69,9 +65,6 @@ func (h *httpClient) next(request client.Request, opts client.CallOptions) (sele
 func (h *httpClient) call(ctx context.Context, node *registry.Node, req client.Request, rsp interface{}, opts client.CallOptions) error {
 	// set the address
 	address := node.Address
-	if node.Port > 0 {
-		address = fmt.Sprintf("%s:%d", address, node.Port)
-	}
 
 	// get codec
 	cf, err := h.newHTTPCodec(req.ContentType())
@@ -326,9 +319,6 @@ func (h *httpClient) Stream(ctx context.Context, req client.Request, opts ...cli
 		}
 
 		addr := node.Address
-		if node.Port > 0 {
-			addr = fmt.Sprintf("%s:%d", addr, node.Port)
-		}
 
 		stream, err := h.stream(ctx, addr, req, callOpts)
 		h.opts.Selector.Mark(req.Service(), node, err)
@@ -387,7 +377,7 @@ func (h *httpClient) Publish(ctx context.Context, p client.Message, opts ...clie
 	}
 
 	b := &buffer{bytes.NewBuffer(nil)}
-	if err := cf(b).Write(&codec.Message{Type: codec.Publication}, p.Payload()); err != nil {
+	if err := cf(b).Write(&codec.Message{Type: codec.Event}, p.Payload()); err != nil {
 		return errors.InternalServerError("go.micro.client", err.Error())
 	}
 

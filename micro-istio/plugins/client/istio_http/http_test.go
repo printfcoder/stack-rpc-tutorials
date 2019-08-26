@@ -8,14 +8,13 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
-	"strconv"
 	"testing"
 
 	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/client/selector"
 	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/selector"
+	"github.com/micro/go-micro/registry/memory"
 	"github.com/micro/go-plugins/client/http/test"
-	"github.com/micro/go-plugins/registry/memory"
 )
 
 func TestHTTPClient(t *testing.T) {
@@ -68,19 +67,12 @@ func TestHTTPClient(t *testing.T) {
 	})
 	go http.Serve(l, mux)
 
-	host, sport, err := net.SplitHostPort(l.Addr().String())
-	if err != nil {
-		t.Fatal(err)
-	}
-	port, _ := strconv.Atoi(sport)
-
 	if err := r.Register(&registry.Service{
 		Name: "test.service",
 		Nodes: []*registry.Node{
 			{
 				Id:      "test.service.1",
-				Address: host,
-				Port:    port,
+				Address: l.Addr().String(),
 			},
 		},
 	}); err != nil {
@@ -231,19 +223,12 @@ func TestHTTPClientStream(t *testing.T) {
 	})
 	go http.Serve(l, mux)
 
-	host, sport, err := net.SplitHostPort(l.Addr().String())
-	if err != nil {
-		t.Fatal(err)
-	}
-	port, _ := strconv.Atoi(sport)
-
 	if err := r.Register(&registry.Service{
 		Name: "test.service",
 		Nodes: []*registry.Node{
 			{
 				Id:      "test.service.1",
-				Address: host,
-				Port:    port,
+				Address: l.Addr().String(),
 			},
 		},
 	}); err != nil {

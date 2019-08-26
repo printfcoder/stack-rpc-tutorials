@@ -3,19 +3,18 @@ package main
 import (
 	"flag"
 
-	httpClient "github.com/micro-in-cn/tutorials/micro-istio/plugins/client/istio_http"
-	httpServer "github.com/micro-in-cn/tutorials/micro-istio/plugins/server/istio_http"
-	"github.com/micro/cli"
-	"github.com/micro/go-micro/api"
-	ha "github.com/micro/go-micro/api/handler/api"
-	"github.com/micro/go-log"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/server"
-
 	apiClient "github.com/micro-in-cn/tutorials/micro-istio/http/api/client"
 	"github.com/micro-in-cn/tutorials/micro-istio/http/api/handler"
 	example "github.com/micro-in-cn/tutorials/micro-istio/http/api/proto/example"
+	httpClient "github.com/micro-in-cn/tutorials/micro-istio/plugins/client/istio_http"
+	httpServer "github.com/micro-in-cn/tutorials/micro-istio/plugins/server/istio_http"
+	"github.com/micro/cli"
+	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/api"
+	ha "github.com/micro/go-micro/api/handler/api"
+	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/server"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (
@@ -41,7 +40,7 @@ func main() {
 	c := httpClient.NewClient(
 		client.ContentType("application/json"),
 		func(o *client.Options) {
-			o.CallOptions.Address = callAddr
+			o.CallOptions.Address = []string{callAddr}
 		},
 	)
 	s := httpServer.NewApiServer(
