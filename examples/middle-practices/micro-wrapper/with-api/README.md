@@ -2,6 +2,11 @@
 
 我们在这里演示通过`micro api`调用有wrapper包装的接口
 
+我们演示两个包装器：
+
+- logWrapper
+- rspHeaderWrapper
+
 ## 使用方式
 
 运行**API**网关，我们传入api指令运行：
