@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"strings"
 
-	proto2 "github.com/gogo/protobuf/proto"
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-api/api/proto"
 	"github.com/micro/go-micro"
 	api "github.com/micro/go-micro/api/proto"
@@ -21,7 +20,6 @@ type Foo struct{}
 // Example.Call 通过API向外暴露为/example/call，接收http请求
 // 即：/example/call请求会调用go.micro.api.example服务的Example.Call方法
 func (e *Example) Call(ctx context.Context, req *api.Request, rsp *api.Response) error {
-
 	log.Logf("Example.Call接口收到请求")
 
 	name, ok := req.Get["name"]
@@ -45,16 +43,33 @@ func (e *Example) Call(ctx context.Context, req *api.Request, rsp *api.Response)
 // logWrapper 包装HandlerFunc类型的接口
 func logWrapper(fn server.HandlerFunc) server.HandlerFunc {
 	return func(ctx context.Context, req server.Request, rsp interface{}) error {
-
 		log.Logf("[logWrapper] 收到请求，请求接口：%s", req.Endpoint())
+		if reqStruct, ok := req.Body().(*api.Request); ok {
+			log.Logf("[logWrapper] 请求参数名：%s ", reqStruct.Get["name"].Key)
+			err := fn(ctx, req, rsp)
+			return err
+		}
 
-		reqStruct := &api.Request{}
-		bytes, _ := req.Read()
+		return nil
+	}
+}
 
-		_ = proto2.Unmarshal(bytes, reqStruct)
+// rspHeaderWrapper 处理Response头部
+func rspHeaderWrapper(fn server.HandlerFunc) server.HandlerFunc {
+	return func(ctx context.Context, req server.Request, rsp interface{}) error {
+		if rspT, ok := rsp.(*api.Response); ok {
+			if rspT.Header == nil {
+				rspT.Header = map[string]*api.Pair{}
+			}
 
-		log.Logf("[logWrapper] 请求参数名：%s ", reqStruct.Get["name"].Key)
-
+			rspT.Header["NEW-HEADER-ADDED"] = &api.Pair{Key: "NEW-HEADER-ADDED", Values: []string{"NEW-HEADER-ADDED-VALUE"}}
+			if reqStruct, ok := req.Body().(*api.Request); ok {
+				for k, v := range reqStruct.Header {
+					log.Logf("[rspHeaderWrapper] 原头：%s:%s", k, v)
+					rspT.Header[k] = v
+				}
+			}
+		}
 		err := fn(ctx, req, rsp)
 		return err
 	}
@@ -63,7 +78,7 @@ func logWrapper(fn server.HandlerFunc) server.HandlerFunc {
 func main() {
 	service := micro.NewService(
 		micro.Name("go.micro.api.example"),
-		micro.WrapHandler(logWrapper),
+		micro.WrapHandler(logWrapper, rspHeaderWrapper),
 	)
 
 	service.Init()
