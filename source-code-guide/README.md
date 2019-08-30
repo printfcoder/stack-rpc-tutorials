@@ -5,3 +5,8 @@
 - go-micro
   - [服务是如何创建的](https://micro.mu/blog/cn/2019/05/23/how-does-go-micro-server-be-bulit.html)
   - [服务注册（in progress）]
+  
+## 组件
+
+- 客户端
+  - 负载均衡
