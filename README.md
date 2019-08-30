@@ -17,6 +17,7 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 - [使用Micro监控平台](./platform-web) in progress 介绍如何使用监控平台
 - [源码解读](./source-code-guide)
 - [性能测试与解读](./micro-benchmark) in progress Micro内部组件性能对比，与第三方框架对比，差异原因等资料
+- [分布式系统](./distributed-system) in progress 分布式系统资料
 
 ## 其它系列
 
