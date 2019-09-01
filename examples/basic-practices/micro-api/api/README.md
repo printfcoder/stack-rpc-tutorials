@@ -12,7 +12,7 @@
 ```
 protoc --proto_path=import_proto_path:. --go_out=. --micro_out=. proto/api.proto
 ```
->  会在 import_pkg_path 这个路径下搜索proto/api.proto中导入proto文件
+>  会在 import_proto_path 这个路径下搜索proto/api.proto中导入proto文件
 
 运行**API**网关，我们传入api指令运行：
 
