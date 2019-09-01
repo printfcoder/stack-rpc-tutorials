@@ -7,3 +7,4 @@
 ## 目录
 
 - [什么是分布式系统](./introduction/introduction-to-distributed-systems.md)
+- [常见的负载均衡方法](./introduction/load-balancing-menthods.md)
