@@ -3,26 +3,31 @@ package main
 import (
 	"context"
 	"fmt"
+	"testing"
 
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-service/proto"
 	"github.com/micro/go-micro"
 )
 
-func main() {
-	// 定义服务，可以传入其它可选参数
+var (
+	greeter proto.GreeterService
+)
+
+func init() {
 	service := micro.NewService(micro.Name("greeter.client"))
 	service.Init()
+	greeter = proto.NewGreeterService("greeter.service", service.Client())
+}
 
-	// 创建客户端
-	greeter := proto.NewGreeterService("greeter.service", service.Client())
-
-	// 调用greeter服务
+func TestHello(t *testing.T) {
 	rsp, err := greeter.Hello(context.TODO(), &proto.HelloRequest{Name: "Micro中国"})
 	if err != nil {
-		fmt.Println(err)
-		return
+		t.Error(err)
 	}
 
-	// 打印响应结果
-	fmt.Println(rsp.Greeting)
+	if rsp.Greeting == "" {
+		t.Error(fmt.Errorf("[ERR] invalid rsp"))
+	}
+
+	t.Log("[INFO] rsp:", rsp.Greeting)
 }
