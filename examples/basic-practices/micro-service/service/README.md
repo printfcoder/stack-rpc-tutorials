@@ -6,6 +6,7 @@
 
 - main.go - 服务端
 - client.go - 客户端
+- hello_test.go - 单元测试示例
 
 ## 运行
 使用protoc生成相应的代码
