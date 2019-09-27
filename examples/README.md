@@ -59,6 +59,8 @@ $ go get -u github.com/micro/micro
   - [**关闭应用](./middle-practices/micro-service/shutdown)
 - [micro-sync](./senior-practices/micro-sync) 分布式同步、锁、时间、任务等
   - [***consul-lock](./senior-practices/micro-sync/lock/consul) 基于consul的锁
+- [micro-client-filter](./senior-practices/micro-filter) 客户端过滤器
+  - [***version-filter](./senior-practices/micro-filter/version) 版本号过滤器
 - [micro-web](./basic-practices/micro-web) 
   - [*web-pub](./basic-practices/micro-web/web-pub) web与pub结合
 - [**micro-wrapper](./middle-practices/micro-wrapper) 
