@@ -29,8 +29,10 @@ $ go get -u github.com/micro/micro
   - [*meta-handler](./basic-practices/micro-api/meta) meta模式
 - [micro-broker](./basic-practices/micro-broker) 
   - [*发布与订阅](./basic-practices/micro-broker/basic) 基础篇
+  - [*Kafka](./basic-practices/micro-broker/kafka) 使用Kafka作为消息中间件
+  - [*NATs](./basic-practices/micro-broker/nats) 使用NATs作为消息中间件
+  - [*nsq](./basic-practices/micro-broker/nsq) 使用NSQ作为消息中间件
   - [*rabbitMQ](./basic-practices/micro-broker/rabbitmq) 使用rabbitMQ作为消息中间件
-  - [*nats](./basic-practices/micro-broker/nats) 使用NATs作为消息中间件
 - [micro-cli](./middle-practices/micro-cli) 如何使用命令行接口
   - [**flag](./middle-practices/micro-cli/flags) 如何使用flag
 - [micro-client](./middle-practices/micro-client) 如何使用Micro客户端
