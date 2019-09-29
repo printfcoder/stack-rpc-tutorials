@@ -1,4 +1,4 @@
-# NSQ Pubsub
+# Kafka Pubsub
 
 本篇演示如何使用Kafka消息中间件来编写Micro的Pubsub服务，本篇由[Jayn Yang](https://github.com/jayn1985)提供，略作结构上的删改。
 
