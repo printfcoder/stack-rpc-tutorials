@@ -50,7 +50,7 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 或者关注微信公众号、微信群
 <div style="float:left">
 <img src="https://github.com/micro-in-cn/tutorials/raw/master/donation/wx_qrcode.jpg" width="30%">
-<img src="https://github.com/micro-in-cn/tutorials/raw/master/donation/wx_group.png" width="30%"> 
+<img src="https://github.com/micro-in-cn/tutorials/raw/master/donation/wx_group_v1.png" width="30%"> 
 </div>
 
 [cn-examples]: /examples
