@@ -54,9 +54,10 @@ $ go get -u github.com/micro/micro
 - [**micro-new](./middle-practices/micro-new) 新建模板
 - [*micro-registry](./basic-practices/micro-registry) 
   - [*etcdv3](./basic-practices/micro-registry/etcdv3)
-- [micro-service](./basic-practices/micro-service) 编写Micro服务，包含service和function
+- [micro-service](./basic-practices/micro-service) 编写Micro服务
   - [*function](./basic-practices/micro-service/function)
   - [*service](./basic-practices/micro-service/service)
+  - [*timeout](./basic-practices/micro-service/timeout) 自定义超时
   - [**自定义broker](./middle-practices/micro-service/custom-broker)
   - [**关闭应用](./middle-practices/micro-service/shutdown)
 - [micro-sync](./senior-practices/micro-sync) 分布式同步、锁、时间、任务等
