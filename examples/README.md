@@ -52,6 +52,7 @@ $ go get -u github.com/micro/micro
     - [***k8s](./senior-practices/micro-config/k8s) 使用k8s作为配置中心 todo
 - [micro-grpc](./middle-practices/micro-grpc) micro与grpc相关用法
 - [**micro-new](./middle-practices/micro-new) 新建模板
+- [**micro-proxy](./senior-practices/micro-proxy) **micro proxy** 示例
 - [*micro-registry](./basic-practices/micro-registry) 
   - [*etcdv3](./basic-practices/micro-registry/etcdv3)
 - [micro-service](./basic-practices/micro-service) 编写Micro服务
