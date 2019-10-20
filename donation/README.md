@@ -5,6 +5,7 @@
 <div style="float:left">
  <img src="https://github.com/micro-in-cn/tutorials/raw/master/donation/donation_zfb.jpg" width="30%"> 
  <img src="https://github.com/micro-in-cn/tutorials/raw/master/donation/donation_wx.jpg" width="30%"> 
+ <img src="https://github.com/micro-in-cn/tutorials/raw/master/donation/donation_wx_any.jpg" width="30%"> 
 </div>
 
 [捐赠列表](./users.md)
