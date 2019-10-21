@@ -1,11 +1,43 @@
 #使用metadata从客户端传递非业务数据给服务端
+运行rpc服务
+
+```bash
+cd ./server
+go run rpc.go
 
 
-客户端用JSON客户端的代码
-- [JSON客户端](../json)
+2019/10/21 09:46:48 Transport [http] Listening on [::]:52019
+2019/10/21 09:46:48 Broker [http] Connected to [::]:52020
+2019/10/21 09:46:48 Registry [mdns] Registering node: go.micro.rpc.example-005b5de8-b71a-41eb-82df-524770462bcd
+
+```
+运行客户端
+
+```bash
+cd ./client
+go run main.go
+rsp:  RPC Call收到了你的请求 John
+```
+
+注意客户端调用时服务端log
+
+```bash
+2019/10/21 09:49:39 收到 Example.Call 请求 name:"John"
+2019/10/21 09:49:39 name:"John"
+2019/10/21 09:49:39 metadata Test-User-Data=自定义数据
+
+```
 
 
-我们先来看看代码
+
+# 代码说明
+
+
+客户端借用JSON客户端的代码
+- [客户端](./client)
+
+
+我们来看看代码
 ```go
 func main() {
 	cli := client.NewClient(
@@ -25,6 +57,7 @@ func main() {
 	ctx := metadata.NewContext(context.Background(), map[string]string{
 		"X-User-Id": "john",
 		"X-From-Id": "script",
+		"Test-User-Data": "自定义数据",
 	})
 
 	rsp := &whatEverRsp{}
@@ -48,6 +81,7 @@ func main() {
 	ctx := metadata.NewContext(context.Background(), map[string]string{
 		"X-User-Id": "john",
 		"X-From-Id": "script",
+		"Test-User-Data": "自定义数据",
 	})
 
 ```
@@ -60,7 +94,7 @@ func main() {
 
 服务端代码我们就用
 
-- [rpc服务端](../rpc)
+- [rpc服务端](/server)
 
 的代码，我们对Call函数做如下修改
 ```go
@@ -69,7 +103,7 @@ func (e *Example) Call(ctx context.Context, req *proto.CallRequest, rsp *proto.C
 	fmt.Printf("%v\n", req)
 
 +	if md, ok := metadata.FromContext(ctx); ok {
-+		log.Printf("metadata X-User-Id=%s", md["X-User-Id"])
++		log.Printf("metadata X-User-Id=%s", md["Test-User-Data"])
 +	}
 
 	if len(req.Name) == 0 {
@@ -84,7 +118,7 @@ func (e *Example) Call(ctx context.Context, req *proto.CallRequest, rsp *proto.C
 追加了3行代码
 ```go
     if md, ok := metadata.FromContext(ctx); ok {
-        log.Printf("metadata X-User-Id=%s", md["X-User-Id"])
+        log.Printf("metadata X-User-Id=%s", md["Test-User-Data"])
     }
 ```
 
@@ -92,6 +126,7 @@ func (e *Example) Call(ctx context.Context, req *proto.CallRequest, rsp *proto.C
 rpc端的log如下
 
 ```bash
-name:"John"
-2019/10/18 12:56:25 metadata X-User-Id=john
+2019/10/21 09:49:39 收到 Example.Call 请求 name:"John"
+2019/10/21 09:49:39 name:"John"
+2019/10/21 09:49:39 metadata Test-User-Data=自定义数据
 ```
