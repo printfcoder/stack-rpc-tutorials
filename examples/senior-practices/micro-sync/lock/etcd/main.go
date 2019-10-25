@@ -2,19 +2,19 @@ package main
 
 import (
 	"github.com/micro/go-micro/sync/lock"
-	"github.com/micro/go-micro/sync/lock/consul"
+	"github.com/micro/go-micro/sync/lock/etcd"
 	"github.com/micro/go-micro/util/log"
 	"time"
 )
 
 func main() {
 	// 地址
-	nodes := lock.Nodes("127.0.0.1:8500")
+	nodes := lock.Nodes("127.0.0.1:2379")
 
 	resourceId := "id"
 
 	go func() {
-		lc := consul.NewLock(nodes)
+		lc := etcd.NewLock(nodes)
 		log.Logf("协程一获取锁...")
 		// 获取锁
 		err := lc.Acquire(resourceId)
@@ -35,7 +35,7 @@ func main() {
 	}()
 
 	go func() {
-		lc := consul.NewLock(nodes)
+		lc := etcd.NewLock(nodes)
 		log.Logf("协程二获取锁...")
 		// 获取锁
 		err := lc.Acquire(resourceId)
