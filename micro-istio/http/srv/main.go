@@ -37,7 +37,7 @@ func main() {
 	c := httpClient.NewClient(
 		client.ContentType("application/json"),
 		func(o *client.Options) {
-			o.CallOptions.Address = callAddr
+			o.CallOptions.Address = []string{callAddr}
 		},
 	)
 	s := httpServer.NewServer(
