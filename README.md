@@ -20,11 +20,20 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 - [源码解读](./source-code-guide)
 - [性能测试与解读](./micro-benchmark) in progress Micro内部组件性能对比，与第三方框架对比，差异原因等资料
 
-## 其它系列
+## 提问
 
-- [Micro全中文示例][cn-examples]
-- [Micro中文博客][cn-blogs]
-- [Micro中文文档][cn-docs] todo
+我们专门创建了问题仓库，用来收集、检索伙伴们遇到的问题，聚合以方便找到方案。 问题仓库-> [questions](https://github.com/micro-in-cn/questions)
+
+## 其它资源
+
+- [中文示例][cn-examples]
+- [中文博客][cn-blogs]
+- [中文手册](https://github.com/micro-in-cn/parchment)
+- [问题集](https://github.com/micro-in-cn/questions)
+- [快速开发包](https://github.com/micro-in-cn/starter-kit)
+- [学习视频](https://github.com/micro-in-cn/learning-videos)
+- [Config-Server 配置中心](https://github.com/micro-in-cn/config-server)
+- [Platform-Web 服务管理平台](https://github.com/micro-in-cn/platform-web)
 
 ## 贡献
 

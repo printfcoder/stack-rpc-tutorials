@@ -32,10 +32,10 @@ $ go get -u github.com/micro/protobuf/protoc-gen-go
 
 - [gateway](gateway) - gRPC网关
 - [greeter](greeter) - 示例程序
-  -- [greeter](greeter) - 示例程序
-  -- [micro-cli](greeter/cli) - micro风格客户端
-  -- [grpc-cli](greeter/grpc-cli) - grpc风格客户端
-  -- [srv](greeter/srv) - 服务
+  - [greeter](greeter) - 示例程序
+  - [micro-cli](greeter/cli) - micro风格客户端
+  - [grpc-cli](greeter/grpc-cli) - grpc风格客户端
+  - [srv](greeter/srv) - 服务
 
 ## 开始上手
 
