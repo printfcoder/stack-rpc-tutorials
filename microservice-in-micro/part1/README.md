@@ -67,20 +67,22 @@ micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-
 ├── main.go
 ├── plugin.go
 ├── handler
-│   └── example.go
+│   └── user.go
 ├── subscriber
-│   └── example.go
-├── proto/example
-│   └── example.proto
+│   └── user.go
+├── proto/user
+│   └── user.proto
 ├── Dockerfile
 ├── Makefile
-└── README.md
+├── README.md
+└── go.mod
 
 ```
+- <span style="color:red">*</span>需要有个说明的地方，当前实例micro的版本是1.13.0,如果安装的是之前的版本生成的项目模板或许会有些许差异。不过没关系，可以继续参照下面的教程步骤进行学习。<br/>
 
-有些目录比如subscriber，example等目前我们是用不到或者名称不是我们想要的，我们需要手动改一下：
+有些目录比如subscriber等目前我们是用不到或者名称不是我们想要的，我们需要手动改一下：
 
-handler/example.go改成user.go，proto也一样改成user/user.proto，详见下面的目录结构
+删除subscriber目录，添加basic和conf配置相关的目录，添加model模型相关目录,详见下面的目录结构
 
 ```text
 .
@@ -98,14 +100,14 @@ handler/example.go改成user.go，proto也一样改成user/user.proto，详见�
 │   └── basic                * 初始化基础组件
 ├── conf                     * 配置文件目录
 ├── handler
-│   └── user.go              * 将名称改为user
+│   └── user.go
 ├── model                    * 增加模型层，用于与数据库交换数据
 │   └── user                 * 用户模型类
 │   │   └── user.go          * 初始化用户模型类
 │   │   └── user_get.go      * 封装获取用户数据类业务
 │   └── model.go             * 初始化模型层
 ├── proto/user    
-│   └── user.proto           * 将名称改为user
+│   └── user.proto
 ├── Dockerfile
 ├── Makefile
 └── README.md
@@ -113,7 +115,7 @@ handler/example.go改成user.go，proto也一样改成user/user.proto，详见�
 
 其中加`*`的便是我们修改过的结构，其后跟的描述是目录或文件的功能或作用。可能大家会觉得改动这么大，模板命令还有什么用呢？
 
-其实模板只是生成基础目录，把大家引进一个风格的项目中，这样管理起来会轻松许多。下面我们解释一下为什么要新增两个目录：**basic**，**model**和**config**。
+其实模板只是生成基础目录，把大家引进一个风格的项目中，这样管理起来会轻松许多。下面我们解释一下为什么要新增三个目录：**basic**，**model**和**conf**。
 
 **basic**和**model**其实和Micro无关，只是为了满足我们为**user-srv**的业务定位，它是一个**MVC**应用后台，而C交给了**user-web**，其中的**M**才是它的主要功能。
 
@@ -193,13 +195,13 @@ func main() {
     service.Init()
 
     // Register Handler
-    s.RegisterUserHandler(service.Server(), new(handler.Service))
+    s.RegisterUserHandler(service.Server(), new(handler.User))
 
     // Register Struct as Subscriber
-    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), new(subscriber.Service))
+    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), new(subscriber.User))
 
     // Register Function as Subscriber
-    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), subscriber.Service)
+    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), subscriber.Handler)
 
     // Run service
     if err := service.Run(); err != nil {
@@ -731,7 +733,8 @@ micro new --namespace=mu.micro.book --type=web --alias=user github.com/micro-in-
 │   └── index.html
 ├── Dockerfile
 ├── Makefile
-└── README.md
+├── README.md
+└── go.mod
 
 ```
 
@@ -904,7 +907,7 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 
 朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
 
-[micro-new]: https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-new
+[micro-new]: https://github.com/micro-in-cn/tutorials/tree/master/examples/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
 [micro-new-code]: https://github.com/micro/micro/tree/master/new
 [go-micro]: https://github.com/micro/go-micro
