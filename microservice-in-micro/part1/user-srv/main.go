@@ -19,7 +19,7 @@ func main() {
 	// 初始化配置、数据库等信息
 	basic.Init()
 
-	// 使用consul注册
+	// 使用etcd注册
 	micReg := etcd.NewRegistry(registryOptions)
 
 	// 新建服务
@@ -49,6 +49,6 @@ func main() {
 }
 
 func registryOptions(ops *registry.Options) {
-	consulCfg := config.GetEtcdConfig()
-	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
+	etcdCfg := config.GetEtcdConfig()
+	ops.Addrs = []string{fmt.Sprintf("%s:%d", etcdCfg.GetHost(), etcdCfg.GetPort())}
 }

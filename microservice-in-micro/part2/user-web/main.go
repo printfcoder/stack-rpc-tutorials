@@ -8,7 +8,7 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/user-web/handler"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/consul"
+	"github.com/micro/go-micro/registry/etcd"
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/web"
 )
@@ -17,8 +17,8 @@ func main() {
 	// 初始化配置
 	basic.Init()
 
-	// 使用consul注册
-	micReg := consul.NewRegistry(registryOptions)
+	// 使用etcd注册
+	micReg := etcd.NewRegistry(registryOptions)
 
 	// 创建新服务
 	service := web.NewService(
@@ -52,6 +52,6 @@ func main() {
 }
 
 func registryOptions(ops *registry.Options) {
-	consulCfg := config.GetConsulConfig()
-	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
+	etcdCfg := config.GetEtcdConfig()
+	ops.Addrs = []string{fmt.Sprintf("%s:%d", etcdCfg.GetHost(), etcdCfg.GetPort())}
 }
