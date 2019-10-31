@@ -137,7 +137,7 @@ go get -u github.com/go-redis/redis
 micro new --namespace=mu.micro.book --type=srv --alias=auth github.com/micro-in-cn/tutorials/microservice-in-micro/part2/auth
 ```
 
-把**proto/example/example.proto**文件改成下面的样子，并将文件名与目录改成*auth*，让其能正确生成我们需要的类型与接口
+对模板生成的auth.proto文件进行如下修改
 
 ```proto
 service Service {
@@ -851,7 +851,7 @@ $ curl --request POST \
 
 ## 延伸阅读
 
-[micro-new]: https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-new
+[micro-new]: https://github.com/micro-in-cn/tutorials/tree/master/examples/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
 [micro-new-code]: https://github.com/micro/micro/tree/master/new
 [go-micro]: https://github.com/micro/go-micro
