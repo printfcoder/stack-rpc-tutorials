@@ -11,7 +11,7 @@ import (
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/consul"
+	"github.com/micro/go-micro/registry/etcd"
 	"github.com/micro/go-micro/util/log"
 )
 
@@ -20,7 +20,7 @@ func main() {
 	basic.Init()
 
 	// 使用consul注册
-	micReg := consul.NewRegistry(registryOptions)
+	micReg := etcd.NewRegistry(registryOptions)
 
 	// 新建服务
 	service := micro.NewService(
@@ -49,6 +49,6 @@ func main() {
 }
 
 func registryOptions(ops *registry.Options) {
-	consulCfg := config.GetConsulConfig()
+	consulCfg := config.GetEtcdConfig()
 	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
 }
