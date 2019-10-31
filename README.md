@@ -55,8 +55,8 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 或者关注微信公众号、微信群：
 <div style="float:left">
-<img src="https://sm.ms/image/9UMPwexjv4iOdBl" width="30%"> 
-<img src="https://sm.ms/image/rDgxKCz2G1H4EB9" width="30%">
+<img src="https://github.com/micro-in-cn/Notice/raw/master/donation/wx_qrcode.jpg" width="30%">
+<img src="https://github.com/micro-in-cn/Notice/raw/master/donation/wx_group_v1.png" width="30%"> 
 </div>
 
 二维码如过期：
