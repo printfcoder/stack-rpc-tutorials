@@ -3,10 +3,10 @@ micro:
     name: mu.micro.book.srv.auth
     address: 127.0.0.1
     port: 9030
-  consul:
+  etcd:
     enabled: true
     host: 127.0.0.1
-    port: 8500
+    port: 2379
   db:
     mysql:
       enabled: true

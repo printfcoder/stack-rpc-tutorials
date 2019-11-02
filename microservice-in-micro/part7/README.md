@@ -148,7 +148,7 @@ func main() {
 然后启动网关：
 
 ```bash
-$  go run main.go --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
+$  go run main.go --registry=etcd --api_namespace=mu.micro.book.web  api --handler=web
 ```
 
 ### web/api 服务opentracing插件
@@ -214,7 +214,7 @@ import (
 	"github.com/micro/go-plugins/config/source/grpc"
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/consul"
+	"github.com/micro/go-micro/registry/etcd"
 	"github.com/micro/go-web"
 )
 
@@ -231,8 +231,8 @@ func main() {
 	// 初始化配置
 	initCfg()
 
-	// 使用consul注册
-	micReg := consul.NewRegistry(registryOptions)
+	// 使用etcd注册
+	micReg := etcd.NewRegistry(registryOptions)
 
 +	t, io, err := tracer.NewTracer(cfg.Name, "")
 +	if err != nil {
@@ -388,7 +388,7 @@ func TracerWrapper(h http.Handler) http.Handler {
 
 ```
 $  cd $GOPATH/src/github.com/Allenxuxu/microservices/micro/
-$  make && ../build/microGW --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
+$  make && ../build/microGW --registry=etcd --api_namespace=mu.micro.book.web  api --handler=web
 ```
 
 启动 **config-grpc-srv**

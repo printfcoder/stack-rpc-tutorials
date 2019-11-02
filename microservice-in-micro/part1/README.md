@@ -91,7 +91,7 @@ micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-
 ├── basic
 │   └── config               * 配置类
 │   │   └── config.go        * 初始化配置类
-│   │   └── consul.go        * consul配置结构体
+│   │   └── etcd.go          * etcd配置结构体
 │   │   └── mysql.go         * mysql配置结构体
 │   │   └── profiles.go      * 配置文件树辅助类
 │   └── db                   * 数据库相关
@@ -294,10 +294,10 @@ func Init() {
 ```yaml
 app:
   profiles:
-    include: consul, db
+    include: etcd, db
 ```
 
-起名为**application.yml**是参考了Spring-boot风格，我觉得这个设计非常漂亮，于是在这抄袭一番。我们把consul和db配置分到独立的文件中
+起名为**application.yml**是参考了Spring-boot风格，我觉得这个设计非常漂亮，于是在这抄袭一番。我们把etcd和db配置分到独立的文件中
 
 通过解析`app.profiles.include`来加载指定的配置文件。当然也可以全部写在**application.yml**中，只是我觉得挤在一起的配置不优雅。
 
@@ -362,7 +362,7 @@ func InitConfig() {
     }
 
     // 赋值
-    config.Get(defaultRootPath, "consul").Scan(&consulConfig)
+    config.Get(defaultRootPath, "etcd").Scan(&etcdConfig)
     config.Get(defaultRootPath, "mysql").Scan(&mysqlConfig)
 
     // 标记已经初始化
@@ -373,7 +373,7 @@ func InitConfig() {
 我们目前定义了三个配置结构，它们在basic的[config](user-srv/basic/config)目录下
 
 - [profiles](./user-srv/basic/config/profiles.go)
-- [consul](./user-srv/basic/config/consul.go)
+- [etcd](./user-srv/basic/config/etcd.go)
 - [mysql](./user-srv/basic/config/mysql.go)：
 
 ```go
@@ -382,8 +382,8 @@ type defaultProfiles struct {
     Include string `json:"include"`
 }
 
-// defaultConsulConfig 默认consul 配置
-type defaultConsulConfig struct {
+// defaultEtcdConfig 默认etcd 配置
+type defaultEtcdConfig struct {
     Enabled bool   `json:"enabled"`
     Host    string `json:"host"`
     Port    int    `json:"port"`
@@ -627,8 +627,8 @@ func main() {
     // 初始化配置、数据库等信息
     basic.Init()
 
-    // 使用consul注册
-    micReg := consul.NewRegistry(registryOptions)
+    // 使用etcd注册
+    micReg := etcd.NewRegistry(registryOptions)
 
     // New Service
     service := micro.NewService(
@@ -657,13 +657,13 @@ func main() {
 }
 
 func registryOptions(ops *registry.Options) {
-    consulCfg := config.GetConsulConfig()
+    etcdCfg := config.GetEtcdConfig()
     ops.Timeout = time.Second * 5
-    ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
+    ops.Addrs = []string{fmt.Sprintf("%s:%d", etcdCfg.GetHost(), etcdCfg.GetPort())}
 }
 ```
 
-代码中我们默认使用consul作为注册中心，被在Action中初始化基础组件与模型层。
+代码中我们默认使用 Etcd 作为注册中心，被在 Action 中初始化基础组件与模型层。
 
 注意，因为handler依赖model，所以初始化handler要在初始化模型层之后执行。
 
@@ -672,19 +672,19 @@ func registryOptions(ops *registry.Options) {
 ```bash
 $ go run main.go plugin.go
 
-2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application.yml, {Include:consul, db}
-2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application-consul.yml
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application.yml, {Include:etcd, db}
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application-etcd.yml
 2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application-db.yml
 2019/04/12 23:57:12 Transport [http] Listening on [::]:52801
 2019/04/12 23:57:12 Broker [http] Connected to [::]:52802
-2019/04/12 23:57:12 Registry [consul] Registering node: mu.micro.book.srv.user-f1cb2a6c-1c8b-4d90-97b6-a9e287c1acc4
+2019/04/12 23:57:12 Registry [etcd] Registering node: mu.micro.book.srv.user-f1cb2a6c-1c8b-4d90-97b6-a9e287c1acc4
 
 ```
 
 启动成功，我们调用*Service.QueryUserByName*测试一下服务是否正常:
 
 ```bash
-$ micro --registry=consul call mu.micro.book.srv.user User.QueryUserByName '{"userName":"micro"}'
+$ micro --registry=etcd call mu.micro.book.srv.user User.QueryUserByName '{"userName":"micro"}'
 {
    "user": {
        "id": 10001,
@@ -836,7 +836,7 @@ handler里定义了错误结构体**Error**、**Init**、**Login**方法。
 运行api
 
 ```bash
-$ micro --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
+$ micro --registry=etcd --api_namespace=mu.micro.book.web  api --handler=web
 ```
 
 运行user-srv
