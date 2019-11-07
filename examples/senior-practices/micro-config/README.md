@@ -2,7 +2,7 @@
 
 ## 目录
 
-- [consul](./consul) doing
-- [etcd](./etcd) doing
+- [consul](./consul) 
+- [etcd](./etcd) 
 - [gRPC](./gRPC)
 - [k8s](./k8s) doing
