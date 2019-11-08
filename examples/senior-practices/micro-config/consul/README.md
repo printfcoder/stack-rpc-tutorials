@@ -9,8 +9,8 @@ micro-config的consul插件从consul的key/values读取配置
 
 # 数据存储格式
 
-consul插件默认的key的前缀是/micro/config，这个是可以自定义的
-我们在consul中存储数据
+consul插件默认的key的前缀是/micro/config，这个是可以自定义的<br />
+我们在consul中存储数据 <br />
 执行命令：
 ```
     consul kv put micro/app/mysql '{"address":"127.0.0.1","port":3306}'
