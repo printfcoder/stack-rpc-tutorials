@@ -577,7 +577,7 @@ func (s *service) sendPayDoneEvt(orderId int64, state int32) {
 **API**
 
 ```bash
-$ micro --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
+$ micro --registry=etcd --api_namespace=mu.micro.book.web  api --handler=web
 ```
 
 **user-srv**

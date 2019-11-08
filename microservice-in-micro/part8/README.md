@@ -90,7 +90,7 @@ docker:
 **Micro**提供了Env环境变量方式指定flag，所以我们可以基于该特性，在启动时设置docker实例。
 
 ```
-docker run -e MICRO_REGISTRY_ADDRESS=192.168.13.2:8500 -i orders-srv
+docker run -e MICRO_REGISTRY_ADDRESS=192.168.13.2:2379 -i orders-srv
 ```
 
 不过我们不会这么做，这样会把docker启动指令搞得又臭又长，我们把**Env**放到Dockerfile中：
@@ -98,7 +98,7 @@ docker run -e MICRO_REGISTRY_ADDRESS=192.168.13.2:8500 -i orders-srv
 ```dockerfile
 FROM alpine
 
-ENV MICRO_REGISTRY_ADDRESS 192.168.13.2:8500
+ENV MICRO_REGISTRY_ADDRESS 192.168.13.2:2379
 ENV MICRO_BOOK_CONFIG_GRPC_ADDR 192.168.13.2:9600
 
 RUN apk update && apk add tzdata && cp -r -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime

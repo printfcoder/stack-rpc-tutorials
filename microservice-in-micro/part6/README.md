@@ -410,11 +410,11 @@ web服务如下：
 
 > 我们不能直接用 **control + C** 快捷键来杀死进程，因为micro内部捕获这个信号，并且主动去注册中心注销然后退出进程
 
-kill 进程后，我们可以在consul的UI看到，consul的健康检查已经出现提示，但是服务还没有删除。
-![](../docs/part6_consul_1.png)
+kill 进程后，我们可以在etcd的UI看到，etcd的健康检查已经出现提示，但是服务还没有删除。
+![](../docs/part6_etcd_1.png)
 
-等待TTL超时后，我们可以看到consul已经将服务删除。
-![](../docs/part6_consul_2.png)
+等待TTL超时后，我们可以看到etcd已经将服务删除。
+![](../docs/part6_etcd_2.png)
 
 ## 总结
 
