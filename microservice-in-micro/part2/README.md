@@ -33,7 +33,7 @@
 │   ├── basic.go
 │   ├── config
 │   │   ├── config.go
-│   │   ├── config_consul.go
+│   │   ├── config_etcd.go
 │   │   ├── config_mysql.go
 │   │   └── profiles.go
 │   └── db
@@ -89,7 +89,7 @@ func InitConfig() {
 }
 // ...
 
-// GetRedisConfig 获取Consul配置
+// GetRedisConfig 获取etcd配置
 func GetRedisConfig() (ret RedisConfig) {
     return redisConfig
 }
@@ -172,7 +172,7 @@ cd auth
 protoc --proto_path=. --go_out=. --micro_out=. proto/auth/auth.proto
 ```
 
-添加配置文件，因为**auth**目前只会用到**consul**、**jwt**、**redis**，故而我们只用添加母文件[application.yml](./auth/conf/application.yml)、[redis](./auth/conf/application-redis.yml)和[consul](./auth/conf/application-consul.yml)配置文件即可。
+添加配置文件，因为**auth**目前只会用到**etcd**、**jwt**、**redis**，故而我们只用添加母文件[application.yml](./auth/conf/application.yml)、[redis](./auth/conf/application-redis.yml)和[etcd](./auth/conf/application-etcd.yml)配置文件即可。
 
 application.yml，我们把jwt配置加到其中。
 
@@ -566,8 +566,8 @@ func main() {
     // 初始化配置、数据库等信息
     basic.Init()
 
-    // 使用consul注册
-    micReg := consul.NewRegistry(registryOptions)
+    // 使用etcd注册
+    micReg := etcd.NewRegistry(registryOptions)
 
     // 新建服务
     service := micro.NewService(
@@ -757,7 +757,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 运行api
 
 ```bash
-$ micro --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
+$ micro --registry=etcd --api_namespace=mu.micro.book.web  api --handler=web
 ```
 
 运行user-srv

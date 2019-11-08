@@ -1,30 +1,30 @@
 package config
 
-// ConsulConfig consul 配置
-type ConsulConfig interface {
+// EtcdConfig Etcd 配置
+type EtcdConfig interface {
 	GetEnabled() bool
 	GetPort() int
 	GetHost() string
 }
 
-// defaultConsulConfig 默认consul 配置
-type defaultConsulConfig struct {
+// defaultEtcdConfig认 etcd 配置
+type defaultEtcdConfig struct {
 	Enabled bool   `json:"enabled"`
 	Host    string `json:"host"`
 	Port    int    `json:"port"`
 }
 
 // GetPort consul 端口
-func (c defaultConsulConfig) GetPort() int {
+func (c defaultEtcdConfig) GetPort() int {
 	return c.Port
 }
 
 // GetEnabled consul 激活
-func (c defaultConsulConfig) GetEnabled() bool {
+func (c defaultEtcdConfig) GetEnabled() bool {
 	return c.Enabled
 }
 
 // GetHost consul 主机地址
-func (c defaultConsulConfig) GetHost() string {
+func (c defaultEtcdConfig) GetHost() string {
 	return c.Host
 }

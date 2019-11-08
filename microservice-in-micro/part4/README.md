@@ -2,7 +2,7 @@
 
 前面的章节中，我们把配置以yml文件的方式放到配置目录**conf**中，并通过**go-config**把其加载读到应用中。
 
-Micro生态链中使用**go-config**管理配置，但是目前**go-config**定位是客户端插件，即是说它**并没有**充当配置中心的能力，不过，可以通过接口使用其它如consul、etcd、k8s等具备kv存储能力的配置服务器。
+Micro生态链中使用**go-config**管理配置，但是目前**go-config**定位是客户端插件，即是说它**并没有**充当配置中心的能力，不过，可以通过接口使用其它如etcd、etcd、k8s等具备kv存储能力的配置服务器。
 
 **go-config**与配置服务器组合，足以俱备配置中心的能力。
 
@@ -10,7 +10,7 @@ go-config在Micro体系中工作层次如下图所示：
 
 ![](../docs/part4_go-config_view.png)
 
-本章我们重点介绍如何使用gRPC作为配置中心，因为consul、etcd、k8s使用方式大同小异，不过多赘述。
+本章我们重点介绍如何使用gRPC作为配置中心，因为etcd、etcd、k8s使用方式大同小异，不过多赘述。
 
 go-config所有使用方式，包括本地与中心服务可参考下列示例
 
@@ -20,9 +20,9 @@ go-config所有使用方式，包括本地与中心服务可参考下列示例
 - [memory](https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-config/memory) 本地 基于内存方式配置
 - [microcli](https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-config/microcli) 本地 基于MicroCli参数配置
 - [gRPC](https://github.com/micro-in-cn/tutorials/examples/tree/master/senior-practices/micro-config/gRPC) 使用gRPC服务作为配置中心
-- [Consul](https://github.com/micro-in-cn/tutorials/examples/tree/master/senior-practices/micro-config/consul) 使用Consul服务作为配置中心
-- [etcd](https://github.com/micro-in-cn/tutorials/examples/tree/master/senior-practices/micro-config/consul) 使用etcd服务作为配置中心
-- [k8s](https://github.com/micro-in-cn/tutorials/examples/tree/master/senior-practices/micro-config/consul) 使用K8s服务作为配置中心
+- [etcd](https://github.com/micro-in-cn/tutorials/examples/tree/master/senior-practices/micro-config/etcd) 使用etcd服务作为配置中心
+- [etcd](https://github.com/micro-in-cn/tutorials/examples/tree/master/senior-practices/micro-config/etcd) 使用etcd服务作为配置中心
+- [k8s](https://github.com/micro-in-cn/tutorials/examples/tree/master/senior-practices/micro-config/etcd) 使用K8s服务作为配置中心
 
 ## gRPC Server
 
@@ -344,7 +344,7 @@ func Init(opts ...Option) {
 - Configurator 配置器 负责提供给客户端获取配置
 - Init/init 初始化接口与内部方法 负责初始化并同步配置服务器回传的配置变动
 
-我们实现的客户端并不限制数据源是gRPC或者像consul这样的资源服务都可以直接调用**Init**进行初始化。
+我们实现的客户端并不限制数据源是gRPC或者像etcd这样的资源服务都可以直接调用**Init**进行初始化。
 
 ## 应用代码
 
@@ -367,7 +367,7 @@ func main() {
 	// 初始化配置
 	initCfg()
 
-	// 使用consul注册
+	// 使用etcd注册
 	// 创建新服务
 	service := web.NewService(
 		web.Name(cfg.Name),
@@ -383,14 +383,14 @@ func main() {
 
 func registryOptions(ops *registry.Options) {
 
-	consulCfg := &common.Consul{}
-	err := config.C().App("consul", consulCfg)
+	etcdCfg := &common.Etcd{}
+	err := config.C().App("etcd", etcdCfg)
 	if err != nil {
 		panic(err)
 	}
 
 	ops.Timeout = time.Second * 5
-	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.Host, consulCfg.Port)}
+	ops.Addrs = []string{fmt.Sprintf("%s:%d", etcdCfg.Host, etcdCfg.Port)}
 }
 
 func initCfg() {

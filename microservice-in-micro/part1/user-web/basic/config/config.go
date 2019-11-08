@@ -19,7 +19,7 @@ var (
 var (
 	defaultRootPath         = "app"
 	defaultConfigFilePrefix = "application-"
-	consulConfig            defaultConsulConfig
+	etcdConfig              defaultEtcdConfig
 	profiles                defaultProfiles
 	m                       sync.RWMutex
 	inited                  bool
@@ -74,13 +74,13 @@ func Init() {
 	}
 
 	// 赋值
-	config.Get(defaultRootPath, "consul").Scan(&consulConfig)
+	config.Get(defaultRootPath, "etcd").Scan(&etcdConfig)
 
 	// 标记已经初始化
 	inited = true
 }
 
-// GetConsulConfig 获取Consul配置
-func GetConsulConfig() (ret ConsulConfig) {
-	return consulConfig
+// GetEtcdConfig 获取etcd配置
+func GetEtcdConfig() (ret EtcdConfig) {
+	return etcdConfig
 }

@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/basic/config"
 	"github.com/micro/go-micro/util/log"
 )
