@@ -69,6 +69,9 @@ $ go get -u github.com/micro/micro
   - [*web-pub](./basic-practices/micro-web/web-pub) web与pub结合
 - [**micro-wrapper](./middle-practices/micro-wrapper) 
   - [**基础用法](./middle-practices/micro-wrapper/basic)
+  - [**WrapHandler](./middle-practices/micro-wrapper/with-api)
+  - [**WrapCall](./middle-practices/micro-wrapper/wrap-call)
+  - [**WrapClient](./middle-practices/micro-wrapper/wrap-client)
 - grpc
   - [**grpc-oneof**](./middle-practices/grpc-oneof) grpc oneOf 示例todo
 
