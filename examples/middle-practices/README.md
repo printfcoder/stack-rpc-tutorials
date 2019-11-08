@@ -14,6 +14,10 @@
 - [micro-service](./micro-service)
   - [自定义Broker](./micro-service/custom-broker)
   - [关闭应用](./micro-service/shutdown)
-
+- [micro-wrapper](./micro-wrapper) 
+  - [基础用法](./micro-wrapper/basic)
+  - [WrapHandler](./micro-wrapper/with-api)
+  - [WrapCall](./micro-wrapper/wrap-call)
+  - [WrapClient](./micro-wrapper/wrap-client)
 
 [文档]: https://micro.mu/docs/cn/
