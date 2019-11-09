@@ -7,8 +7,8 @@ import (
 	"github.com/micro-in-cn/tutorials/micro-benchmark/pb"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/consul"
 	"github.com/micro/go-micro/transport"
+	"github.com/micro/go-plugins/registry/consul"
 	"github.com/micro/go-plugins/transport/rabbitmq"
 )
 
