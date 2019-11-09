@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-service/proto"
 	"github.com/micro/go-micro"
 )
@@ -24,7 +25,7 @@ func main() {
 		}),
 	)
 	service.Init()
-	
+
 	// 注册服务
 	proto.RegisterGreeterHandler(service.Server(), new(Greeter))
 

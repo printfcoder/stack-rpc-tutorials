@@ -20,6 +20,7 @@ require (
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
 	github.com/cloudflare/cloudflare-go v0.10.7 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/go-log/log v0.1.0
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gogo/protobuf v1.3.1

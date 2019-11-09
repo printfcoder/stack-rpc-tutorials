@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
+
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-service/proto"
 	"github.com/micro/go-micro"
-	"time"
 )
 
 type Greeter struct{}
