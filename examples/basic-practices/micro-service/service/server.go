@@ -20,9 +20,6 @@ func main() {
 	service := micro.NewService(
 		micro.Name("greeter.service"),
 		micro.Version("latest"),
-		micro.Metadata(map[string]string{
-			"type": "你好，世界",
-		}),
 	)
 	service.Init()
 
