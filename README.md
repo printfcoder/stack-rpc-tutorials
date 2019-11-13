@@ -1,8 +1,19 @@
 # Micro 中国站教程系列
 
+## 主打系列
+
+- [中文示例][cn-examples]
+- [中文博客][cn-blogs]
+- [中文手册](https://github.com/micro-in-cn/parchment)
+- [问题集](https://github.com/micro-in-cn/questions)
+- [快速开发包](https://github.com/micro-in-cn/starter-kit)
+- [学习视频](https://github.com/micro-in-cn/learning-videos)
+- [Config-Server 配置中心](https://github.com/micro-in-cn/config-server)
+- [Platform-Web 服务管理平台](https://github.com/micro-in-cn/platform-web)
+
 ## 愿景
 
-> 我们的愿景：同心同德的朋友们一起把Micro中国站发展成以Micro为核心，关注分布式与微服务技术的知识站点。专业、专心向大家介绍有用的知识！
+> 我们的愿景：构建以Micro为核心的中国资源、产品生态！
 
 Micro在github上公开了源码，也有及时更新的文档，还有尽可能多的示例，以及Slack社区等等，不过我们还缺个教程类型的资料，能帮助大家对Micro有进一步的了解的入门手册。
 
@@ -13,7 +24,6 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 ## 内容
 
 - [示例](./examples) micro使用示例
-- [Micro k8s](https://github.com/micro-in-cn/k8s-starter-kit) Micro如何与K8s集成
 - [Micro Istio](./micro-istio) Micro如何与Istio集成
 - [Micro Sync](./micro-sync) 分布式同步锁 in progress
 - [使用Micro构建微服务](./microservice-in-micro) 假设读者有Golang以及Micro的基础知识，在如何使用Micro构建微服务上，给大家一些使用范例。
@@ -23,17 +33,6 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 ## 提问
 
 我们专门创建了问题仓库，用来收集、检索伙伴们遇到的问题，聚合以方便找到方案。 问题仓库-> [questions](https://github.com/micro-in-cn/questions)
-
-## 其它资源
-
-- [中文示例][cn-examples]
-- [中文博客][cn-blogs]
-- [中文手册](https://github.com/micro-in-cn/parchment)
-- [问题集](https://github.com/micro-in-cn/questions)
-- [快速开发包](https://github.com/micro-in-cn/starter-kit)
-- [学习视频](https://github.com/micro-in-cn/learning-videos)
-- [Config-Server 配置中心](https://github.com/micro-in-cn/config-server)
-- [Platform-Web 服务管理平台](https://github.com/micro-in-cn/platform-web)
 
 ## 贡献
 
@@ -59,8 +58,7 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 <img src="https://github.com/micro-in-cn/Notice/raw/master/donation/wx_group_v1.png" width="30%"> 
 </div>
 
-二维码如过期：
-微信搜索 SLliuxian ，请附上您的姓名，备注来源：Github。
+微信群已不能扫码登录，请扫码或搜索“SLliuxian”加好友，并注明“姓名+github”
 
 [cn-examples]: /examples
 [cn-blogs]: https://micro.mu/blog/cn/
