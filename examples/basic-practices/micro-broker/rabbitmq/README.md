@@ -6,7 +6,8 @@ Micro中的[broker](https://godoc.org/github.com/micro/go-micro/broker#Broker)�
 
 ## 内容
 
-- main.go - mian程序运行两个协程10秒钟，各自负责发布与订阅消息。
+- main.go mian程序运行两个协程10秒钟，各自负责发布与订阅消息。
+- plugin.go 引入rabbitmq插件
 
 ## 运行程序
 

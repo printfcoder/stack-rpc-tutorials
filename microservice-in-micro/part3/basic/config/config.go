@@ -19,7 +19,7 @@ var (
 var (
 	defaultRootPath         = "app"
 	defaultConfigFilePrefix = "application-"
-	consulConfig            defaultConsulConfig
+	etcdConfig              defaultEtcdConfig
 	mysqlConfig             defaultMysqlConfig
 	jwtConfig               defaultJwtConfig
 	redisConfig             defaultRedisConfig
@@ -77,7 +77,7 @@ func Init() {
 	}
 
 	// 赋值
-	config.Get(defaultRootPath, "consul").Scan(&consulConfig)
+	config.Get(defaultRootPath, "etcd").Scan(&etcdConfig)
 	config.Get(defaultRootPath, "mysql").Scan(&mysqlConfig)
 	config.Get(defaultRootPath, "redis").Scan(&redisConfig)
 	config.Get(defaultRootPath, "jwt").Scan(&jwtConfig)
@@ -91,9 +91,9 @@ func GetMysqlConfig() (ret MysqlConfig) {
 	return mysqlConfig
 }
 
-// GetConsulConfig 获取Consul配置
-func GetConsulConfig() (ret ConsulConfig) {
-	return consulConfig
+// GetEtcdConfig 获取etcd配置
+func GetEtcdConfig() (ret EtcdConfig) {
+	return etcdConfig
 }
 
 // GetJwtConfig 获取Jwt配置

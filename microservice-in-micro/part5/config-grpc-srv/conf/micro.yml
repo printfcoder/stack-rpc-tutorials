@@ -13,10 +13,10 @@ micro:
       maxSize: 50
       maxBackups: 200
       maxAge: 10
-  consul:
+  etcd:
     enabled: true
     host: 192.168.10.86
-    port: 8500
+    port: 2379
   db:
     mysql:
       enabled: true
