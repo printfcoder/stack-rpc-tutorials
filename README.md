@@ -58,7 +58,7 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 <img src="https://github.com/micro-in-cn/Notice/raw/master/donation/wx_group_v1.png" width="30%"> 
 </div>
 
-微信群已不能扫码登录，请扫码或搜索“SLliuxian”加好友，并注明“姓名+github”
+微信群已不能扫码加入，请扫码或搜索“SLliuxian”加好友，并注明“姓名+github”
 
 [cn-examples]: /examples
 [cn-blogs]: https://micro.mu/blog/cn/
