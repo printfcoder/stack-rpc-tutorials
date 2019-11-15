@@ -107,6 +107,7 @@ ADD orders-srv /orders-srv
 
 ENTRYPOINT [ "/orders-srv" ]
 ```
+**环境变量请根据实际测试机器进行修改，此处请重点注意一下etcd启动时的主机地址**
 
 其中我们多加了个RUN指令，这是因为alpine镜像使用的是UTC时区，我们在+8区，故而我们需要设置一下时区，这样日志看起来顺眼些
 
@@ -151,6 +152,7 @@ orders-srv              latest              4f4b6df3e32b        3 seconds ago   
 ```bash
 docker run --name orders-srv -d orders-srv 
 ```
+**此处以orders-srv做一个小测试，其他服务的docker化还需要一些其他的手段进行处理，例如swarm，还在完善中**
 
 ## 总结
 
