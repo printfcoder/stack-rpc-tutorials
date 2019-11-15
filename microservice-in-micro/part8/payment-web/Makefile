@@ -1,7 +1,7 @@
 
 GOPATH:=$(shell go env GOPATH)
 
-.PHONY: build
+.PHONY:
 build: proto
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o payment-web main.go plugin.go
 
