@@ -5,13 +5,13 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"github.com/micro/go-micro/errors"
 	"io"
 	"io/ioutil"
 	"os"
 
-	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-service/file/proto"
+	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-service/stream/file/proto"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/errors"
 )
 
 type File struct{}
