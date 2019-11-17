@@ -5,7 +5,7 @@
 - [中文示例][cn-examples]
 - [中文博客][cn-blogs]
 - [中文手册](https://github.com/micro-in-cn/parchment)
-- [问题集](https://github.com/micro-in-cn/questions)
+- [问题集(FAQ)](https://github.com/micro-in-cn/questions)
 - [快速开发包](https://github.com/micro-in-cn/starter-kit)
 - [学习视频](https://github.com/micro-in-cn/learning-videos)
 - [Config-Server 配置中心](https://github.com/micro-in-cn/config-server)
