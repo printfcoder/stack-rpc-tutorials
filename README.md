@@ -44,6 +44,12 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 大家如果有建议或者问题，也可以新建issue，我们会一一回复。
 
+## 加入
+
+你是否在以下方向和技能领域,满是兴趣同时又充满热情：[点击了解](https://github.com/micro-in-cn/Notice/blob/master/we-need-you.md)
+
+我们需要你，是兴趣让我们走到一起：[了解并加入我们](https://github.com/micro-in-cn/Notice)
+
 ## 捐赠
 
 [链接](https://github.com/micro-in-cn/Notice/blob/master/donation/README.md)
