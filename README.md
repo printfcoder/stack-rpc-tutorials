@@ -5,7 +5,7 @@
 - [中文示例][cn-examples]
 - [中文博客][cn-blogs]
 - [中文手册](https://github.com/micro-in-cn/parchment)
-- [问题集](https://github.com/micro-in-cn/questions)
+- [问题集(FAQ)](https://github.com/micro-in-cn/questions)
 - [快速开发包](https://github.com/micro-in-cn/starter-kit)
 - [学习视频](https://github.com/micro-in-cn/learning-videos)
 - [Config-Server 配置中心](https://github.com/micro-in-cn/config-server)
@@ -44,6 +44,12 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 大家如果有建议或者问题，也可以新建issue，我们会一一回复。
 
+## 加入
+
+你是否在以下方向和技能领域,满是兴趣同时又充满热情：[点击了解](https://github.com/micro-in-cn/Notice/blob/master/we-need-you.md)
+
+我们需要你，是兴趣让我们走到一起：[了解并加入我们](https://github.com/micro-in-cn/Notice)
+
 ## 捐赠
 
 [链接](https://github.com/micro-in-cn/Notice/blob/master/donation/README.md)
@@ -58,7 +64,7 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 <img src="https://github.com/micro-in-cn/Notice/raw/master/donation/wx_group_v1.png" width="30%"> 
 </div>
 
-微信群已不能扫码登录，请扫码或搜索“SLliuxian”加好友，并注明“姓名+github”
+微信群已不能扫码加入，请扫码或搜索“SLliuxian”加好友，并注明“姓名+github”
 
 [cn-examples]: /examples
 [cn-blogs]: https://micro.mu/blog/cn/
