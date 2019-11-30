@@ -16,8 +16,9 @@ import (
 	"github.com/micro/go-micro/registry/etcd"
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-plugins/config/source/grpc"
-	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	openTrace "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	"github.com/opentracing/opentracing-go"
+	"os"
 )
 
 var (
@@ -48,7 +49,7 @@ func main() {
 		micro.Registry(micReg),
 		micro.Version(cfg.Version),
 		micro.Address(cfg.Addr()),
-		micro.WrapHandler(ocplugin.NewHandlerWrapper()),
+		micro.WrapHandler(openTrace.NewHandlerWrapper(opentracing.GlobalTracer())),
 	)
 
 	// 服务初始化
@@ -81,8 +82,9 @@ func registryOptions(ops *registry.Options) {
 }
 
 func initCfg() {
+	configAddr := os.Getenv("MICRO_BOOK_CONFIG_GRPC_ADDR")
 	source := grpc.NewSource(
-		grpc.WithAddress("127.0.0.1:9600"),
+		grpc.WithAddress(configAddr),
 		grpc.WithPath("micro"),
 	)
 

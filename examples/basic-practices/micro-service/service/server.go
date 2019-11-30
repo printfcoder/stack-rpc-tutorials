@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-service/proto"
 	"github.com/micro/go-micro"
 )
@@ -19,12 +20,9 @@ func main() {
 	service := micro.NewService(
 		micro.Name("greeter.service"),
 		micro.Version("latest"),
-		micro.Metadata(map[string]string{
-			"type": "你好，世界",
-		}),
 	)
 	service.Init()
-	
+
 	// 注册服务
 	proto.RegisterGreeterHandler(service.Server(), new(Greeter))
 

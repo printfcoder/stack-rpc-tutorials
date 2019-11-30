@@ -17,8 +17,9 @@ import (
 	"github.com/micro/go-micro/registry/etcd"
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-plugins/config/source/grpc"
-	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	openTrace "github.com/opentracing/opentracing-go"
+	openTrace "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	"github.com/opentracing/opentracing-go"
+	"os"
 )
 
 var (
@@ -37,12 +38,13 @@ func main() {
 	// 使用 Etcd 注册
 	micReg := etcd.NewRegistry(registryOptions)
 
-	t, io, err := tracer.NewTracer(cfg.Name, "localhost:6831")
+	traceAddr := os.Getenv("MICRO_BOOK_TRACER_ADDR")
+	t, io, err := tracer.NewTracer(cfg.Name, traceAddr)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer io.Close()
-	openTrace.SetGlobalTracer(t)
+	opentracing.SetGlobalTracer(t)
 	// 新建服务
 	service := micro.NewService(
 		micro.Name("mu.micro.book.srv.user"),
@@ -50,7 +52,7 @@ func main() {
 		micro.RegisterInterval(time.Second*10),
 		micro.Registry(micReg),
 		micro.Version("latest"),
-		micro.WrapHandler(ocplugin.NewHandlerWrapper()),
+		micro.WrapHandler(openTrace.NewHandlerWrapper(opentracing.GlobalTracer())),
 	)
 
 	// 服务初始化
@@ -83,8 +85,9 @@ func registryOptions(ops *registry.Options) {
 }
 
 func initCfg() {
+	configAddr := os.Getenv("MICRO_BOOK_CONFIG_GRPC_ADDR")
 	source := grpc.NewSource(
-		grpc.WithAddress("127.0.0.1:9600"),
+		grpc.WithAddress(configAddr),
 		grpc.WithPath("micro"),
 	)
 
