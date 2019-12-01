@@ -40,9 +40,10 @@ require (
 	github.com/mattn/go-runewidth v0.0.6 // indirect
 	github.com/mholt/certmagic v0.8.3 // indirect
 	github.com/micro/cli v0.2.0
-	github.com/micro/go-micro v1.15.1
+	github.com/micro/go-micro v1.16.0
 	github.com/micro/go-plugins v1.4.0
 	github.com/micro/micro v1.15.1
+	github.com/micro/protoc-gen-micro v1.0.0 // indirect
 	github.com/montanaflynn/stats v0.5.0
 	github.com/nats-io/nats.go v1.9.1
 	github.com/nats-io/nkeys v0.1.2 // indirect
@@ -57,9 +58,6 @@ require (
 	github.com/uber/jaeger-lib v2.2.0+incompatible // indirect
 	go.uber.org/multierr v1.4.0 // indirect
 	go.uber.org/zap v1.12.0
-	golang.org/x/crypto v0.0.0-20191108234033-bd318be0434a // indirect
-	golang.org/x/net v0.0.0-20191109021931-daa7c04131f5 // indirect
-	golang.org/x/sys v0.0.0-20191105231009-c1f44814a5cd // indirect
 	golang.org/x/tools v0.0.0-20191108193012-7d206e10da11 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
 	google.golang.org/genproto v0.0.0-20191108220845-16a3f7862a1a

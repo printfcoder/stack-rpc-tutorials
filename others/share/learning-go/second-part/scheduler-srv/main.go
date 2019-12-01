@@ -1,1 +1,1 @@
-package scheduler_srv
+package main

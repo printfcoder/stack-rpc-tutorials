@@ -1,4 +1,4 @@
-package parallel_sum_srv
+package main
 
 func main() {
 

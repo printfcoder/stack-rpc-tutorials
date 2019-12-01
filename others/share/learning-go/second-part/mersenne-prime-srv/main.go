@@ -1,4 +1,4 @@
-package mersenne_prime_srv
+package main
 
 func main() {
 
