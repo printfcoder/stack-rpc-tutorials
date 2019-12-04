@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+message Sum {
+    int64 totalSum = 1;
+}
+
+message ParallelRequest {
+
+}
+
+message ParallelResponse {
+
+}
+
+service Parallel {
+    rpc GetTotalSum (ParallelRequest) returns (ParallelResponse) {
+    }
+}
+
+
+
