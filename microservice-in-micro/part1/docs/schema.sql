@@ -1,5 +1,7 @@
 CREATE DATABASE `micro_book_mall` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin */;
 
+USE micro_book_mall;
+
 CREATE TABLE `user`
 (
     `id`           int(10) unsigned                                              NOT NULL AUTO_INCREMENT COMMENT '主键',
