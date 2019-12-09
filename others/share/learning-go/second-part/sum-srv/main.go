@@ -9,7 +9,6 @@ import (
 func main() {
 	srv := micro.NewService(
 		micro.Name("go.micro.learning.srv.sum"),
-		micro.Address("127.0.0.1:9988"),
 	)
 
 	_ = sum.RegisterSumHandler(srv.Server(), handler.Handler())

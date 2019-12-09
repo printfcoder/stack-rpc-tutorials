@@ -21,6 +21,7 @@ func main() {
 		// 以下选项都是可选的！
 		web.Version("latest"),
 		web.Address(":8088"),
+		web.StaticDir("html"),
 		web.Id("123"),
 	)
 
