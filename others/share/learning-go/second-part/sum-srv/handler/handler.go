@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/sum"
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/sum-srv/service"
 )
