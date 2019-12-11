@@ -50,6 +50,7 @@ func Init() {
 		log.Log("初始化Redis，检测连接Ping..")
 		log.Logf("初始化Redis，检测连接Ping... %s", pong)
 	}
+	inited = true
 }
 
 // GetRedis 获取redis
