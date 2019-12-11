@@ -8,7 +8,7 @@
 - [问题集(FAQ)](https://github.com/micro-in-cn/questions)
 - [快速开发包](https://github.com/micro-in-cn/starter-kit)
 - [学习视频](https://github.com/micro-in-cn/learning-videos)
-- [Config-Server 配置中心](https://github.com/micro-in-cn/config-server)
+- [XConf 分布式配置中心](https://github.com/micro-in-cn/XConf)
 - [Platform-Web 服务管理平台](https://github.com/micro-in-cn/platform-web)
 
 ## 愿景
