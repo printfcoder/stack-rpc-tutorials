@@ -8,10 +8,9 @@
 
 ## 使用方法
 
-以web模式运行**API**，因为我们的应用是在web空间下，所以我们把api的启动空间设置为**go.micro.web**
-
+以web模式运行**API**
 ```
-micro api --handler=web --namespace=go.micro.web
+micro api --handler=web
 ```
 
 运行web应用

@@ -19,7 +19,7 @@ var upGrader = websocket.Upgrader{
 func main() {
 	// New web service
 	service := web.NewService(
-		web.Name("go.micro.web.websocket"),
+		web.Name("go.micro.api.websocket"),
 		web.MicroService(micro.NewService(micro.Transport(grpc.NewTransport()))),
 	)
 
