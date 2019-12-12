@@ -67,20 +67,22 @@ micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-
 ├── main.go
 ├── plugin.go
 ├── handler
-│   └── example.go
+│   └── user.go
 ├── subscriber
-│   └── example.go
-├── proto/example
-│   └── example.proto
+│   └── user.go
+├── proto/user
+│   └── user.proto
 ├── Dockerfile
 ├── Makefile
-└── README.md
+├── README.md
+└── go.mod
 
 ```
+- <span style="color:red">*</span>需要有个说明的地方，当前实例micro的版本是1.13.0,如果安装的是之前的版本生成的项目模板或许会有些许差异。不过没关系，可以继续参照下面的教程步骤进行学习。<br/>
 
-有些目录比如subscriber，example等目前我们是用不到或者名称不是我们想要的，我们需要手动改一下：
+有些目录比如subscriber等目前我们是用不到或者名称不是我们想要的，我们需要手动改一下：
 
-handler/example.go改成user.go，proto也一样改成user/user.proto，详见下面的目录结构
+删除subscriber目录，添加basic和conf配置相关的目录，添加model模型相关目录,详见下面的目录结构
 
 ```text
 .
@@ -89,7 +91,7 @@ handler/example.go改成user.go，proto也一样改成user/user.proto，详见�
 ├── basic
 │   └── config               * 配置类
 │   │   └── config.go        * 初始化配置类
-│   │   └── consul.go        * consul配置结构体
+│   │   └── etcd.go          * etcd配置结构体
 │   │   └── mysql.go         * mysql配置结构体
 │   │   └── profiles.go      * 配置文件树辅助类
 │   └── db                   * 数据库相关
@@ -98,14 +100,14 @@ handler/example.go改成user.go，proto也一样改成user/user.proto，详见�
 │   └── basic                * 初始化基础组件
 ├── conf                     * 配置文件目录
 ├── handler
-│   └── user.go              * 将名称改为user
+│   └── user.go
 ├── model                    * 增加模型层，用于与数据库交换数据
 │   └── user                 * 用户模型类
 │   │   └── user.go          * 初始化用户模型类
 │   │   └── user_get.go      * 封装获取用户数据类业务
 │   └── model.go             * 初始化模型层
 ├── proto/user    
-│   └── user.proto           * 将名称改为user
+│   └── user.proto
 ├── Dockerfile
 ├── Makefile
 └── README.md
@@ -113,7 +115,7 @@ handler/example.go改成user.go，proto也一样改成user/user.proto，详见�
 
 其中加`*`的便是我们修改过的结构，其后跟的描述是目录或文件的功能或作用。可能大家会觉得改动这么大，模板命令还有什么用呢？
 
-其实模板只是生成基础目录，把大家引进一个风格的项目中，这样管理起来会轻松许多。下面我们解释一下为什么要新增两个目录：**basic**，**model**和**config**。
+其实模板只是生成基础目录，把大家引进一个风格的项目中，这样管理起来会轻松许多。下面我们解释一下为什么要新增三个目录：**basic**，**model**和**conf**。
 
 **basic**和**model**其实和Micro无关，只是为了满足我们为**user-srv**的业务定位，它是一个**MVC**应用后台，而C交给了**user-web**，其中的**M**才是它的主要功能。
 
@@ -193,13 +195,13 @@ func main() {
     service.Init()
 
     // Register Handler
-    s.RegisterUserHandler(service.Server(), new(handler.Service))
+    s.RegisterUserHandler(service.Server(), new(handler.User))
 
     // Register Struct as Subscriber
-    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), new(subscriber.Service))
+    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), new(subscriber.User))
 
     // Register Function as Subscriber
-    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), subscriber.Service)
+    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), subscriber.Handler)
 
     // Run service
     if err := service.Run(); err != nil {
@@ -292,10 +294,10 @@ func Init() {
 ```yaml
 app:
   profiles:
-    include: consul, db
+    include: etcd, db
 ```
 
-起名为**application.yml**是参考了Spring-boot风格，我觉得这个设计非常漂亮，于是在这抄袭一番。我们把consul和db配置分到独立的文件中
+起名为**application.yml**是参考了Spring-boot风格，我觉得这个设计非常漂亮，于是在这抄袭一番。我们把etcd和db配置分到独立的文件中
 
 通过解析`app.profiles.include`来加载指定的配置文件。当然也可以全部写在**application.yml**中，只是我觉得挤在一起的配置不优雅。
 
@@ -360,7 +362,7 @@ func InitConfig() {
     }
 
     // 赋值
-    config.Get(defaultRootPath, "consul").Scan(&consulConfig)
+    config.Get(defaultRootPath, "etcd").Scan(&etcdConfig)
     config.Get(defaultRootPath, "mysql").Scan(&mysqlConfig)
 
     // 标记已经初始化
@@ -371,7 +373,7 @@ func InitConfig() {
 我们目前定义了三个配置结构，它们在basic的[config](user-srv/basic/config)目录下
 
 - [profiles](./user-srv/basic/config/profiles.go)
-- [consul](./user-srv/basic/config/consul.go)
+- [etcd](./user-srv/basic/config/etcd.go)
 - [mysql](./user-srv/basic/config/mysql.go)：
 
 ```go
@@ -380,8 +382,8 @@ type defaultProfiles struct {
     Include string `json:"include"`
 }
 
-// defaultConsulConfig 默认consul 配置
-type defaultConsulConfig struct {
+// defaultEtcdConfig 默认etcd 配置
+type defaultEtcdConfig struct {
     Enabled bool   `json:"enabled"`
     Host    string `json:"host"`
     Port    int    `json:"port"`
@@ -625,8 +627,8 @@ func main() {
     // 初始化配置、数据库等信息
     basic.Init()
 
-    // 使用consul注册
-    micReg := consul.NewRegistry(registryOptions)
+    // 使用etcd注册
+    micReg := etcd.NewRegistry(registryOptions)
 
     // New Service
     service := micro.NewService(
@@ -655,13 +657,13 @@ func main() {
 }
 
 func registryOptions(ops *registry.Options) {
-    consulCfg := config.GetConsulConfig()
+    etcdCfg := config.GetEtcdConfig()
     ops.Timeout = time.Second * 5
-    ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
+    ops.Addrs = []string{fmt.Sprintf("%s:%d", etcdCfg.GetHost(), etcdCfg.GetPort())}
 }
 ```
 
-代码中我们默认使用consul作为注册中心，被在Action中初始化基础组件与模型层。
+代码中我们默认使用 Etcd 作为注册中心，被在 Action 中初始化基础组件与模型层。
 
 注意，因为handler依赖model，所以初始化handler要在初始化模型层之后执行。
 
@@ -670,19 +672,19 @@ func registryOptions(ops *registry.Options) {
 ```bash
 $ go run main.go plugin.go
 
-2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application.yml, {Include:consul, db}
-2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application-consul.yml
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application.yml, {Include:etcd, db}
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application-etcd.yml
 2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application-db.yml
 2019/04/12 23:57:12 Transport [http] Listening on [::]:52801
 2019/04/12 23:57:12 Broker [http] Connected to [::]:52802
-2019/04/12 23:57:12 Registry [consul] Registering node: mu.micro.book.srv.user-f1cb2a6c-1c8b-4d90-97b6-a9e287c1acc4
+2019/04/12 23:57:12 Registry [etcd] Registering node: mu.micro.book.srv.user-f1cb2a6c-1c8b-4d90-97b6-a9e287c1acc4
 
 ```
 
 启动成功，我们调用*Service.QueryUserByName*测试一下服务是否正常:
 
 ```bash
-$ micro --registry=consul call mu.micro.book.srv.user User.QueryUserByName '{"userName":"micro"}'
+$ micro --registry=etcd call mu.micro.book.srv.user User.QueryUserByName '{"userName":"micro"}'
 {
    "user": {
        "id": 10001,
@@ -731,7 +733,8 @@ micro new --namespace=mu.micro.book --type=web --alias=user github.com/micro-in-
 │   └── index.html
 ├── Dockerfile
 ├── Makefile
-└── README.md
+├── README.md
+└── go.mod
 
 ```
 
@@ -833,7 +836,7 @@ handler里定义了错误结构体**Error**、**Init**、**Login**方法。
 运行api
 
 ```bash
-$ micro --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
+$ micro --registry=etcd --api_namespace=mu.micro.book.web  api --handler=web
 ```
 
 运行user-srv
@@ -904,7 +907,7 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 
 朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
 
-[micro-new]: https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-new
+[micro-new]: https://github.com/micro-in-cn/tutorials/tree/master/examples/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
 [micro-new-code]: https://github.com/micro/micro/tree/master/new
 [go-micro]: https://github.com/micro/go-micro

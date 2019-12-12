@@ -55,11 +55,11 @@ Creating service go.micro.srv.default in /Users/me/workspace/go/src/github.com/m
 ├── main.go
 ├── plugin.go
 ├── handler
-│   └── example.go
+│   └── default.go
 ├── subscriber
-│   └── example.go
-├── proto/example
-│   └── example.proto
+│   └── default.go
+├── proto/default
+│   └── default.proto
 ├── Dockerfile
 ├── Makefile
 └── README.md
@@ -77,6 +77,10 @@ compile the proto file example.proto:
 cd /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/examples/middle-practices/micro-new/default
 protoc --proto_path=. --go_out=. --micro_out=. proto/example/example.proto
 ```
+如果是ubuntu系统生成的protoc命令为：
+protoc --proto_path=.:$GOPATH/src --go_out=. --micro_out=. proto/default/default.proto
+
+- <span style="color:red">*</span>需要有个说明的地方，当前实例micro的版本是1.13.0,如果安装的是之前的版本生成的项目模板或许会有些许差异。<br/>
 
 生成的代码中，命令空间前缀为默认的**go.micro**，默认的服务类型为**srv**，服务别名（alias）为**default**
 
@@ -116,7 +120,7 @@ func main() {
     )
 
     // ...
-    micro.RegisterSubscriber("mu.micro.srv.namespace", service.Server(), new(subscriber.Example))
+    micro.RegisterSubscriber("mu.micro.srv.namespace", service.Server(), new(subscriber.Namespace))
 
     // Register Function as Subscriber
     micro.RegisterSubscriber("mu.micro.srv.namespace", service.Server(), subscriber.Handler)
@@ -192,7 +196,8 @@ protoc --proto_path=.:$GOPATH/src --go_out=. --micro_out=. proto/apiType/apiType
         └── apiType.proto
 ``` 
 
-现在可以复制proto/api的相对GOPATH目录，然后把`path/to/service/proto/apiType`换成`github.com/micro-in-cn/tutorials/examples/middle-practices/micro-new/apiType/proto/apiType`。
+现在可以复制proto/apiType的相对GOPATH目录，然后把`path/to/service/proto/apiType`换成`github.com/micro-in-cn/tutorials/examples/middle-practices/micro-new/apiType/proto/apiType`。
+如果服务类型是srv则Handler目录下的接口类的引入路径则无需要做此修改。
 
 ### 指定FQDN
 
@@ -219,7 +224,7 @@ func main() {
     // ..
     
     // Register Struct as Subscriber
-    micro.RegisterSubscriber("mu.micro.fqdn.more", service.Server(), new(subscriber.Example))
+    micro.RegisterSubscriber("mu.micro.fqdn.more", service.Server(), new(subscriber.Fqdn))
 
     // Register Function as Subscriber
     micro.RegisterSubscriber("mu.micro.fqdn.more", service.Server(), subscriber.Handler)
@@ -252,7 +257,7 @@ func main() {
 
     // ...
     // Register Struct as Subscriber
-    micro.RegisterSubscriber("go.micro.srv.orcim", service.Server(), new(subscriber.Example))
+    micro.RegisterSubscriber("go.micro.srv.orcim", service.Server(), new(subscriber.Orcim))
 
     // Register Function as Subscriber
     micro.RegisterSubscriber("go.micro.srv.orcim", service.Server(), subscriber.Handler)

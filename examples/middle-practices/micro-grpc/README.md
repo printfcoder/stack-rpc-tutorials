@@ -1,6 +1,6 @@
 # GRPC
 
-本篇给大家演示如何使用gRPC构建服务及使用gRPC gateway，代码请见[go-grpc](https://gitub.com/micro/go-grpc)
+本篇给大家演示如何使用gRPC构建服务及使用gRPC gateway，代码请见[go-grpc](https://github.com/micro/go-grpc)
 
 gRPC网关[gRPC-gateway](https://github.com/grpc-ecosystem/grpc-gateway)是[protoc](http://github.com/google/protobuf)的一个插件。
 
@@ -32,10 +32,10 @@ $ go get -u github.com/micro/protobuf/protoc-gen-go
 
 - [gateway](gateway) - gRPC网关
 - [greeter](greeter) - 示例程序
-  -- [greeter](greeter) - 示例程序
-  -- [micro-cli](greeter/cli) - micro风格客户端
-  -- [grpc-cli](greeter/grpc-cli) - grpc风格客户端
-  -- [srv](greeter/srv) - 服务
+  - [greeter](greeter) - 示例程序
+  - [micro-cli](greeter/cli) - micro风格客户端
+  - [grpc-cli](greeter/grpc-cli) - grpc风格客户端
+  - [srv](greeter/srv) - 服务
 
 ## 开始上手
 

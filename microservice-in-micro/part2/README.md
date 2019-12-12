@@ -33,7 +33,7 @@
 │   ├── basic.go
 │   ├── config
 │   │   ├── config.go
-│   │   ├── config_consul.go
+│   │   ├── config_etcd.go
 │   │   ├── config_mysql.go
 │   │   └── profiles.go
 │   └── db
@@ -89,7 +89,7 @@ func InitConfig() {
 }
 // ...
 
-// GetRedisConfig 获取Consul配置
+// GetRedisConfig 获取etcd配置
 func GetRedisConfig() (ret RedisConfig) {
     return redisConfig
 }
@@ -137,7 +137,7 @@ go get -u github.com/go-redis/redis
 micro new --namespace=mu.micro.book --type=srv --alias=auth github.com/micro-in-cn/tutorials/microservice-in-micro/part2/auth
 ```
 
-把**proto/example/example.proto**文件改成下面的样子，并将文件名与目录改成*auth*，让其能正确生成我们需要的类型与接口
+对模板生成的auth.proto文件进行如下修改
 
 ```proto
 service Service {
@@ -172,7 +172,7 @@ cd auth
 protoc --proto_path=. --go_out=. --micro_out=. proto/auth/auth.proto
 ```
 
-添加配置文件，因为**auth**目前只会用到**consul**、**jwt**、**redis**，故而我们只用添加母文件[application.yml](./auth/conf/application.yml)、[redis](./auth/conf/application-redis.yml)和[consul](./auth/conf/application-consul.yml)配置文件即可。
+添加配置文件，因为**auth**目前只会用到**etcd**、**jwt**、**redis**，故而我们只用添加母文件[application.yml](./auth/conf/application.yml)、[redis](./auth/conf/application-redis.yml)和[etcd](./auth/conf/application-etcd.yml)配置文件即可。
 
 application.yml，我们把jwt配置加到其中。
 
@@ -566,8 +566,8 @@ func main() {
     // 初始化配置、数据库等信息
     basic.Init()
 
-    // 使用consul注册
-    micReg := consul.NewRegistry(registryOptions)
+    // 使用etcd注册
+    micReg := etcd.NewRegistry(registryOptions)
 
     // 新建服务
     service := micro.NewService(
@@ -757,7 +757,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 运行api
 
 ```bash
-$ micro --registry=consul --api_namespace=mu.micro.book.web  api --handler=web
+$ micro --registry=etcd --api_namespace=mu.micro.book.web  api --handler=web
 ```
 
 运行user-srv
@@ -851,7 +851,7 @@ $ curl --request POST \
 
 ## 延伸阅读
 
-[micro-new]: https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-new
+[micro-new]: https://github.com/micro-in-cn/tutorials/tree/master/examples/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
 [micro-new-code]: https://github.com/micro/micro/tree/master/new
 [go-micro]: https://github.com/micro/go-micro

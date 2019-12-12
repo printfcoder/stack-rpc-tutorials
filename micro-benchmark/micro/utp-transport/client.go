@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+
 	"github.com/micro-in-cn/tutorials/micro-benchmark/micro/internal"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/client"

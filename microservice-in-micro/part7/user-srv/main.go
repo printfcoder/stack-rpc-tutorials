@@ -14,11 +14,11 @@ import (
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/consul"
+	"github.com/micro/go-micro/registry/etcd"
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-plugins/config/source/grpc"
-	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	openTrace "github.com/opentracing/opentracing-go"
+	openTrace "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	"github.com/opentracing/opentracing-go"
 )
 
 var (
@@ -34,15 +34,15 @@ func main() {
 	// 初始化配置、数据库等信息
 	initCfg()
 
-	// 使用consul注册
-	micReg := consul.NewRegistry(registryOptions)
+	// 使用etcd注册
+	micReg := etcd.NewRegistry(registryOptions)
 
 	t, io, err := tracer.NewTracer(cfg.Name, "localhost:6831")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer io.Close()
-	openTrace.SetGlobalTracer(t)
+	opentracing.SetGlobalTracer(t)
 	// 新建服务
 	service := micro.NewService(
 		micro.Name("mu.micro.book.srv.user"),
@@ -50,7 +50,7 @@ func main() {
 		micro.RegisterInterval(time.Second*10),
 		micro.Registry(micReg),
 		micro.Version("latest"),
-		micro.WrapHandler(ocplugin.NewHandlerWrapper()),
+		micro.WrapHandler(openTrace.NewHandlerWrapper(opentracing.GlobalTracer())),
 	)
 
 	// 服务初始化
@@ -73,13 +73,13 @@ func main() {
 }
 
 func registryOptions(ops *registry.Options) {
-	consulCfg := &common.Consul{}
-	err := config.C().App("consul", consulCfg)
+	etcdCfg := &common.Etcd{}
+	err := config.C().App("etcd", etcdCfg)
 	if err != nil {
 		panic(err)
 	}
 
-	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.Host, consulCfg.Port)}
+	ops.Addrs = []string{fmt.Sprintf("%s:%d", etcdCfg.Host, etcdCfg.Port)}
 }
 
 func initCfg() {
