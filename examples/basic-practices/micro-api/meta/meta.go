@@ -50,7 +50,7 @@ func main() {
 		// http请求路由，支持POSIX风格
 		Path: []string{"/example"},
 		// 支持的方法类型
-		Method: []string{"POST"},
+		Method: []string{"POST", "GET"},
 		// 该接口使用的API转发模式
 		Handler: rpc.Handler,
 	}))
@@ -59,7 +59,7 @@ func main() {
 	proto.RegisterFooHandler(service.Server(), new(Foo), api.WithEndpoint(&api.Endpoint{
 		Name:    "Foo.Bar",
 		Path:    []string{"/foo/bar"},
-		Method:  []string{"POST"},
+		Method:  []string{"POST", "GET", "DELETE"},
 		Handler: rapi.Handler,
 	}))
 

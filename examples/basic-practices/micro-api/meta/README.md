@@ -24,10 +24,13 @@ go run meta.go
 
 ```
 curl -H 'Content-Type: application/json' -d '{"name": "john"}' "http://localhost:8080/example"
+curl -XGET "http://localhost:8080/example?name=john"
 ```
 
 向 **/example** POST请求时，会被转到**go.micro.api.example**的**Foo.Bar**方法。
 
 ```
 curl -H 'Content-Type: application/json' -d '{}' http://localhost:8080/foo/bar
+curl -XGET "http://localhost:8080/foo/bar"
+curl -XDELETE "http://localhost:8080/foo/bar"
 ```
