@@ -2,9 +2,12 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	logProto "github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/log"
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/sum"
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/sum-srv/handler"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/broker"
 	"github.com/micro/go-micro/server"
 	"github.com/micro/go-micro/util/log"
 )
@@ -12,8 +15,11 @@ import (
 func main() {
 	srv := micro.NewService(
 		micro.Name("go.micro.learning.srv.sum"),
-		// 并发只支持5次
-		micro.WrapHandler(rateLimiter(5)),
+		micro.WrapHandler(
+			// 并行请求只支持5个
+			rateLimiter(5),
+			reqLogger(),
+		),
 	)
 
 	srv.Init()
@@ -35,10 +41,29 @@ func rateLimiter(rate int) server.HandlerWrapper {
 		return func(ctx context.Context, req server.Request, rsp interface{}) error {
 			token := <-tokens
 			defer func() {
-				// 处理完成后释放
-				log.Infof("[rateLimiter] 释放限制")
 				tokens <- token
 			}()
+			return handler(ctx, req, rsp)
+		}
+	}
+}
+
+func reqLogger() server.HandlerWrapper {
+	return func(handler server.HandlerFunc) server.HandlerFunc {
+		return func(ctx context.Context, req server.Request, rsp interface{}) error {
+			log.Log("发送日志")
+			evt := logProto.LogEvt{
+				Msg: "Hello",
+			}
+
+			body, _ := json.Marshal(evt)
+			broker.Publish("go.micro.learning.topic.log",
+				&broker.Message{
+					Header: map[string]string{
+						"serviceName": "sum",
+					},
+					Body: body,
+				})
 			return handler(ctx, req, rsp)
 		}
 	}
