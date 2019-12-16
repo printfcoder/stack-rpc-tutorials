@@ -6,6 +6,7 @@ import (
 	proto "github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/log"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/util/log"
+	_ "github.com/micro/go-plugins/broker/rabbitmq"
 )
 
 type Sub struct {
