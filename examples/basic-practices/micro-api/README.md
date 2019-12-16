@@ -20,15 +20,16 @@ Micro API目前有5种处理方式，下面我们会讲到，我们可以根据�
 
 | - | 类型 | 说明
 ----|----|----
-1 | rpc | 默认值，通过RPC向go-micro应用转送请求，通常只传送请求body，头信息不封装。只接收POST请求
+1 | rpc | 通过RPC向go-micro应用转送请求，只接收GET和POST请求，GET转发`RawQuery`，POST转发`Body`
 2 | api | 与rpc差不多，但是会把完整的http头封装向下传送，不限制请求方法
 3 | http或proxy | 以反向代理的方式使用**API**，相当于把普通的web应用部署在**API**之后，让外界像调api接口一样调用web服务
 4 | web | 与http差不多，但是支持websocket
 5 | event | 代理event事件服务类型的请求
-6 | meta* | 元数据，通过在代码中的配置选择使用上述中的某一个处理器
+6 | meta* | 默认值，元数据，通过在代码中的`Endpoint`配置选择使用上述中的某一个处理器，默认RPC
 
 - 重点讲一下rpc和api两种类型的区别，它们的区别就在于，rpc不会把请求头信息封装传下去，而api会。
-- meta，并无此模式，只是对api或rpc模式下的扩展使用方法。
+- meta，并无此模式，只是对api、rpc、proxy、web等模式的扩展使用方法。
+- `Endpoint`在路由中会优先匹配，所以使用rpc或api模式同样可以使用此方法定义灵活的路由。
 - 目前版本（V1）无法支持多个handler并存运行
 
 ## 请求映射
