@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"github.com/micro/cli"
 
 	logProto "github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/log"
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/sum"
@@ -22,11 +23,25 @@ func main() {
 			// 并行请求只支持5个
 			rateLimiter(5),
 		),
+		micro.Flags(cli.StringFlag{
+			Name:   "learning_go",
+			EnvVar: "LEARNING_GO",
+			Usage:  "help一下，你就知道",
+		}),
 	)
 
-	srv.Init(micro.WrapHandler(
-		reqLogger(srv.Client()),
-	),
+	srv.Init(
+		micro.WrapHandler(
+			reqLogger(srv.Client()),
+		),
+		micro.BeforeStart(func() error {
+			log.Error("[srv] 启动前的动作执行了")
+			return nil
+		}),
+		micro.AfterStart(func() error {
+			log.Error("[srv] 启动后的动作执行了")
+			return nil
+		}),
 	)
 
 	_ = sum.RegisterSumHandler(srv.Server(), handler.Handler())
