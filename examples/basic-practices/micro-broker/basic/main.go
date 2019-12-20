@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	topic = "mu.micro.book.topic.payment.done"
+	topic = "go.micro.learning.topic.log"
 	b broker.Broker
 )
 
@@ -57,7 +57,7 @@ func main() {
 		log.Fatalf("broker.Connect() error: %v", err)
 	}
 
-	go pub()
+	// go pub()
 	go sub()
 
 	<-time.After(time.Second * 20)
