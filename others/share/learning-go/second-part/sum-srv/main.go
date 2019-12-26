@@ -2,14 +2,12 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/micro/cli"
 
 	logProto "github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/log"
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/sum"
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/sum-srv/handler"
 	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/broker"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/server"
 	"github.com/micro/go-micro/util/log"
@@ -78,14 +76,7 @@ func reqLogger(cli client.Client) server.HandlerWrapper {
 				Msg: "Hello",
 			}
 
-			body, _ := json.Marshal(evt)
-			pub.Publish(context.TODO(),
-				&broker.Message{
-					Header: map[string]string{
-						"serviceName": "sum",
-					},
-					Body: body,
-				})
+			_ = pub.Publish(context.TODO(), &evt)
 			return handler(ctx, req, rsp)
 		}
 	}
