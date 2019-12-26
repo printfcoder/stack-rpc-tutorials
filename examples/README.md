@@ -20,6 +20,7 @@ $ go get -u github.com/micro/micro
 
 *代表是初阶，**代表中阶，***代表高阶
 
+- [micro-plugins](./basic-practices/micro-plugins) micro 插件（跨域配置）
 - [micro-api](./basic-practices/micro-api) 
   - [*rpc-handler](./basic-practices/micro-api/rpc) rpc模式
   - [*api-handler](./basic-practices/micro-api/api) api模式
