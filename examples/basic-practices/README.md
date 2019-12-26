@@ -12,5 +12,6 @@
 - [micro-broker](./micro-broker) broker用法
 - [micro-config](./micro-config) 配置文件如何读取
 - [micro-service](./micro-service) 编写Micro服务，包含service和function
+- [micro-plugins](./micro-plugins) micro 插件（跨域配置）
 
 [文档]: https://micro.mu/docs/cn/
