@@ -3,9 +3,11 @@ module github.com/micro-in-cn/tutorials
 go 1.13.3
 
 replace (
+	github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.0
 	github.com/golang/lint => github.com/golang/lint v0.0.0-20190227174305-8f45f776aaf1
 	github.com/lucas-clemente/quic-go => github.com/lucas-clemente/quic-go v0.7.1-0.20190913061013-f15a82d3fdc3
 	github.com/nats-io/nats.go v1.8.2-0.20190607221125-9f4d16fe7c2d => github.com/nats-io/nats.go v1.8.1
+	github.com/nats-io/nkeys => github.com/nats-io/nkeys v0.1.3
 	github.com/testcontainers/testcontainer-go => github.com/testcontainers/testcontainers-go v0.0.0-20181115231424-8e868ca12c0f
 )
 
