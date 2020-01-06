@@ -61,7 +61,7 @@ $ GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o go-micro-demo-client client.
 $ docker build . -t go-micro-demo-client:latest
 ```
 
-6. 动客户端容器，输出结果
+6. 启动客户端容器，输出结果
 
 ```bash
 $ docker run go-micro-demo-client
