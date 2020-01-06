@@ -1,5 +1,8 @@
 # Docker
 
+很多朋友有疑问为什么在Docker中运行时会调不通服务，这是因为Docker有自己的网络，我们的服务端与客户端都要在这个网络中，才可能彼此访问。下面我们就给大家演示纯Docker环境时，怎么发布的简单流程。
+
+
 1. 编译Server
 
 ```bash
@@ -51,13 +54,16 @@ $ docker build . -t go-micro-demo-server:latest
 $ docker run go-micro-demo-server
 ```
 
-5. 同样的套路编译打包client，并启动
+5. 同样的套路编译打包client
 
 ```bash
 $ GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o go-micro-demo-client client.go
 $ docker build . -t go-micro-demo-client:latest
-$ docker run go-micro-demo-client
 ```
 
+6. 动客户端容器，输出结果
 
-得到容器的ip
+```bash
+$ docker run go-micro-demo-client
+你好，Micro中国
+```
