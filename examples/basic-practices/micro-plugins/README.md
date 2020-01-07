@@ -9,8 +9,8 @@ plugin.Register(cors.NewPlugin())
 ```
 
 ```bash
-go run main.go api 
---cors-allowed-headers=X-Custom-Header,X-Header 
---cors-allowed-origins=someotherdomain.com,xx.com 
---cors-allowed-methods=POST
+go run main.go 
+--cors-allowed-headers="Content-Type,X-Token" 
+--cors-allowed-origins="*" 
+--cors-allowed-methods="OPTIONS,DELETE,GET,POST" api
 ```
