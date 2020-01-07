@@ -54,6 +54,7 @@ $ go get -u github.com/micro/micro
 - [micro-grpc](./middle-practices/micro-grpc) micro与grpc相关用法
 - [**micro-new](./middle-practices/micro-new) 新建模板
 - [**micro-proxy](./senior-practices/micro-proxy) **micro proxy** 示例
+- [**micro-plugins](./basic-practices/micro-plugins) micro 工具集插件
 - [*micro-registry](./basic-practices/micro-registry) 
   - [*etcdv3](./basic-practices/micro-registry/etcdv3)
 - [micro-service](./basic-practices/micro-service) 编写Micro服务
@@ -64,7 +65,7 @@ $ go get -u github.com/micro/micro
   - [**关闭应用](./middle-practices/micro-service/shutdown)
 - [micro-sync](./senior-practices/micro-sync) 分布式同步、锁、时间、任务等
   - [***consul-lock](senior-practices/micro-sync/lock/etcd) 基于etcd的锁
-- [micro-client-filter](./senior-practices/micro-filter) 客户端过滤器
+- [micro-filter](./senior-practices/micro-filter) 过滤器
   - [***version-filter](./senior-practices/micro-filter/version) 版本号过滤器
 - [micro-web](./basic-practices/micro-web) 
   - [*web-pub](./basic-practices/micro-web/web-pub) web与pub结合
@@ -73,6 +74,8 @@ $ go get -u github.com/micro/micro
   - [**WrapHandler](./middle-practices/micro-wrapper/with-api)
   - [**WrapCall](./middle-practices/micro-wrapper/wrap-call)
   - [**WrapClient](./middle-practices/micro-wrapper/wrap-client)
+- Docker
+  - [**docker**](./senior-practices/docker) docker 示例
 - grpc
   - [**grpc-oneof**](./middle-practices/grpc-oneof) grpc oneOf 示例todo
 
