@@ -4,7 +4,7 @@
 
 该模式下允许我们通过RPC的方式把HTTP请求转发到go-micro微服务上。
 
-需要提醒的是，RPC模式下**API**只接收POST方式的请求，并且只支付内容格式**content-type**为**application/json**或者**application/protobuf**。
+需要提醒的是，RPC模式下**API**只接收POST方式的请求，并且只消费（consume）内容格式**content-type**为**application/json**或者**application/protobuf**。
 
 ## 使用方法
 
