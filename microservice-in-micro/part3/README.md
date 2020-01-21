@@ -418,7 +418,7 @@ func (s *service) Confirm(id int64, state int) (err error) {
 
 该接口有两个子服务协作完成，**orders-web**和**orders-srv**，前者作为订单服务的门面层，后者则是真正的核心业务层。
 
-**orders-srv**通过RPC向**payment-srv**请求占用一条库存，通过侦听**inventory-srv**广播的支付事件更新订单支付状态。
+**orders-srv**通过RPC向**inventory-srv**请求占用一条库存，通过侦听**payment-srv**广播的支付事件更新订单支付状态。
 
 #### 代码详解
 
