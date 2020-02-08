@@ -34,7 +34,7 @@ func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Re
 			Detail: err.Error(),
 		}
 
-		return err
+		return nil
 	}
 
 	rsp.User = user

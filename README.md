@@ -10,6 +10,8 @@
 - [学习视频](https://github.com/micro-in-cn/learning-videos)
 - [XConf 分布式配置中心](https://github.com/micro-in-cn/XConf)
 - [Platform-Web 服务管理平台](https://github.com/micro-in-cn/platform-web)
+- [使用Micro构建微服务](./microservice-in-micro) 
+
 
 ## 愿景
 
