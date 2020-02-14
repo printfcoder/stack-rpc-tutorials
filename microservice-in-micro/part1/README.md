@@ -287,7 +287,7 @@ func Init() {
 
 ### 配置
 
-加载配置我们会使用到[go-config](https://github.com/micro/go-micro/config)里面的本地文件配置。相关示例可以参考[go-config示例](https://github.com/micro-in-cn/tutorials/examples/tree/master/basic-practices/micro-config)。
+加载配置我们会使用到[go-config](https://github.com/micro/go-micro/v2/config)里面的本地文件配置。相关示例可以参考[go-config示例](https://github.com/micro-in-cn/tutorials/examples/tree/master/basic-practices/micro-config)。
 
 我们先看下根配置文件[application.yml](./user-srv/conf/application.yml)的样子
 
@@ -910,8 +910,8 @@ $  curl --request POST   --url http://127.0.0.1:8080/user/login   --header 'Cont
 [micro-new]: https://github.com/micro-in-cn/tutorials/tree/master/examples/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
 [micro-new-code]: https://github.com/micro/micro/tree/master/new
-[go-micro]: https://github.com/micro/go-micro
-[go-config]: https://github.com/micro/go-micro/config
+[go-micro]: https://github.com/micro/go-micro/v2
+[go-config]: https://github.com/micro/go-micro/v2/config
 [go-web]: https://github.com/micro/go-web
 
 [第二章]: ../part2
