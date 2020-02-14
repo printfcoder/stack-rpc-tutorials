@@ -72,10 +72,10 @@
 ```bash
 
 ## 安装go-micro
-go get github.com/micro/go-micro
+go get github.com/micro/go-micro/v2
 
 ## 安装micro
-go get github.com/micro/micro
+go get github.com/micro/micro/v2
 
 ```
 - mysql

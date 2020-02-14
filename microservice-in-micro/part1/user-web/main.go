@@ -6,11 +6,11 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-web/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-web/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-web/handler"
-	"github.com/micro/cli"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/etcd"
-	"github.com/micro/go-micro/util/log"
-	"github.com/micro/go-micro/web"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2/registry"
+	"github.com/micro/go-micro/v2/registry/etcd"
+	"github.com/micro/go-micro/v2/util/log"
+	"github.com/micro/go-micro/v2/web"
 )
 
 func main() {
@@ -31,11 +31,10 @@ func main() {
 
 	// 初始化服务
 	if err := service.Init(
-		web.Action(
-			func(c *cli.Context) {
-				// 初始化handler
-				handler.Init()
-			}),
+		web.Action(func(c *cli.Context) {
+			// 初始化handler
+			handler.Init()
+		}),
 	); err != nil {
 		log.Fatal(err)
 	}
