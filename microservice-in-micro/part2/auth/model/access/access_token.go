@@ -6,8 +6,8 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/basic/config"
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2/broker"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 var (

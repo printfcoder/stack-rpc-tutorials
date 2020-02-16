@@ -854,10 +854,10 @@ $ curl --request POST \
 [micro-new]: https://github.com/micro-in-cn/tutorials/tree/master/examples/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
 [micro-new-code]: https://github.com/micro/micro/tree/master/new
-[go-micro]: https://github.com/micro/go-micro
+[go-micro]: https://github.com/micro/go-micro/v2
 [go-config]: https://github.com/go-micro/config
 [go-web]: https://github.com/micro/go-web
-[go-broker]: https://github.com/micro/go-micro/broker
+[go-broker]: https://github.com/micro/go-micro/v2/broker
 [jwt]: https://jwt.io/introduction/
 
 [第一章]: ../part1

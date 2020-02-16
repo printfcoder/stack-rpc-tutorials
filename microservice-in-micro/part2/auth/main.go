@@ -8,11 +8,11 @@ import (
 	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/auth/proto/auth"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/basic/config"
-	"github.com/micro/cli"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/etcd"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/registry"
+	"github.com/micro/go-micro/v2/registry/etcd"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 func main() {
@@ -31,11 +31,12 @@ func main() {
 
 	// 服务初始化
 	service.Init(
-		micro.Action(func(c *cli.Context) {
+		micro.Action(func(c *cli.Context) error {
 			// 初始化handler
 			model.Init()
 			// 初始化handler
 			handler.Init()
+			return nil
 		}),
 	)
 
