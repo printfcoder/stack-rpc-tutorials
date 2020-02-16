@@ -6,11 +6,11 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part2/user-web/handler"
-	"github.com/micro/cli"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/etcd"
-	"github.com/micro/go-micro/util/log"
-	"github.com/micro/go-micro/web"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2/registry"
+	"github.com/micro/go-micro/v2/registry/etcd"
+	"github.com/micro/go-micro/v2/util/log"
+	"github.com/micro/go-micro/v2/web"
 )
 
 func main() {
