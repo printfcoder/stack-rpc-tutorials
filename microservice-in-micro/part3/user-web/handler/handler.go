@@ -9,8 +9,8 @@ import (
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/plugins/session"
 	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-srv/proto/user"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2/client"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 var (

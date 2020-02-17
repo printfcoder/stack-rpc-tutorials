@@ -696,10 +696,10 @@ $ go run main.go plugin.go
 [micro-new]: https://github.com/micro-in-cn/tutorials/examples/tree/master/middle-practices/micro-new
 [protoc-gen-go]: https://github.com/micro/protoc-gen-micro
 [micro-new-code]: https://github.com/micro/micro/tree/master/new
-[go-micro]: https://github.com/micro/go-micro
-[go-config]: https://github.com/micro/go-micro/config
+[go-micro]: https://github.com/micro/go-micro/v2
+[go-config]: https://github.com/micro/go-micro/v2/config
 [go-web]: https://github.com/micro/go-web
-[go-broker]: https://github.com/micro/go-micro/broker
+[go-broker]: https://github.com/micro/go-micro/v2/broker
 [jwt]: https://jwt.io/introduction/
 [gorilla-session]: https://github.com/gorilla/sessions
 
