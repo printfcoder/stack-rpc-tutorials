@@ -5,7 +5,7 @@ import (
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/model/orders"
 	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/payment-srv/proto/payment"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 var (

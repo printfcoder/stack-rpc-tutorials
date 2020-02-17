@@ -6,10 +6,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/micro/go-micro/config"
-	"github.com/micro/go-micro/config/source"
-	"github.com/micro/go-micro/config/source/file"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2/config"
+	"github.com/micro/go-micro/v2/config/source"
+	"github.com/micro/go-micro/v2/config/source/file"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 var (

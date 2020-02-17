@@ -10,11 +10,11 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/model"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/proto/orders"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/orders-srv/subscriber"
-	"github.com/micro/cli"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/etcd"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/registry"
+	"github.com/micro/go-micro/v2/registry/etcd"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 func main() {
@@ -33,13 +33,15 @@ func main() {
 
 	// 服务初始化
 	service.Init(
-		micro.Action(func(c *cli.Context) {
+		micro.Action(func(c *cli.Context) error {
 			// 初始化模型层
 			model.Init()
 			// 初始化handler
 			handler.Init()
 			// 初始化sub
 			subscriber.Init()
+
+			return nil
 		}),
 	)
 
