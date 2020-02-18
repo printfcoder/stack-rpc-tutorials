@@ -6,7 +6,7 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/plugins/jwt"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/plugins/redis"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2/util/log"
 	"sync"
 )
 

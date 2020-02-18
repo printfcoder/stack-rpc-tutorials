@@ -9,12 +9,12 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/config"
-	"github.com/micro/cli"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/etcd"
-	"github.com/micro/go-micro/util/log"
-	"github.com/micro/go-plugins/config/source/grpc"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/registry"
+	"github.com/micro/go-micro/v2/registry/etcd"
+	"github.com/micro/go-micro/v2/util/log"
+	"github.com/micro/go-plugins/config/source/grpc/v2"
 )
 
 var (

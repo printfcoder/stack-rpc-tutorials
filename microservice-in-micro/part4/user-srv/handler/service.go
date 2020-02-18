@@ -5,7 +5,7 @@ import (
 
 	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/user-srv/model/user"
 	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/user-srv/proto/user"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 type Service struct{}
