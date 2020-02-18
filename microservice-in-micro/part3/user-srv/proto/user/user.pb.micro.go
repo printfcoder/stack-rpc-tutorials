@@ -43,12 +43,6 @@ type userService struct {
 }
 
 func NewUserService(name string, c client.Client) UserService {
-	if c == nil {
-		c = client.NewClient()
-	}
-	if len(name) == 0 {
-		name = "mu.micro.book.user.srv.service"
-	}
 	return &userService{
 		c:    c,
 		name: name,

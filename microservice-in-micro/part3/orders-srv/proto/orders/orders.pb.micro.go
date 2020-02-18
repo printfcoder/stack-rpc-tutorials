@@ -44,12 +44,6 @@ type ordersService struct {
 }
 
 func NewOrdersService(name string, c client.Client) OrdersService {
-	if c == nil {
-		c = client.NewClient()
-	}
-	if len(name) == 0 {
-		name = "mu.micro.book.srv.orders"
-	}
 	return &ordersService{
 		c:    c,
 		name: name,
