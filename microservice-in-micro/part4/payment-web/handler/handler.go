@@ -9,8 +9,8 @@ import (
 
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
 	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/proto/payment"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2/client"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 var (
