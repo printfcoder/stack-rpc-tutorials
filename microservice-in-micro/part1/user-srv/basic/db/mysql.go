@@ -5,7 +5,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/basic/config"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 func initMysql() {

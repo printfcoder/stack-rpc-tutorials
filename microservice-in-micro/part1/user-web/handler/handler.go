@@ -8,7 +8,7 @@ import (
 
 	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/proto/user"
 	"github.com/micro/go-micro/v2/client"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 var (
@@ -29,7 +29,7 @@ func Init() {
 func Login(w http.ResponseWriter, r *http.Request) {
 	// 只接受POST请求
 	if r.Method != "POST" {
-		log.Logf("非法请求")
+		log.Error("非法请求")
 		http.Error(w, "非法请求", 400)
 		return
 	}
