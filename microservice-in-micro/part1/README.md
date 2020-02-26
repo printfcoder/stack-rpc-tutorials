@@ -648,7 +648,8 @@ func main() {
     )
 
     // 注册服务
-    s.RegisterUserHandler(service.Server(), new(handler.Service))
+    //这里如果使用的是v1的protoc-gen-micro的话，会编译报错。使用`go get -u github.com/micro/protoc-gen-micro/v2`安装v2的新插件即可。
+    s.RegisterUserHandler(service.Server(), new(handler.Service)) 
 
     // 启动服务
     if err := service.Run(); err != nil {
