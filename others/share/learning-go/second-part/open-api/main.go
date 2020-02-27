@@ -8,9 +8,9 @@ import (
 	proto "github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/api"
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/prime"
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/sum"
-	"github.com/micro/cli"
-	"github.com/micro/go-micro"
-	api "github.com/micro/go-micro/api/proto"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2"
+	api "github.com/micro/go-micro/v2/api/proto"
 )
 
 var (
@@ -58,9 +58,10 @@ func main() {
 		micro.Name("go.micro.learning.api.open"),
 	)
 
-	service.Init(micro.Action(func(c *cli.Context) {
+	service.Init(micro.Action(func(c *cli.Context) error {
 		sumClient = sum.NewSumService("go.micro.learning.srv.sum", service.Client())
 		primeClient = prime.NewPrimeService("go.micro.learning.srv.prime", service.Client())
+		return nil
 	}))
 
 	_ = proto.RegisterOpenHandler(service.Server(), new(Open))

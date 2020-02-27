@@ -4,8 +4,8 @@ import (
 	"context"
 
 	proto "github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/log"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2"
+	log "github.com/micro/go-micro/v2/logger"
 	_ "github.com/micro/go-plugins/broker/rabbitmq"
 )
 
@@ -13,7 +13,7 @@ type Sub struct {
 }
 
 func (s *Sub) Process(ctx context.Context, evt *proto.LogEvt) error {
-	log.Logf("收到日志 %v\n", evt.Msg)
+	log.Info("收到日志 %v\n", evt.Msg)
 	return nil
 }
 
