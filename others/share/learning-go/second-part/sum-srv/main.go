@@ -2,15 +2,15 @@ package main
 
 import (
 	"context"
-	"github.com/micro/cli"
 
 	logProto "github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/log"
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/sum"
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/sum-srv/handler"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/server"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/client"
+	log "github.com/micro/go-micro/v2/logger"
+	"github.com/micro/go-micro/v2/server"
 	_ "github.com/micro/go-plugins/broker/rabbitmq"
 )
 
@@ -21,10 +21,9 @@ func main() {
 			// 并行请求只支持5个
 			rateLimiter(5),
 		),
-		micro.Flags(cli.StringFlag{
-			Name:   "learning_go",
-			EnvVar: "LEARNING_GO",
-			Usage:  "help一下，你就知道",
+		micro.Flags(&cli.StringFlag{
+			Name:  "learning_go",
+			Usage: "help一下，你就知道",
 		}),
 	)
 
@@ -71,7 +70,7 @@ func reqLogger(cli client.Client) server.HandlerWrapper {
 
 	return func(handler server.HandlerFunc) server.HandlerFunc {
 		return func(ctx context.Context, req server.Request, rsp interface{}) error {
-			log.Log("发送日志")
+			log.Info("发送日志")
 			evt := logProto.LogEvt{
 				Msg: "Hello",
 			}

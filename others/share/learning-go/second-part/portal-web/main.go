@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/micro-in-cn/tutorials/others/share/learning-go/second-part/proto/sum"
-	"github.com/micro/go-micro/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/web"
 )
 

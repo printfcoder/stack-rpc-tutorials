@@ -6,7 +6,7 @@ package api
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	proto1 "github.com/micro/go-micro/api/proto"
+	proto1 "github.com/micro/go-micro/v2/api/proto"
 	math "math"
 )
 
@@ -35,7 +35,7 @@ var _ server.Option
 // Client API for Open service
 
 type OpenService interface {
-	Fetch(ctx context.Context, in *proto1.Request, opts ...client.CallOption) (*proto1.Response, error)
+	Hello(ctx context.Context, in *proto1.Request, opts ...client.CallOption) (*proto1.Response, error)
 }
 
 type openService struct {
@@ -50,8 +50,8 @@ func NewOpenService(name string, c client.Client) OpenService {
 	}
 }
 
-func (c *openService) Fetch(ctx context.Context, in *proto1.Request, opts ...client.CallOption) (*proto1.Response, error) {
-	req := c.c.NewRequest(c.name, "Open.Fetch", in)
+func (c *openService) Hello(ctx context.Context, in *proto1.Request, opts ...client.CallOption) (*proto1.Response, error) {
+	req := c.c.NewRequest(c.name, "Open.Hello", in)
 	out := new(proto1.Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -63,12 +63,12 @@ func (c *openService) Fetch(ctx context.Context, in *proto1.Request, opts ...cli
 // Server API for Open service
 
 type OpenHandler interface {
-	Fetch(context.Context, *proto1.Request, *proto1.Response) error
+	Hello(context.Context, *proto1.Request, *proto1.Response) error
 }
 
 func RegisterOpenHandler(s server.Server, hdlr OpenHandler, opts ...server.HandlerOption) error {
 	type open interface {
-		Fetch(ctx context.Context, in *proto1.Request, out *proto1.Response) error
+		Hello(ctx context.Context, in *proto1.Request, out *proto1.Response) error
 	}
 	type Open struct {
 		open
@@ -81,6 +81,6 @@ type openHandler struct {
 	OpenHandler
 }
 
-func (h *openHandler) Fetch(ctx context.Context, in *proto1.Request, out *proto1.Response) error {
-	return h.OpenHandler.Fetch(ctx, in, out)
+func (h *openHandler) Hello(ctx context.Context, in *proto1.Request, out *proto1.Response) error {
+	return h.OpenHandler.Hello(ctx, in, out)
 }
