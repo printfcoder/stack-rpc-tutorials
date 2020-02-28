@@ -9,7 +9,7 @@ import (
 	"github.com/micro/go-micro/v2/config"
 	"github.com/micro/go-micro/v2/config/source"
 	"github.com/micro/go-micro/v2/config/source/file"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 var (
@@ -34,7 +34,7 @@ func Init() {
 	defer m.Unlock()
 
 	if inited {
-		log.Logf("[Init] 配置已经初始化过")
+		log.Info("[Init] 配置已经初始化过")
 		return
 	}
 
@@ -55,7 +55,7 @@ func Init() {
 		panic(err)
 	}
 
-	log.Logf("[Init] 加载配置文件：path: %s, %+v\n", pt+"/application.yml", profiles)
+	log.Infof("[Init] 加载配置文件：path: %s, %+v\n", pt+"/application.yml", profiles)
 
 	// 开始导入新文件
 	if len(profiles.GetInclude()) > 0 {
@@ -65,7 +65,7 @@ func Init() {
 		for i := 0; i < len(include); i++ {
 			filePath := pt + string(filepath.Separator) + defaultConfigFilePrefix + strings.TrimSpace(include[i]) + ".yml"
 
-			log.Logf("[Init] 加载配置文件：path: %s\n", filePath)
+			log.Infof("[Init] 加载配置文件：path: %s\n", filePath)
 
 			sources[i] = file.NewSource(file.WithPath(filePath))
 		}
@@ -92,7 +92,7 @@ func GetMysqlConfig() (ret MysqlConfig) {
 }
 
 // GetEtcdConfig 获取etcd配置
-func GetEtcdConfig() (ret EtcdConfig){
+func GetEtcdConfig() (ret EtcdConfig) {
 	return etcdConfig
 }
 
