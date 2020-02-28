@@ -9,7 +9,7 @@ import (
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/auth/proto/auth"
 	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part2/user-srv/proto/user"
 	"github.com/micro/go-micro/v2/client"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 var (
@@ -32,7 +32,7 @@ func Init() {
 func Login(w http.ResponseWriter, r *http.Request) {
 	// 只接受POST请求
 	if r.Method != "POST" {
-		log.Logf("非法请求")
+		log.Warn("非法请求")
 		http.Error(w, "非法请求", 400)
 		return
 	}
@@ -59,7 +59,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		// 干掉密码返回
 		rsp.User.Pwd = ""
 		response["data"] = rsp.User
-		log.Logf("[Login] 密码校验完成，生成token...")
+		log.Info("[Login] 密码校验完成，生成token...")
 
 		// 生成token
 		rsp2, err := authClient.MakeAccessToken(context.TODO(), &auth.Request{
@@ -67,12 +67,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			UserName: rsp.User.Name,
 		})
 		if err != nil {
-			log.Logf("[Login] 创建token失败，err：%s", err)
+			log.Errorf("[Login] 创建token失败，err：%s", err)
 			http.Error(w, err.Error(), 500)
 			return
 		}
 
-		log.Logf("[Login] token %s", rsp2.Token)
+		log.Infof("[Login] token %s", rsp2.Token)
 		response["token"] = rsp2.Token
 
 		// 同时将token写到cookies中
@@ -102,14 +102,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 func Logout(w http.ResponseWriter, r *http.Request) {
 	// 只接受POST请求
 	if r.Method != "POST" {
-		log.Logf("非法请求")
+		log.Warn("非法请求")
 		http.Error(w, "非法请求", 400)
 		return
 	}
 
 	tokenCookie, err := r.Cookie("remember-me-token")
 	if err != nil {
-		log.Logf("token获取失败")
+		log.Error("token获取失败")
 		http.Error(w, "非法请求", 400)
 		return
 	}
