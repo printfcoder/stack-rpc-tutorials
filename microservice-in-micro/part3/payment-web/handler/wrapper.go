@@ -7,7 +7,7 @@ import (
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part3/auth/proto/auth"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/plugins/session"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 // AuthWrapper 认证wrapper
@@ -16,7 +16,7 @@ func AuthWrapper(h http.Handler) http.Handler {
 		ck, _ := r.Cookie(common.RememberMeCookieName)
 		// token不存在，则状态异常，无权限
 		if ck == nil {
-			log.Logf("token不存在")
+			log.Error("token不存在")
 			http.Error(w, "非法请求", 400)
 			return
 		}
@@ -41,12 +41,12 @@ func AuthWrapper(h http.Handler) http.Handler {
 
 					// token不一致
 					if rsp.Token != ck.Value {
-						log.Logf("[AuthWrapper]，token不一致")
+						log.Error("[AuthWrapper]，token不一致")
 						http.Error(w, "非法请求", 400)
 						return
 					}
 				} else {
-					log.Logf("[AuthWrapper]，session不合法，无用户id")
+					log.Error("[AuthWrapper]，session不合法，无用户id")
 					http.Error(w, "非法请求", 400)
 					return
 				}

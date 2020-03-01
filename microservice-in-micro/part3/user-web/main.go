@@ -7,9 +7,9 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part3/user-web/handler"
 	"github.com/micro/cli/v2"
+	log "github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/registry/etcd"
-	"github.com/micro/go-micro/v2/util/log"
 	"github.com/micro/go-micro/v2/web"
 )
 
