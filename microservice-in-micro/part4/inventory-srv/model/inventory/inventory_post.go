@@ -6,7 +6,7 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/common"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/inventory-srv/proto/inventory"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/plugins/db"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 // Sell 销存
@@ -14,7 +14,7 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 	// 获取数据库
 	tx, err := db.GetDB().Begin()
 	if err != nil {
-		log.Logf("[Sell] 事务开启失败", err.Error())
+		log.Errorf("[Sell] 事务开启失败", err)
 		return
 	}
 	defer func() {
@@ -35,24 +35,24 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 		// 查询
 		errIn = tx.QueryRow(querySQL, bookId).Scan(&inv.Id, &inv.BookId, &inv.UnitPrice, &inv.Stock, &inv.Version)
 		if errIn != nil {
-			log.Logf("[Sell] 查询数据失败，err：%s", errIn)
+			log.Errorf("[Sell] 查询数据失败，err：%s", errIn)
 			return errIn
 		}
 
 		if inv.Stock < 1 {
 			errIn = fmt.Errorf("[Sell] 库存不足")
-			log.Logf(errIn.Error())
+			log.Error(errIn)
 			return errIn
 		}
 
 		r, errIn := tx.Exec(updateSQL, inv.Stock-1, inv.Version+1, bookId, inv.Version)
 		if errIn != nil {
-			log.Logf("[Sell] 更新库存数据失败，err：%s", errIn)
+			log.Errorf("[Sell] 更新库存数据失败，err：%s", errIn)
 			return
 		}
 
 		if affected, _ := r.RowsAffected(); affected == 0 {
-			log.Logf("[Sell] 更新库存数据失败，版本号%d过期，即将重试", inv.Version)
+			log.Errorf("[Sell] 更新库存数据失败，版本号%d过期，即将重试", inv.Version)
 			// 重试，直到没有库存
 			deductInv()
 		}
@@ -63,14 +63,14 @@ func (s *service) Sell(bookId int64, userId int64) (id int64, err error) {
 	// 开始销存
 	err = deductInv()
 	if err != nil {
-		log.Logf("[Sell] 销存失败，err：%s", err)
+		log.Errorf("[Sell] 销存失败，err：%s", err)
 		return
 	}
 
 	insertSQL := `INSERT inventory_history (book_id, user_id, state) VALUE (?, ?, ?) `
 	r, err := tx.Exec(insertSQL, bookId, userId, common.InventoryHistoryStateNotOut)
 	if err != nil {
-		log.Logf("[Sell] 新增销存记录失败，err：%s", err)
+		log.Errorf("[Sell] 新增销存记录失败，err：%s", err)
 		return
 	}
 
@@ -92,7 +92,7 @@ func (s *service) Confirm(id int64, state int) (err error) {
 	// 更新
 	_, err = o.Exec(updateSQL, state, id)
 	if err != nil {
-		log.Logf("[Confirm] 更新失败，err：%s", err)
+		log.Errorf("[Confirm] 更新失败，err：%s", err)
 		return
 	}
 	return

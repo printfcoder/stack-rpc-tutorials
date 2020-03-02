@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/proto/payment"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 // sendPayDoneEvt 发送支付事件
@@ -19,10 +19,10 @@ func (s *service) sendPayDoneEvt(orderId int64, state int32) {
 		State:    state,
 	}
 
-	log.Logf("[sendPayDoneEvt] 发送支付事件，%+v\n", ev)
+	log.Infof("[sendPayDoneEvt] 发送支付事件，%+v\n", ev)
 
 	// 广播
 	if err := payPublisher.Publish(context.Background(), ev); err != nil {
-		log.Logf("[sendPayDoneEvt] 异常: %v", err)
+		log.Errorf("[sendPayDoneEvt] 异常: %v", err)
 	}
 }

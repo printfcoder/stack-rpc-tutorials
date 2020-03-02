@@ -11,8 +11,8 @@ import (
 
 	"github.com/micro/go-micro/v2/config"
 	"github.com/micro/go-micro/v2/config/source/file"
-	"github.com/micro/go-micro/v2/util/log"
-	proto "github.com/micro/go-plugins/config/source/grpc/proto"
+	log "github.com/micro/go-micro/v2/logger"
+	proto "github.com/micro/go-plugins/config/source/grpc/v2/proto"
 	grpc2 "google.golang.org/grpc"
 )
 
@@ -29,7 +29,7 @@ func main() {
 	// 灾难恢复
 	defer func() {
 		if r := recover(); r != nil {
-			log.Logf("[main] Recovered in f %v", r)
+			log.Infof("[main] Recovered in f %v", r)
 		}
 	}()
 
@@ -46,7 +46,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Logf("configServer started")
+	log.Infof("configServer started")
 
 	// 启动
 	err = service.Serve(ts)
@@ -70,7 +70,7 @@ func (s Service) Watch(req *proto.WatchRequest, server proto.Source_WatchServer)
 		ChangeSet: getConfig(appName),
 	}
 	if err = server.Send(rsp); err != nil {
-		log.Logf("[Watch] 侦听处理异常，%s", err)
+		log.Errorf("[Watch] 侦听处理异常，%s", err)
 		return err
 	}
 
@@ -103,7 +103,7 @@ func loadAndWatchConfigFile() (err error) {
 				return
 			}
 
-			log.Logf("[loadAndWatchConfigFile] 文件变动，%s", string(v.Bytes()))
+			log.Infof("[loadAndWatchConfigFile] 文件变动，%s", string(v.Bytes()))
 		}
 	}()
 
@@ -113,7 +113,7 @@ func loadAndWatchConfigFile() (err error) {
 func getConfig(appName string) *proto.ChangeSet {
 	bytes := config.Get(appName).Bytes()
 
-	log.Logf("[getConfig] appName：%s", appName)
+	log.Infof("[getConfig] appName：%s", appName)
 	return &proto.ChangeSet{
 		Data:      bytes,
 		Checksum:  fmt.Sprintf("%x", md5.Sum(bytes)),

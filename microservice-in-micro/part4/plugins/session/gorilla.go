@@ -1,11 +1,12 @@
 package session
 
 import (
-	"github.com/google/uuid"
-	"github.com/gorilla/sessions"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/gorilla/sessions"
 )
 
 var (

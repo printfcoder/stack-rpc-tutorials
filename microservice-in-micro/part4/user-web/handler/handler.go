@@ -10,7 +10,7 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/plugins/session"
 	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/user-srv/proto/user"
 	"github.com/micro/go-micro/v2/client"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 var (
@@ -34,7 +34,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// 只接受POST请求
 	if r.Method != "POST" {
-		log.Logf("非法请求")
+		log.Warn("非法请求")
 		http.Error(w, "非法请求", 400)
 		return
 	}
@@ -61,7 +61,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		// 干掉密码返回
 		rsp.User.Pwd = ""
 		response["data"] = rsp.User
-		log.Logf("[Login] 密码校验完成，生成token...")
+		log.Info("[Login] 密码校验完成，生成token...")
 
 		// 生成token
 		rsp2, err := authClient.MakeAccessToken(context.TODO(), &auth.Request{
@@ -69,12 +69,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			UserName: rsp.User.Name,
 		})
 		if err != nil {
-			log.Logf("[Login] 创建token失败，err：%s", err)
+			log.Error("[Login] 创建token失败，err：%s", err)
 			http.Error(w, err.Error(), 500)
 			return
 		}
 
-		log.Logf("[Login] token %s", rsp2.Token)
+		log.Info("[Login] token %s", rsp2.Token)
 		response["token"] = rsp2.Token
 
 		// 同时将token写到cookies中
@@ -109,14 +109,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 func Logout(w http.ResponseWriter, r *http.Request) {
 	// 只接受POST请求
 	if r.Method != "POST" {
-		log.Logf("非法请求")
+		log.Warn("非法请求")
 		http.Error(w, "非法请求", 400)
 		return
 	}
 
 	tokenCookie, err := r.Cookie("remember-me-token")
 	if err != nil {
-		log.Logf("token获取失败")
+		log.Warn("token获取失败")
 		http.Error(w, "非法请求", 400)
 		return
 	}
@@ -154,13 +154,13 @@ func TestSession(w http.ResponseWriter, r *http.Request) {
 
 	if v, ok := sess.Values["path"]; !ok {
 		sess.Values["path"] = r.URL.Query().Get("path")
-		log.Logf("path:" + r.URL.Query().Get("path"))
+		log.Infof("path: %s" + r.URL.Query().Get("path"))
 	} else {
-		log.Logf(v.(string))
+		log.Infof(v.(string))
 	}
 
-	log.Logf(sess.ID)
-	log.Logf(sess.Name())
+	log.Info(sess.ID)
+	log.Info(sess.Name())
 
 	w.Write([]byte("OK"))
 }
