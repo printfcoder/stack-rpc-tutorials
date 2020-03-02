@@ -4,7 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/config"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 type db struct {
@@ -20,18 +20,18 @@ type Mysql struct {
 }
 
 func initMysql() {
-	log.Logf("[initMysql] 初始化Mysql")
+	log.Info("[initMysql] 初始化Mysql")
 
 	c := config.C()
 	cfg := &db{}
 
 	err := c.App("db", cfg)
 	if err != nil {
-		log.Logf("[initMysql] %s", err)
+		log.Warnf("[initMysql] %s", err)
 	}
 
 	if !cfg.Mysql.Enable {
-		log.Logf("[initMysql] 未启用Mysql")
+		log.Warnf("[initMysql] 未启用Mysql")
 		return
 	}
 
@@ -53,5 +53,5 @@ func initMysql() {
 		log.Fatal(err)
 	}
 
-	log.Logf("[initMysql] Mysql 连接成功")
+	log.Warnf("[initMysql] Mysql 连接成功")
 }

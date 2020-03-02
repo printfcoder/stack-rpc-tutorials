@@ -10,7 +10,7 @@ import (
 	auth "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/auth/proto/auth"
 	payS "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/payment-srv/proto/payment"
 	"github.com/micro/go-micro/v2/client"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 var (
@@ -34,7 +34,7 @@ func PayOrder(w http.ResponseWriter, r *http.Request) {
 
 	// 只接受POST请求
 	if r.Method != "POST" {
-		log.Logf("非法请求")
+		log.Warn("非法请求")
 		http.Error(w, "非法请求", 400)
 		return
 	}

@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 var (
@@ -28,7 +28,7 @@ func initDB() {
 
 	if inited {
 		err = fmt.Errorf("[initDB] db 已经初始化过")
-		log.Logf(err.Error())
+		log.Info(err)
 		return
 	}
 

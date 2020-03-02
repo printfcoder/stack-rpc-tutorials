@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/micro/go-micro/v2/config"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 var (
@@ -48,12 +48,11 @@ func (c *configurator) init(ops Options) (err error) {
 	defer m.Unlock()
 
 	if inited {
-		log.Logf("[init] 配置已经初始化过")
+		log.Info("[init] 配置已经初始化过")
 		return
 	}
 
-	c.conf = config.NewConfig()
-
+	c.conf, _ = config.NewConfig()
 	// 加载配置
 	err = c.conf.Load(ops.Sources...)
 	if err != nil {
@@ -61,8 +60,7 @@ func (c *configurator) init(ops Options) (err error) {
 	}
 
 	go func() {
-
-		log.Logf("[init] 侦听配置变动 ...")
+		log.Info("[init] 侦听配置变动 ...")
 
 		// 开始侦听变动事件
 		watcher, err := c.conf.Watch()
@@ -76,7 +74,7 @@ func (c *configurator) init(ops Options) (err error) {
 				log.Fatal(err)
 			}
 
-			log.Logf("[init] 侦听配置变动: %v", string(v.Bytes()))
+			log.Infof("[init] 侦听配置变动: %v", string(v.Bytes()))
 		}
 	}()
 

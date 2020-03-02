@@ -7,7 +7,7 @@ import (
 	r "github.com/go-redis/redis"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part4/basic/config"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 var (
@@ -64,11 +64,11 @@ func initRedis() {
 	cfg := &redis{}
 	err := c.App("redis", cfg)
 	if err != nil {
-		log.Logf("[initRedis] %s", err)
+		log.Warnf("[initRedis] %s", err)
 	}
 
 	if !cfg.Enabled {
-		log.Logf("[initRedis] 未启用redis")
+		log.Info("[initRedis] 未启用redis")
 		return
 	}
 
@@ -88,7 +88,7 @@ func initRedis() {
 		log.Fatal(err.Error())
 	}
 
-	log.Logf("[initRedis] 初始化Redis，检测连接Ping... %s", pong)
+	log.Info("[initRedis] 初始化Redis，检测连接Ping... %s", pong)
 }
 
 // Redis 获取redis

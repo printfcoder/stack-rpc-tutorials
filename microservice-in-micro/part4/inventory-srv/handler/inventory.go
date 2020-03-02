@@ -2,10 +2,10 @@ package handler
 
 import (
 	"context"
-	"github.com/micro/go-micro/v2/util/log"
 
 	inv "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/inventory-srv/model/inventory"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part4/inventory-srv/proto/inventory"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 var (
@@ -24,7 +24,7 @@ func Init() {
 func (e *Service) Sell(ctx context.Context, req *proto.Request, rsp *proto.Response) (err error) {
 	id, err := invService.Sell(req.BookId, req.UserId)
 	if err != nil {
-		log.Logf("[Sell] 销存失败，bookId：%d，userId: %d，%s", req.BookId, req.UserId, err)
+		log.Errorf("[Sell] 销存失败，bookId：%d，userId: %d，%s", req.BookId, req.UserId, err)
 		rsp.Success = false
 		return
 	}
@@ -41,7 +41,7 @@ func (e *Service) Sell(ctx context.Context, req *proto.Request, rsp *proto.Respo
 func (e *Service) Confirm(ctx context.Context, req *proto.Request, rsp *proto.Response) (err error) {
 	err = invService.Confirm(req.HistoryId, int(req.HistoryState))
 	if err != nil {
-		log.Logf("[Confirm] 确认销存失败，%s", err)
+		log.Errorf("[Confirm] 确认销存失败，%s", err)
 		rsp.Success = false
 		return
 	}
