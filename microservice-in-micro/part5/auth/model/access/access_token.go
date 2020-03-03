@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2/broker"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 var (
@@ -80,7 +80,7 @@ func (s *service) DelUserAccessToken(tk string) (err error) {
 		Body: []byte(claims.Subject),
 	}
 	if err := broker.Publish(tokenExpiredTopic, msg); err != nil {
-		log.Logf("[pub] 发布token删除消息失败： %v", err)
+		log.Infof("[pub] 发布token删除消息失败： %v", err)
 	} else {
 		fmt.Println("[pub] 发布token删除消息：", string(msg.Body))
 	}

@@ -10,11 +10,11 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/config"
 	z "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/zap"
-	"github.com/micro/cli"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/etcd"
-	"github.com/micro/go-plugins/config/source/grpc"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/registry"
+	"github.com/micro/go-micro/v2/registry/etcd"
+	"github.com/micro/go-plugins/config/source/grpc/v2"
 	"go.uber.org/zap"
 )
 
@@ -45,11 +45,13 @@ func main() {
 
 	// 服务初始化
 	service.Init(
-		micro.Action(func(c *cli.Context) {
+		micro.Action(func(c *cli.Context) error {
 			// 初始化handler
 			model.Init()
 			// 初始化handler
 			handler.Init()
+
+			return nil
 		}),
 	)
 
@@ -58,7 +60,6 @@ func main() {
 
 	// 启动服务
 	if err := service.Run(); err != nil {
-		log.Error("[main] error")
 		panic(err)
 	}
 }
@@ -69,6 +70,7 @@ func registryOptions(ops *registry.Options) {
 	if err != nil {
 		panic(err)
 	}
+
 	ops.Addrs = []string{fmt.Sprintf("%s:%d", etcdCfg.Host, etcdCfg.Port)}
 }
 
@@ -80,8 +82,7 @@ func initCfg() {
 
 	basic.Init(
 		config.WithSource(source),
-		config.WithApp(appName),
-	)
+		config.WithApp(appName),)
 
 	err := config.C().App(appName, cfg)
 	if err != nil {
