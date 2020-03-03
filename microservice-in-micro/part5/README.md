@@ -1,100 +1,76 @@
-# 第五章 日志持久化
+# 第五章 日志持久化【Updating 20200304】
 
-Micro的日志插件[go-log](https://github.com/micro/go-log)并没有提供日志持久化方案，它只一个基于github.com/go-log/log的日志打印接口。
+Go-Micro在V2.1.0-V2.2.0版本中持续增强了Logger组件。详情代码可在go-micro/logger下查看。
 
-由于目前go-log并不具备设置输出源的能力，我们不去使用它作为日志工具，但是还是要简单讲解一下micro中的日志模块。
+默认使用仍然标准输出，并不输出到文件，不过[Go-Plugins](https://github.com/micro/go-plugins)插件库中在常见的日志库Logger实现，比如Zap，Logrus等。插件库中对这些库进行了封装，我们可以简单声明即可使用这些库。
 
 本章主要内容
 
-- [介绍go-log](go-log)
+- [介绍Logger](#Logger)
 - [micro中为什么日志不分级](#为什么Micro中日志不分级)
 - [持久化日志](持久化日志)
 
-## go-log
+## Logger
 
-我们先看看**go-log**提供的接口
+Logger主要有三个部分组成：
+
+- Logger：定义日志器接口
+- Level：定义打印级别，以及用户直接调用的SugarAPI（如：log.Debug/Info等等）
+- Helper：日志辅助器，调用者不用关心，它桥接Level与Logger实现。
+
+我们先看看**Logger**提供的接口
 
 ```go
-var (
-	// the local logger
-	logger log.Logger = golog.New()
-)
-
-// Log makes use of github.com/go-log/log.Log
-func Log(v ...interface{}) {
-	logger.Log(v...)
-}
-
-// Logf makes use of github.com/go-log/log.Logf
-func Logf(format string, v ...interface{}) {
-	logger.Logf(format, v...)
-}
-
-// Fatal logs with Log and then exits with os.Exit(1)
-func Fatal(v ...interface{}) {
-	Log(v...)
-	os.Exit(1)
-}
-
-// Fatalf logs with Logf and then exits with os.Exit(1)
-func Fatalf(format string, v ...interface{}) {
-	Logf(format, v...)
-	os.Exit(1)
-}
-
-// SetLogger sets the local logger
-func SetLogger(l log.Logger) {
-	logger = l
+type Logger interface {
+	// Init initialises options
+	Init(options ...Option) error
+	// The Logger options
+	Options() Options
+	// Fields set fields to always be logged
+	Fields(fields map[string]interface{}) Logger
+	// Log writes a log entry
+	Log(level Level, v ...interface{})
+	// Logf writes a formatted log entry
+	Logf(level Level, format string, v ...interface{})
+	// String returns the name of logger
+	String() string
 }
 ```
 
-源码非常简单，关于打印的总得来说两个接口**Log**和**Fatal**。一个负责打印普通日志，一个则打印致命日志。
+用户打印日志时，直接调用的并不是上面的方法。Go-Micro只是规范了日志要实现这些方法。我们要调用的是下面的Level中的方法：
 
-还有一个**SetLogger**，则是用来设置默认的日志处理器的。有朋友可能就会产生疑问，特别是从Java转过来的伙伴，为什么没有debug/info/warn/error等常见的日志级别方法。
+```go
+func Infof(template string, args ...interface{}) {
+	DefaultLogger.Logf(InfoLevel, template, args...)
+}
 
-那么，接下来我们聊聊为什么不要分级。
+func Trace(args ...interface{}) {
+	DefaultLogger.Log(TraceLevel, args...)
+}
 
-## 为什么Micro中日志不分级
+func Tracef(template string, args ...interface{}) {
+	DefaultLogger.Logf(TraceLevel, template, args...)
+}
 
-在Go官方的[log包](https://golang.org/pkg/log/)中，打印日志的方法，并没有根据级别作区分。除非自己实现。更别谈可以像log4j那样的根据实际运行环境只打开某个级别以上日志的指令。
+func Debug(args ...interface{}) {
+	DefaultLogger.Log(DebugLevel, args...)
+}
+... (Debug/Debugf等)
+```
 
-golang官方也提供了相应带级别的日志版本[glog](https://godoc.org/github.com/golang/glog)，它支持如下级别的日志：
+### 为什么要Helper？
 
-- Info
-- Warning
-- Error
-- Fatal
+Logger中只有Log与Logf方法，它们可以接收日志级别，不再需要定义一堆Debug/Info/Error等接口，这样可以简化Logger的接口。而没有SugarAPI，为了大家能方便指定打印级别，需要Helper转换一下。
 
-再比如[zap](https://godoc.org/go.uber.org/zap)更丰富
+调用链关系大致如下：
 
-- Info
-- Debug
-- Error
-- Panic
-- Warn
-- Fatalf
-- DPanic
-- ...
-
-很明显，为了照顾其它语言的用户，这两个库都或多或少引入了其它语言库的日志风格。
-
-其实日志库应该是要足够简单。
-
-对于debug类型的调试代码不应该保留在生产环境中，它是面向开发者的。
-
-而warning没有谁会关心，因为它不是错误。
-
-至于Info级别，通常都会打印，既然都无论如何都要打印，为什么不直接log呢？
-
-在golang中，通常我们函数的最后一个回参都会是error，而对于error级别的日志，如果我们能够处理这个错误，那说明它不是致命的，既然不是致命的，我们就处理一下，再当成普通日志打出，最后把错误返回调用者。
-
-所以，真正需要的下只有log（logf）方法。
-
-当然，以上都是基于某种设计哲学，并无对错之分。如何取舍是业务技术层面去考虑的，框架只提供参考。
+```go
+log.Debug(xxxx) -> helper.Debug(xxx)-> logger.Log(Debug,xxxx)
+```
 
 ## 持久化日志
 
-我们小篇幅讲解了go-log及为什么Micro日志不分级，现在终于要讲如何实现持久化。
+我们小篇幅讲解了Logger的结构，现在终于要讲如何实现持久化。
 
 在实际的生产环境中，通常日志是要持久化到本地或者其它存储服务中的，比如db、es等。本章讲解如何使用[**Zap**][zap]作为日志插件，并实现将其持久化到本地文件中。
 
