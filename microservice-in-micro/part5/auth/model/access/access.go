@@ -8,7 +8,7 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/config"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/jwt"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/redis"
-	"github.com/micro/go-micro/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 var (
@@ -56,7 +56,7 @@ func Init() {
 		panic(err)
 	}
 
-	log.Logf("[initCfg] 配置，cfg：%v", cfg)
+	log.Infof("[initCfg] 配置，cfg：%v", cfg)
 
 	ca = redis.Redis()
 

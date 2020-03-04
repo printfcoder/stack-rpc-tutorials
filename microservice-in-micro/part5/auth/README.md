@@ -5,7 +5,7 @@
 ### 运行
 
 ```bash
-go run main.go plugin.go
+go run main.go
 ```
 
 ### 编译打包
