@@ -43,23 +43,23 @@ OPTIONS:
 ### 默认方式创建新服务
 
 ```bash
-micro new github.com/micro-in-cn/tutorials/examples/middle-practices/micro-new/default
+micro new github.com/micro-in-cn/tutorials/examples/middle-practices/micro-new/example
 ```
 
 可以看到指令参数只有生成服务代码的路径，路径最后一个单词就是服务项目名，所以，最后一个单词一定<span style="color:red">不要加任何符号！</span>：
 
 ```text
-Creating service go.micro.srv.default in /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/examples/middle-practices/micro-new/default
+Creating service go.micro.srv.example in /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/examples/middle-practices/micro-new/example
 
 .
 ├── main.go
 ├── plugin.go
 ├── handler
-│   └── default.go
+│   └── example.go
 ├── subscriber
-│   └── default.go
-├── proto/default
-│   └── default.proto
+│   └── example.go
+├── proto/example
+│   └── example.proto
 ├── Dockerfile
 ├── Makefile
 └── README.md
@@ -74,15 +74,15 @@ go get -u github.com/micro/protoc-gen-micro
 compile the proto file example.proto:
 
 ## 切目录，生成文件
-cd /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/examples/middle-practices/micro-new/default
+cd /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/examples/middle-practices/micro-new/example
 protoc --proto_path=. --go_out=. --micro_out=. proto/example/example.proto
 ```
 如果是ubuntu系统生成的protoc命令为：
-protoc --proto_path=.:$GOPATH/src --go_out=. --micro_out=. proto/default/default.proto
+protoc --proto_path=.:$GOPATH/src --go_out=. --micro_out=. proto/example/example.proto
 
 - <span style="color:red">*</span>需要有个说明的地方，当前实例micro的版本是1.13.0,如果安装的是之前的版本生成的项目模板或许会有些许差异。<br/>
 
-生成的代码中，命令空间前缀为默认的**go.micro**，默认的服务类型为**srv**，服务别名（alias）为**default**
+生成的代码中，命令空间前缀为默认的**go.micro**，默认的服务类型为**srv**，服务别名（alias）为**example**
 
 ```go
 package main
@@ -90,7 +90,7 @@ package main
 func main() {
     // New Service
     service := micro.NewService(
-        micro.Name("go.micro.srv.default"),
+        micro.Name("go.micro.srv.example"),
         micro.Version("latest"),
     )
     // ...
