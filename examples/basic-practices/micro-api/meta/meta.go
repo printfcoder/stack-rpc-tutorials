@@ -5,11 +5,11 @@ import (
 	"log"
 
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-api/rpc/proto"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/api"
-	rapi "github.com/micro/go-micro/api/handler/api"
-	"github.com/micro/go-micro/api/handler/rpc"
-	"github.com/micro/go-micro/errors"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/api"
+	rapi "github.com/micro/go-micro/v2/api/handler/api"
+	"github.com/micro/go-micro/v2/api/handler/rpc"
+	"github.com/micro/go-micro/v2/errors"
 )
 
 type Example struct{}

@@ -2,14 +2,15 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/transport/grpc"
+
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/micro/go-micro/web"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/transport/grpc"
+	"github.com/micro/go-micro/v2/web"
 )
 
 var upGrader = websocket.Upgrader{
