@@ -6,10 +6,10 @@ import (
 	"strings"
 
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-api/api/proto"
-	"github.com/micro/go-micro"
-	api "github.com/micro/go-micro/api/proto"
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2"
+	api "github.com/micro/go-micro/v2/api/proto"
+	"github.com/micro/go-micro/v2/errors"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 type Example struct{}
@@ -19,7 +19,7 @@ type Foo struct{}
 // Example.Call 通过API向外暴露为/example/call，接收http请求
 // 即：/example/call请求会调用go.micro.api.example服务的Example.Call方法
 func (e *Example) Call(ctx context.Context, req *api.Request, rsp *api.Response) error {
-	log.Log("Example.Call接口收到请求")
+	log.Info("Example.Call接口收到请求")
 
 	name, ok := req.Get["name"]
 
@@ -29,7 +29,7 @@ func (e *Example) Call(ctx context.Context, req *api.Request, rsp *api.Response)
 
 	// 打印请求头
 	for k, v := range req.Header {
-		log.Log("请求头信息，", k, " : ", v)
+		log.Info("请求头信息，", k, " : ", v)
 	}
 
 	rsp.StatusCode = 200
@@ -47,7 +47,7 @@ func (e *Example) Call(ctx context.Context, req *api.Request, rsp *api.Response)
 // Bar 方法全称是Foo.Bar，故而它会以/example/foo/bar为路由提供服务
 //
 func (f *Foo) Bar(ctx context.Context, req *api.Request, rsp *api.Response) error {
-	log.Logf("Foo.Bar接口收到请求")
+	log.Info("Foo.Bar接口收到请求")
 
 	if req.Method != "POST" {
 		return errors.BadRequest("go.micro.api.example", "require post")
