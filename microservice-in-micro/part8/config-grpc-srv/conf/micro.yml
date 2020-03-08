@@ -14,7 +14,7 @@ micro:
       maxIdleConnection: 100
       maxOpenConnection: 130
   inv_srv:
-    name: mu.micro.book.srv.inv
+    name: mu.micro.book.srv.inventory
     address: 127.0.0.1
     port: 9040
   jwt:
