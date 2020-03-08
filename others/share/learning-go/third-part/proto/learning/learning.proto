@@ -1,8 +1,11 @@
 syntax = "proto3";
 
 service Greeter {
-    rpc Hi (Request) returns (Response) {
-    };
+    rpc Hi (Request) returns (Response) {};
+}
+
+service Learning {
+    rpc Hi (Request) returns (Response) {};
 }
 
 message Request {

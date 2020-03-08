@@ -6,14 +6,14 @@ package api
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	proto1 "github.com/micro/go-micro/api/proto"
+	proto1 "github.com/micro/go-micro/v2/api/proto"
 	math "math"
 )
 
 import (
 	context "context"
-	client "github.com/micro/go-micro/client"
-	server "github.com/micro/go-micro/server"
+	client "github.com/micro/go-micro/v2/client"
+	server "github.com/micro/go-micro/v2/server"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -44,12 +44,6 @@ type exampleService struct {
 }
 
 func NewExampleService(name string, c client.Client) ExampleService {
-	if c == nil {
-		c = client.NewClient()
-	}
-	if len(name) == 0 {
-		name = "example"
-	}
 	return &exampleService{
 		c:    c,
 		name: name,
@@ -103,12 +97,6 @@ type fooService struct {
 }
 
 func NewFooService(name string, c client.Client) FooService {
-	if c == nil {
-		c = client.NewClient()
-	}
-	if len(name) == 0 {
-		name = "foo"
-	}
 	return &fooService{
 		c:    c,
 		name: name,
