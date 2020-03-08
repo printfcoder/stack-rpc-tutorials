@@ -64,7 +64,6 @@ func hi2(w http.ResponseWriter, r *http.Request) {
 }
 
 func hi(w http.ResponseWriter, r *http.Request) {
-
 	c, err := upGrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("upgrade: %s", err)
