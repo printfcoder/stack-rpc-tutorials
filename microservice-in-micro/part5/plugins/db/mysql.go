@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/config"
 	"github.com/micro/go-micro/util/log"
+	"time"
 )
 
 type db struct {
@@ -16,6 +17,7 @@ type Mysql struct {
 	Enable            bool   `json:"enabled"`
 	MaxIdleConnection int    `json:"maxIdleConnection"`
 	MaxOpenConnection int    `json:"maxOpenConnection"`
+	ConnMaxLifetime time.Duration    `json:"connMaxLifetime"`
 }
 
 func initMysql() {
@@ -47,6 +49,8 @@ func initMysql() {
 	// 最大闲置数
 	mysqlDB.SetMaxIdleConns(cfg.Mysql.MaxIdleConnection)
 
+	//连接数据库闲置断线的问题
+	mysqlDB.SetConnMaxLifetime(time.Second * cfg.Mysql.ConnMaxLifetime)
 	// 激活链接
 	if err = mysqlDB.Ping(); err != nil {
 		log.Fatal(err)
