@@ -6,6 +6,7 @@ type MysqlConfig interface {
 	GetEnabled() bool
 	GetMaxIdleConnection() int
 	GetMaxOpenConnection() int
+	GetConnMaxLifetime() int
 }
 
 // defaultMysqlConfig mysql 配置
@@ -14,6 +15,7 @@ type defaultMysqlConfig struct {
 	Enable            bool   `json:"enabled"`
 	MaxIdleConnection int    `json:"maxIdleConnection"`
 	MaxOpenConnection int    `json:"maxOpenConnection"`
+	ConnMaxLifetime int    `json:"connMaxLifetime"`
 }
 
 // URL mysql 连接
@@ -34,4 +36,9 @@ func (m defaultMysqlConfig) GetMaxIdleConnection() int {
 // 打开连接数
 func (m defaultMysqlConfig) GetMaxOpenConnection() int {
 	return m.MaxOpenConnection
+}
+
+// 连接数断开时间
+func (m defaultMysqlConfig) GetConnMaxLifetime() int {
+	return m.ConnMaxLifetime
 }

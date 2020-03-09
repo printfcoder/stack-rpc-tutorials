@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/basic/config"
@@ -25,7 +26,7 @@ func initMysql() {
 	mysqlDB.SetMaxIdleConns(config.GetMysqlConfig().GetMaxIdleConnection())
 
 	//连接数据库闲置断线的问题
-	mysqlDB.SetConnMaxLifetime(time.Second * 100)
+	mysqlDB.SetConnMaxLifetime(time.Second * config.GetMysqlConfig().GetConnMaxLifetime())
 	// 激活链接
 	if err = mysqlDB.Ping(); err != nil {
 		log.Fatal(err)
