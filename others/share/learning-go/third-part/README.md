@@ -1,5 +1,7 @@
 # 夜读第三期
 
+## MICRO API
+
 启动API：
 
 ```shell
@@ -35,6 +37,34 @@ curl http://127.0.0.1:8080/learning/hi  --header 'Content-Type: application/x-ww
 ```shell
 curl http://127.0.0.1:8080/v2/learning/hi  --header 'Content-Type: application/x-www-form-urlencoded' --data '{"name":"Micro"}'
 ```
+
+## Micro CLI
+
+### micro list services
+
+```bash
+micro list services
+```
+
+```bash
+micro --registry=etcd list services
+```
+
+### micro get/health service
+
+```bash
+micro get service go.micro.api.learning
+```
+
+### micro call 
+
+```bash
+micro call go.micro.api.learning Learning.Hi '{"name":"Micro"}'
+```
+
+### micro register
+
+**mdns doest support `micro register`**
 
 micro api 注册到etcd
 
