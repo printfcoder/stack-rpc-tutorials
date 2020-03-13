@@ -13,7 +13,7 @@ func main() {
 	service.Init()
 
 	// 创建客户端
-	greeter := proto.NewGreeterService("go.micro.api.v2.learning", service.Client())
+	greeter := proto.NewGreeterService("go.micro.api.learning", service.Client())
 
 	// 调用greeter服务
 	rsp, err := greeter.Hi(context.TODO(), &proto.Request{Name: "Micro"})

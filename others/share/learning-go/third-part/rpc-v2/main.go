@@ -12,6 +12,7 @@ import (
 func main() {
 	service := micro.NewService(
 		micro.Name("go.micro.api.v2.learning"),
+		micro.Address(":50984"),
 	)
 
 	// 注册Greeter接口

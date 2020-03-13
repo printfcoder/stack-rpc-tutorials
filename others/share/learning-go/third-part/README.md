@@ -38,6 +38,8 @@ curl http://127.0.0.1:8080/learning/hi  --header 'Content-Type: application/x-ww
 curl http://127.0.0.1:8080/v2/learning/hi  --header 'Content-Type: application/x-www-form-urlencoded' --data '{"name":"Micro"}'
 ```
 
+[api 完整示例](../../../../examples/basic-practices/micro-api)
+
 ## Micro CLI
 
 ### micro list services
@@ -77,11 +79,31 @@ v2 注册到mdns
 复制上面的节点id与端口，
 
 ```bash
-micro register service '{"name": "go.micro.api.v2.learning", "version": "v2", "nodes": [{"id": "83f0aeb8-0c38-40bb-9aa2-f35a472cc4b7", "address": "127.0.0.1:54235"}]}'
+micro --registry=etcd register service '{"name": "go.micro.api.v2.learning", "version": "v2", "nodes": [{"id": "d195d52d-ffdc-45cb-91b4-4488e4d86dea", "address": "127.0.0.1:50984"}]}'
 ```
 
 RPC调用Greeter
 
 ```bash
 micro call go.micro.api.v2.learning Learning.Hi '{"name":"Micro"}'
+```
+
+## micro proxy
+
+向etcd注册运行 micro proxy
+
+```bash
+micro --registry=etcd proxy
+```
+
+向etcd注册运行 rpc服务
+
+```bash
+go run rpc/main.go --registry=etcd
+```
+
+在mdns运行客户端
+
+```bash
+go run proxy/client.go
 ```
