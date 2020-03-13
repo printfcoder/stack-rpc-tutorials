@@ -26,6 +26,7 @@ sudo make install
 ```bash
 $ go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 $ go get -u github.com/micro/protobuf/protoc-gen-go
+$ go get -u github.com/micro/protoc-gen-micro/v2
 ```
 
 ## 内容
@@ -46,11 +47,15 @@ $ go get -u github.com/micro/protobuf/protoc-gen-go
 ├── greeter    # 示例程序
 │   ├── cli    # 示例程序 服务端
 │   └── srv    # 示例程序 客户端
-└── proto      # proto 原型文件目录
-    └── hello  # hello 原型文件及存根类目录
+└── proto      # greeter 原型文件及存根类目录                  
+    ├── go               # 生成 go 代码目录        
+    │   ├── micro        # 生成micro风格的go文件        
+    │   └── pure-grpc    # 生成纯grpc风格的go文件        
+    └── pb               # proto 原型文件目录
+        └── greeter      # greeter 原型文件目录
 ```
 
-定义[hello.proto](proto/pb/greeter/greeter.proto)原型
+定义[greeter.proto](proto/pb/greeter/greeter.proto)原型
 
 ```proto
 syntax = "proto3";
