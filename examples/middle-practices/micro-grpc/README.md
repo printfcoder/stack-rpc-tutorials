@@ -97,13 +97,13 @@ import (
 	"time"
 
 	pb "github.com/micro-in-cn/tutorials/examples/middle-practices/micro-grpc/proto/go/micro"
-	"github.com/micro/go-grpc"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/service/grpc"
 )
 
 type Say struct{}
 
-func (s *Say) Hello(ctx context.Context, req *hello.Request, rsp *hello.Response) error {
+func (s *Say) Hello(ctx context.Context, req *pb.Request, rsp *pb.Response) error {
 	log.Print("Received Say.Hello request")
 	rsp.Msg = "Hello " + req.Name
 	return nil
