@@ -43,11 +43,12 @@ $ go get -u github.com/micro/protoc-gen-micro/v2
 我们先创建需要的目录
 
 ```text
-├── gateway    # 网关代码
-├── greeter    # 示例程序
-│   ├── cli    # 示例程序 服务端
-│   └── srv    # 示例程序 客户端
-└── proto      # greeter 原型文件及存根类目录                  
+├── gateway              # 网关代码
+├── greeter              # 示例程序
+│   ├── cli              # 示例程序 micro风格客户端
+│   ├── grpc-cli         # 示例程序 grpc风格客户端
+│   └── srv              # 示例程序 服务端
+└── proto                # greeter 原型文件及存根类目录                  
     ├── go               # 生成 go 代码目录        
     │   ├── micro        # 生成micro风格的go文件        
     │   └── pure-grpc    # 生成纯grpc风格的go文件        
@@ -142,8 +143,8 @@ import (
 	"fmt"
 
 	pb "github.com/micro-in-cn/tutorials/examples/middle-practices/micro-grpc/proto/go/micro"
-	"github.com/micro/go-grpc"
 	"github.com/micro/go-micro/metadata"
+	"github.com/micro/go-micro/service/grpc"
 )
 
 func main() {
@@ -242,11 +243,11 @@ Hello 我是来自micro风格的客户端请求
 
 #### grpc
 
-在运行之前，我们要去服务端地址告诉客户端，比如我们刚启动的srv的grpc端口是52506
+在运行之前，我们要去服务端地址告诉客户端，比如我们刚启动的srv的grpc端口是 9090
 
 ```go
 const (
-	address     = "localhost:52506"
+	address     = "localhost:9090"
 	defaultName = "我是来自grpc风格的客户端请求！"
 )
 ```
