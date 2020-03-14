@@ -9,3 +9,9 @@
   - B站地址：
 
   - [代码](./second-part)
+
+- [第三期：Micro工具集]
+
+  - B站地址：
+
+  - [代码](./third-part)
