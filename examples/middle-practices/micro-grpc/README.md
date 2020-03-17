@@ -26,6 +26,7 @@ sudo make install
 ```bash
 $ go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 $ go get -u github.com/micro/protobuf/protoc-gen-go
+$ go get -u github.com/micro/protoc-gen-micro/v2
 ```
 
 ## 内容
@@ -42,15 +43,20 @@ $ go get -u github.com/micro/protobuf/protoc-gen-go
 我们先创建需要的目录
 
 ```text
-├── gateway    # 网关代码
-├── greeter    # 示例程序
-│   ├── cli    # 示例程序 服务端
-│   └── srv    # 示例程序 客户端
-└── proto      # proto 原型文件目录
-    └── hello  # hello 原型文件及存根类目录
+├── gateway              # 网关代码
+├── greeter              # 示例程序
+│   ├── cli              # 示例程序 micro风格客户端
+│   ├── grpc-cli         # 示例程序 grpc风格客户端
+│   └── srv              # 示例程序 服务端
+└── proto                # greeter 原型文件及存根类目录                  
+    ├── go               # 生成 go 代码目录        
+    │   ├── micro        # 生成micro风格的go文件        
+    │   └── pure-grpc    # 生成纯grpc风格的go文件        
+    └── pb               # proto 原型文件目录
+        └── greeter      # greeter 原型文件目录
 ```
 
-定义[hello.proto](proto/pb/greeter/greeter.proto)原型
+定义[greeter.proto](proto/pb/greeter/greeter.proto)原型
 
 ```proto
 syntax = "proto3";
@@ -92,13 +98,13 @@ import (
 	"time"
 
 	pb "github.com/micro-in-cn/tutorials/examples/middle-practices/micro-grpc/proto/go/micro"
-	"github.com/micro/go-grpc"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/service/grpc"
 )
 
 type Say struct{}
 
-func (s *Say) Hello(ctx context.Context, req *hello.Request, rsp *hello.Response) error {
+func (s *Say) Hello(ctx context.Context, req *pb.Request, rsp *pb.Response) error {
 	log.Print("Received Say.Hello request")
 	rsp.Msg = "Hello " + req.Name
 	return nil
@@ -137,8 +143,8 @@ import (
 	"fmt"
 
 	pb "github.com/micro-in-cn/tutorials/examples/middle-practices/micro-grpc/proto/go/micro"
-	"github.com/micro/go-grpc"
 	"github.com/micro/go-micro/metadata"
+	"github.com/micro/go-micro/service/grpc"
 )
 
 func main() {
@@ -237,11 +243,11 @@ Hello 我是来自micro风格的客户端请求
 
 #### grpc
 
-在运行之前，我们要去服务端地址告诉客户端，比如我们刚启动的srv的grpc端口是52506
+在运行之前，我们要去服务端地址告诉客户端，比如我们刚启动的srv的grpc端口是 9090
 
 ```go
 const (
-	address     = "localhost:52506"
+	address     = "localhost:9090"
 	defaultName = "我是来自grpc风格的客户端请求！"
 )
 ```
