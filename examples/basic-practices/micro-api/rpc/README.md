@@ -16,14 +16,14 @@ protoc  --go_out=. --micro_out=. proto/rpc.proto
 以rpc模式运行**API**
 
 ```
-micro api --handler=rpc
+micro api --handler=rpc --namespace=go.micro.rpc
 ```
 
 ```
 go run rpc.go
 ```
 
-当我们POST请求到 **/example/call**时，**API**会将它转成RPC转发到**go.micro.api.example**服务的**Example.Call**接口上。
+当我们POST请求到 **/example/call**时，**API**会将它转成RPC转发到**go.micro.rpc.example**服务的**Example.Call**接口上。
 
 ```
 curl -H 'Content-Type: application/json' -d '{"name": "小小先"}' "http://localhost:8080/example/call"
