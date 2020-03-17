@@ -10,7 +10,7 @@
 
 使用protoc生成go代码
 ```
-protoc  --go_out=. --micro_out=. proto/api.proto
+protoc  --go_out=. --micro_out=. proto/rpc.proto
 ```
 
 以rpc模式运行**API**

@@ -34,7 +34,7 @@ func (f *Foo) Bar(ctx context.Context, req *proto.EmptyRequest, rsp *proto.Empty
 
 func main() {
 	service := micro.NewService(
-		micro.Name("go.micro.api.example"),
+		micro.Name("go.micro.rpc.example"),
 	)
 
 	service.Init()
