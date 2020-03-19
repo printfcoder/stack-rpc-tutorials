@@ -14,6 +14,17 @@
 - [Platform-Web 服务管理平台](https://github.com/micro-in-cn/platform-web)
 - [使用Micro构建微服务](./microservice-in-micro) 
 
+## 讨论
+
+朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通（推荐）。
+
+或者关注微信公众号、微信群：
+<div style="float:left">
+<img src="https://github.com/micro-in-cn/Notice/raw/master/donation/wx_qrcode.jpg" width="30%">
+<img src="https://github.com/micro-in-cn/Notice/raw/master/donation/wx_group_v1.png" width="30%"> 
+</div>
+
+微信群已不能扫码加入，请扫码或搜索“SLliuxian”加好友，并注明“姓名+github”
 
 ## 愿景
 
@@ -57,18 +68,6 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 ## 捐赠
 
 [链接](https://github.com/micro-in-cn/Notice/blob/master/donation/README.md)
-
-## 讨论
-
-朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通（推荐）。
-
-或者关注微信公众号、微信群：
-<div style="float:left">
-<img src="https://github.com/micro-in-cn/Notice/raw/master/donation/wx_qrcode.jpg" width="30%">
-<img src="https://github.com/micro-in-cn/Notice/raw/master/donation/wx_group_v1.png" width="30%"> 
-</div>
-
-微信群已不能扫码加入，请扫码或搜索“SLliuxian”加好友，并注明“姓名+github”
 
 [cn-examples]: /examples
 [cn-blogs]: https://micro.mu/blog/cn/
