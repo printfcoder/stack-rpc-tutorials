@@ -16,7 +16,7 @@
 
 ## 讨论
 
-朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通（推荐）。
+朋友，请加入[slack](http://slack.micro.mu/)，进入**China**Channel沟通（推荐）。
 
 或者关注微信公众号、微信群：
 <div style="float:left">
