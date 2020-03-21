@@ -37,4 +37,5 @@ go run ../micro-api/api/api.go
 go run web/main.go
 ```
 
-打开浏览器，输入http://localhost:9090，点击按钮即可向端口8080跨域请求数据
+打开浏览器，输入 http://localhost:9090
+点击按钮即可向端口8080跨域请求数据
