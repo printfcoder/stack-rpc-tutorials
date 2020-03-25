@@ -6,14 +6,13 @@ package api
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	proto1 "github.com/micro/go-micro/v2/api/proto"
 	math "math"
 )
 
 import (
 	context "context"
-	client "github.com/micro/go-micro/v2/client"
-	server "github.com/micro/go-micro/v2/server"
+	client "github.com/micro/go-micro/client"
+	server "github.com/micro/go-micro/server"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -35,7 +34,7 @@ var _ server.Option
 // Client API for Example service
 
 type ExampleService interface {
-	Call(ctx context.Context, in *proto1.Request, opts ...client.CallOption) (*proto1.Response, error)
+	Call(ctx context.Context, in *CallRequest, opts ...client.CallOption) (*CallResponse, error)
 }
 
 type exampleService struct {
@@ -44,15 +43,21 @@ type exampleService struct {
 }
 
 func NewExampleService(name string, c client.Client) ExampleService {
+	if c == nil {
+		c = client.NewClient()
+	}
+	if len(name) == 0 {
+		name = "example"
+	}
 	return &exampleService{
 		c:    c,
 		name: name,
 	}
 }
 
-func (c *exampleService) Call(ctx context.Context, in *proto1.Request, opts ...client.CallOption) (*proto1.Response, error) {
+func (c *exampleService) Call(ctx context.Context, in *CallRequest, opts ...client.CallOption) (*CallResponse, error) {
 	req := c.c.NewRequest(c.name, "Example.Call", in)
-	out := new(proto1.Response)
+	out := new(CallResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -63,12 +68,12 @@ func (c *exampleService) Call(ctx context.Context, in *proto1.Request, opts ...c
 // Server API for Example service
 
 type ExampleHandler interface {
-	Call(context.Context, *proto1.Request, *proto1.Response) error
+	Call(context.Context, *CallRequest, *CallResponse) error
 }
 
 func RegisterExampleHandler(s server.Server, hdlr ExampleHandler, opts ...server.HandlerOption) error {
 	type example interface {
-		Call(ctx context.Context, in *proto1.Request, out *proto1.Response) error
+		Call(ctx context.Context, in *CallRequest, out *CallResponse) error
 	}
 	type Example struct {
 		example
@@ -81,14 +86,14 @@ type exampleHandler struct {
 	ExampleHandler
 }
 
-func (h *exampleHandler) Call(ctx context.Context, in *proto1.Request, out *proto1.Response) error {
+func (h *exampleHandler) Call(ctx context.Context, in *CallRequest, out *CallResponse) error {
 	return h.ExampleHandler.Call(ctx, in, out)
 }
 
 // Client API for Foo service
 
 type FooService interface {
-	Bar(ctx context.Context, in *proto1.Request, opts ...client.CallOption) (*proto1.Response, error)
+	Bar(ctx context.Context, in *EmptyRequest, opts ...client.CallOption) (*EmptyResponse, error)
 }
 
 type fooService struct {
@@ -97,15 +102,21 @@ type fooService struct {
 }
 
 func NewFooService(name string, c client.Client) FooService {
+	if c == nil {
+		c = client.NewClient()
+	}
+	if len(name) == 0 {
+		name = "foo"
+	}
 	return &fooService{
 		c:    c,
 		name: name,
 	}
 }
 
-func (c *fooService) Bar(ctx context.Context, in *proto1.Request, opts ...client.CallOption) (*proto1.Response, error) {
+func (c *fooService) Bar(ctx context.Context, in *EmptyRequest, opts ...client.CallOption) (*EmptyResponse, error) {
 	req := c.c.NewRequest(c.name, "Foo.Bar", in)
-	out := new(proto1.Response)
+	out := new(EmptyResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -116,12 +127,12 @@ func (c *fooService) Bar(ctx context.Context, in *proto1.Request, opts ...client
 // Server API for Foo service
 
 type FooHandler interface {
-	Bar(context.Context, *proto1.Request, *proto1.Response) error
+	Bar(context.Context, *EmptyRequest, *EmptyResponse) error
 }
 
 func RegisterFooHandler(s server.Server, hdlr FooHandler, opts ...server.HandlerOption) error {
 	type foo interface {
-		Bar(ctx context.Context, in *proto1.Request, out *proto1.Response) error
+		Bar(ctx context.Context, in *EmptyRequest, out *EmptyResponse) error
 	}
 	type Foo struct {
 		foo
@@ -134,6 +145,6 @@ type fooHandler struct {
 	FooHandler
 }
 
-func (h *fooHandler) Bar(ctx context.Context, in *proto1.Request, out *proto1.Response) error {
+func (h *fooHandler) Bar(ctx context.Context, in *EmptyRequest, out *EmptyResponse) error {
 	return h.FooHandler.Bar(ctx, in, out)
 }

@@ -10,7 +10,7 @@
 
 使用protoc生成相应的代码
 ```
-protoc --proto_path=${GOPATH}/src:. --go_out=. --micro_out=. api/api.proto 
+protoc --proto_path=${GOPATH}/src:. --go_out=. --micro_out=. proto/api.proto 
 ```
 >  会在 import_proto_path 这个路径下搜索proto/api.proto中导入proto文件
 
