@@ -2,13 +2,12 @@ package main
 
 import (
 	"context"
-	"fmt"
 
 	proto "github.com/micro-in-cn/tutorials/examples/micro-api/rpc/proto"
 	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/client/grpc"
 	"github.com/micro/go-micro/v2/errors"
-	"github.com/micro/go-micro/v2/util/log"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 func main() {
@@ -22,12 +21,12 @@ func main() {
 				if err2, ok := err.(*errors.Error); ok {
 					// 假设大于1000的都是业务异常
 					if err2.Code > 1000 {
-						log.Info(fmt.Errorf("[ERR] 请求错误，业务异常，不重试, err: %s", err))
+						log.Infof("[ERR] 请求错误，业务异常，不重试, err: %s", err)
 						return false, nil
 					}
 				}
 
-				log.Info(fmt.Errorf("[ERR] 请求错误，第%d次重试，即将重试, err: %s", retryCount, err))
+				log.Infof("[ERR] 请求错误，第%d次重试，即将重试, err: %s", retryCount, err)
 				return true, nil
 			}
 
@@ -42,10 +41,10 @@ func main() {
 	for i := 0; i < 10; i++ {
 		rsp, err := greeter.Call(context.TODO(), &proto.CallRequest{Name: "Micro中国"})
 		if err != nil {
-			log.Info(fmt.Errorf("[ERR] 第%d次 请求发生错误：%s", i, err))
+			log.Infof("[ERR] 第%d次 请求发生错误：%s", i, err)
 			continue
 		}
 
-		log.Info(fmt.Errorf("[INF] 第%d次 请求结果，%v", i, rsp.Message))
+		log.Infof("[INF] 第%d次 请求结果，%v", i, rsp.Message)
 	}
 }
