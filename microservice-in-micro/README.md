@@ -1,4 +1,4 @@
-# Micro 构建微服务
+# Micro 构建微服务【重构中】
 
 我们尝试使用本系列8篇文章向大家介绍如何使用Micro生态链来构建微服务。在我们的[示例教程][examples]中有对每个技术点作了讲解，但是示例能表达的东西毕竟是彼此独立，不成系统，也过于简单。
 
@@ -80,7 +80,6 @@ go get github.com/micro/micro/v2
 ```
 - mysql
 
-
 还有其它一些会用到的库或组件，但不是基础依赖，我们会在要用到的章节中再安装。
 
 ## 涉及技术与库
@@ -95,7 +94,12 @@ Golang，gRPC，Mysql，Redis，Docker，K8s，Go-micro/Micro
 
 ## 开发环境说明
 
-由于本人用的是MacBook，并且精力有限，有些执行命令没有在多平台上多加测试以兼顾不同朋友的操作系统环境，在此表达歉意。
+- 系统环境：Mac Book
+- Go-Micro版本：2.3.0
+- Micro工具集版本：2.3.0
+- Golang版本：1.13.x
+
+理论上除了Go-Micro与Micro，其它环境及语言版本对本教程影响不大，Windows环境请使用git bash等类Linux控制台工具执行命令，以便得到更好体验效果。
 
 ## 章节结构
 
@@ -121,7 +125,7 @@ Golang，gRPC，Mysql，Redis，Docker，K8s，Go-micro/Micro
 
 朋友，请加入[slack](http://slack.micro.mu/)，进入**中国区**Channel沟通。
 
-[examples]: /examples
+[examples]: ../examples
 [gRPC]: https://grpc.io/
 
 [第一章]: ./part1
