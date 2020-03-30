@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-service/proto"
-	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/v2"
 )
 
 func main() {

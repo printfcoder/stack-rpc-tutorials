@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-service/stream/file/proto"
-	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/client"
 )
 
