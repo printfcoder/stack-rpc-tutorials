@@ -4,6 +4,11 @@
 
 [老目录](./README.OLD.md)
 
+- [Broker](./broker) micro broker异步消息
+ - [basic](./broker/basic)  基础用法
+ - [kafka](./broker/kafka)  集成Kafka
+ - [nsq](./broker/nsq)  集成Nsq
+ - [rabbitMQ](./broker/rabbitmq) 集成RabbitMQ 
 - [Client](./client) 如何单独使用Go-Micro客户端
 - [Service](./service) Service的各种用法，Func、Stream（file）、timeout等
   - [Function](./service/function) 函数式服务
