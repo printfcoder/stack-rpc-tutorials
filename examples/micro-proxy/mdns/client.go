@@ -9,12 +9,11 @@ import (
 )
 
 func main() {
-	// 定义服务，可以传入其它可选参数
-	service := micro.NewService(micro.Name("greeter.client"))
+	service := micro.NewService(micro.Name("proxy.consul.client"))
 	service.Init()
 
 	// 创建客户端
-	greeter := proto.NewGreeterService("greeter.service", service.Client())
+	greeter := proto.NewGreeterService("proxy.consul.service", service.Client())
 
 	// 调用greeter服务
 	rsp, err := greeter.Hello(context.TODO(), &proto.HelloRequest{Name: "Micro中国"})
@@ -25,4 +24,9 @@ func main() {
 
 	// 打印响应结果
 	fmt.Println(rsp.Greeting)
+
+	// 不需要启动服务，直接退出
+	// if err := service.Run(); err != nil {
+	// 	fmt.Println(err)
+	// }
 }

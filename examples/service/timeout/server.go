@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-service/proto"
+	proto "github.com/micro-in-cn/tutorials/examples/service/proto"
 	"github.com/micro/go-micro/v2"
 )
 

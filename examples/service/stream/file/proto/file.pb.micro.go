@@ -11,8 +11,8 @@ import (
 
 import (
 	context "context"
-	client "github.com/micro/go-micro/client"
-	server "github.com/micro/go-micro/server"
+	client "github.com/micro/go-micro/v2/client"
+	server "github.com/micro/go-micro/v2/server"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -45,12 +45,6 @@ type fileService struct {
 }
 
 func NewFileService(name string, c client.Client) FileService {
-	if c == nil {
-		c = client.NewClient()
-	}
-	if len(name) == 0 {
-		name = "file"
-	}
 	return &fileService{
 		c:    c,
 		name: name,
@@ -67,6 +61,7 @@ func (c *fileService) File(ctx context.Context, opts ...client.CallOption) (File
 }
 
 type File_FileService interface {
+	Context() context.Context
 	SendMsg(interface{}) error
 	RecvMsg(interface{}) error
 	Close() error
@@ -79,6 +74,10 @@ type fileServiceFile struct {
 
 func (x *fileServiceFile) Close() error {
 	return x.stream.Close()
+}
+
+func (x *fileServiceFile) Context() context.Context {
+	return x.stream.Context()
 }
 
 func (x *fileServiceFile) SendMsg(m interface{}) error {
@@ -132,6 +131,7 @@ func (h *fileHandler) File(ctx context.Context, stream server.Stream) error {
 }
 
 type File_FileStream interface {
+	Context() context.Context
 	SendMsg(interface{}) error
 	RecvMsg(interface{}) error
 	Close() error
@@ -144,6 +144,10 @@ type fileFileStream struct {
 
 func (x *fileFileStream) Close() error {
 	return x.stream.Close()
+}
+
+func (x *fileFileStream) Context() context.Context {
+	return x.stream.Context()
 }
 
 func (x *fileFileStream) SendMsg(m interface{}) error {

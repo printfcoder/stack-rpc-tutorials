@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+service File {
+    // 定义一个客户端流式调用
+    rpc File(stream FileByte) returns (FileMsg) {}
+    rpc DealFile(DealFileRequest) returns(DealFileRespond) {}
+}
+
+// 文件字节内容
+message FileByte {
+    bytes byte = 1;
+    int64 len = 2;
+}
+
+// 文件传输完成后返回文件信息
+message FileMsg {
+    string file_name = 1;
+}
+
+message DealFileRequest {
+    string file_name = 1;
+    string param = 2;
+}
+
+message DealFileRespond {
+    string md5 = 1;
+}
