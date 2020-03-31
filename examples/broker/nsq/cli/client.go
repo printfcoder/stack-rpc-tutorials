@@ -5,9 +5,9 @@ import (
 	"time"
 
 	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-broker/nsq/proto"
-	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/broker"
+	log "github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-plugins/broker/nsq/v2"
 )
 
@@ -21,7 +21,7 @@ func main() {
 
 	srv.Init()
 
-	pub := micro.NewPublisher("go.micro.broker.topic.nsq", srv.Client())
+	pub := micro.NewEvent("go.micro.broker.topic.nsq", srv.Client())
 	go func() {
 		for i := 0; i < 10; i++ {
 			time.Sleep(1 * time.Second)

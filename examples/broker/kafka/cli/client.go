@@ -16,7 +16,7 @@ func main() {
 
 	srv.Init()
 
-	pub := micro.NewPublisher("go.micro.learning.topic.log", srv.Client())
+	pub := micro.NewEvent("go.micro.learning.topic.log", srv.Client())
 	go func() {
 		for i := 0; i < 10; i++ {
 			time.Sleep(1 * time.Second)
