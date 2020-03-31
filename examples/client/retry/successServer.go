@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 
 	proto "github.com/micro-in-cn/tutorials/examples/micro-api/rpc/proto"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2"
+	log "github.com/micro/go-micro/v2/logger"
 )
 
 type Example struct{}
 
 func (e *Example) Call(ctx context.Context, req *proto.CallRequest, rsp *proto.CallResponse) error {
-	log.Log("Example.Call接口收到请求，返回成功")
+	log.Info("Example.Call接口收到请求，返回成功")
 
 	b, _ := json.Marshal(map[string]string{
 		"message": "我们已经收到你的请求，" + req.Name,
