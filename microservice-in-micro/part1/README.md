@@ -53,8 +53,10 @@ Micro有提供代码生成器指令[**new**][micro-new]，它可以新建服务�
 ### 新建模板
 
 ```bash
-micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv
+micro new --namespace=mu.micro.book --type=service --alias=user github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv
 ```
+
+*注：如果有报Unknow type service，则把--type=service换成--type=srv，srv这是micro@2.2.0及以前的版本用法*
 
 我们解释一下各个flag参数
 
