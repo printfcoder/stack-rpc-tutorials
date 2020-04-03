@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic/config"
 	log "github.com/micro/go-micro/v2/logger"
 )
 

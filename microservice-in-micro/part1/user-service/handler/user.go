@@ -3,8 +3,8 @@ package handler
 import (
 	"context"
 
-	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/model/user"
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/proto/user"
+	us "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/model/user"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/proto/user"
 	log "github.com/micro/go-micro/v2/logger"
 )
 
