@@ -24,7 +24,7 @@
 <img src="https://github.com/micro-in-cn/Notice/raw/master/donation/wx_group_v1.png" width="30%"> 
 </div>
 
-微信群已不能扫码加入，请扫码或搜索“SLliuxian”加好友，并注明“姓名+github”
+微信群已不能扫码加入，请扫码或搜索“microhq”加好友，并注明“姓名+github”
 
 ## 愿景
 
