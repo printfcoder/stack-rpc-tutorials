@@ -6,7 +6,7 @@ package api
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	proto1 "github.com/micro/go-micro/api/proto"
+	proto1 "github.com/micro/go-micro/v2/api/proto"
 	math "math"
 )
 
