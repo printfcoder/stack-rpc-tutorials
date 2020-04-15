@@ -13,7 +13,7 @@ type Sub struct {
 }
 
 func (s *Sub) Process(ctx context.Context, evt *proto.LogEvt) error {
-	log.Info("收到日志 %v\n", evt.Msg)
+	log.Infof("收到日志 %v\n", evt.Msg)
 	return nil
 }
 
