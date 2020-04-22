@@ -17,7 +17,17 @@
 
 同时，我们将就在第一章的基础上改动一番，直接把代码复制一份，将import指令中的part1路径换成part2即可。
 
-## 开始写代码
+## Micro Auth
+
+Go-Micro体系中，有专门提供的服务接口与实现，其中包括Basic Auth，Oauth，Jwt认证等。从调用链上来看，认证大体基于三种：
+
+- 基于内存，也即每个服务都会集成认证模块，该模块会处理各自服务的认证，也就是权限不需要即时更新，它的优点的效率高，缺点更新认证机制麻烦。
+- 基于服务，每个服务的认证会调用认证服务，由认证服务来统一确认接口请求是否通验证。它的优点是权限实时更新，缺点自然是效率低，因为每次请求都要去认证服务那里判断是否合法。
+- 内存+服务结合：集成认证模块，该模块会缓存到认证服务判断后的结果一段时间，过期后再更新。它就是在上述两种机制中平衡了各自的长短。
+
+我们要基于第三种来实现，并且在Micro Auth的基础上来处理。
+
+## 开始写代码【重写中，20200405始】
 
 ### 优化公用包
 
@@ -134,7 +144,7 @@ go get -u github.com/go-redis/redis
 使用模板生成**auth**服务代码
 
 ```bash
-micro new --namespace=mu.micro.book --type=srv --alias=auth github.com/micro-in-cn/tutorials/microservice-in-micro/part2/auth
+micro new --namespace=mu.micro.book --type=service --alias=auth github.com/micro-in-cn/tutorials/microservice-in-micro/part2/auth
 ```
 
 对模板生成的auth.proto文件进行如下修改

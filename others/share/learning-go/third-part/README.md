@@ -105,5 +105,5 @@ go run rpc/main.go --registry=etcd
 在mdns运行客户端
 
 ```bash
-go run proxy/client.go
+MICRO_PROXY_ADDRESS=127.0.0.1:8081 go run proxy/client.go
 ```

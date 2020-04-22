@@ -27,7 +27,7 @@ curl -H 'Content-Type: application/json' -d '{"name": "john"}' "http://localhost
 curl -XGET "http://localhost:8080/example?name=john"
 ```
 
-向 **/example** POST请求时，会被转到**go.micro.api.example**的**Foo.Bar**方法。
+向 **/foo/bar** POST请求时，会被转到**go.micro.api.example**的**Foo.Bar**方法。
 
 ```
 curl -H 'Content-Type: application/json' -d '{}' http://localhost:8080/foo/bar

@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/basic"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/basic/config"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/handler"
-	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/model"
-	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/proto/user"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/handler"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/model"
+	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/proto/user"
 	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2"
 	log "github.com/micro/go-micro/v2/logger"
@@ -24,7 +24,7 @@ func main() {
 
 	// 新建服务
 	service := micro.NewService(
-		micro.Name("mu.micro.book.srv.user"),
+		micro.Name("mu.micro.book.service.user"),
 		micro.Registry(micReg),
 		micro.Version("latest"),
 	)

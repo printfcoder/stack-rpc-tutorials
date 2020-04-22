@@ -1,9 +1,20 @@
 # 第一章 用户服务
 
-本章节我们实现用户服务，用户服务分为两层，web层（user-web）与服务层（user-srv），前者提供http接口，后者向web提供RPC服务。
+## 前言
+
+第一章我们会用Micro的下列几个技术点：
+
+- 使用`micro new`生成模板
+- 使用`go-micro/config`加载配置文件
+- 基于go-micro创建service服务
+- 基于go-micro创建web服务
+
+## 本章内容
+
+本章节我们实现用户服务，用户服务分为两层，web层（user-web）与服务层（user-service），前者提供http接口，后者向web提供RPC服务。
 
 - user-web 以下简称**web**
-- user-srv 以下简称**service**
+- user-service 以下简称**service**
 
 **web**服务主要向用户提供如下接口
 
@@ -24,15 +35,15 @@
 |---|---|---|---|
 |接入层API|mu.micro.book.web|负责代理所有**mu.micro.book.web**下游的web应用，比如**mu.micro.book.web.user**等|---|
 |用户web|mu.micro.book.web.user|接收API下放的路由为/user请求|---|
-|用户服务|mu.micro.book.srv.user|对架构内应用提供user查询服务|---|
+|用户服务|mu.micro.book.service.user|对架构内应用提供user查询服务|---|
 
 见下图
 
 ![](../docs/part1_framework_namespace.png)
 
-## user-srv
+## user-service
 
-我们先从下往上编写，也就是从服务层**user-srv**开始
+我们先从下往上编写，也就是从服务层**user-service**开始
 
 user-srv的各组件如下表所示
 
@@ -53,36 +64,42 @@ Micro有提供代码生成器指令[**new**][micro-new]，它可以新建服务�
 ### 新建模板
 
 ```bash
-micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv
+micro new --namespace=mu.micro.book --type=service --alias=user github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service
 ```
+
+*注：如果有报Unknow type service，则把--type=service换成--type=service，srv这是micro@2.2.0及以前的版本用法*
 
 我们解释一下各个flag参数
 
 - namespace，因为我们要让**web**直接暴露在API之下，而本篇后面我们会开一个handler模式为web的API，它的命名空间为`mu.micro.book.web`，故而，我们服务
 
-模板生成在**user-srv**目录，其结构如下
+模板生成在**user-service**目录，其结构如下
 
 ```text
 .
-├── main.go
-├── plugin.go
-├── handler
-│   └── user.go
-├── subscriber
-│   └── user.go
-├── proto/user
-│   └── user.proto
 ├── Dockerfile
 ├── Makefile
 ├── README.md
-└── go.mod
-
+├── generate.go
+├── go.mod
+├── handler
+│   └── user.go
+├── main.go
+├── plugin.go
+├── proto
+│   └── user
+│       └── user.proto
+└── subscriber
+    └── user.go
 ```
-- <span style="color:red">*</span>需要有个说明的地方，当前实例micro的版本是1.13.0,如果安装的是之前的版本生成的项目模板或许会有些许差异。不过没关系，可以继续参照下面的教程步骤进行学习。<br/>
 
-有些目录比如subscriber等目前我们是用不到或者名称不是我们想要的，我们需要手动改一下：
+删除subscriber目录，因为这是用于专门放订阅异步消息组件的目录，我们暂时用不到，后面的章节会介绍。
 
-删除subscriber目录，添加basic和conf配置相关的目录，添加model模型相关目录,详见下面的目录结构
+删除go mod文件，我们在项目最外层有统一的go mod，这里不需要，有兴趣了解的同学可以谷歌搜索go mod的具体用法。
+
+删除Dockerfile, Makefile打包编程文件与README.md，我们暂不需要，大家可以选择性保留。
+
+尔后添加basic基础工具目录和conf配置相关的目录，添加model业务领域模型目录，详见下面的目录结构
 
 ```text
 .
@@ -108,16 +125,13 @@ micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-
 │   └── model.go             * 初始化模型层
 ├── proto/user    
 │   └── user.proto
-├── Dockerfile
-├── Makefile
-└── README.md
 ```
 
 其中加`*`的便是我们修改过的结构，其后跟的描述是目录或文件的功能或作用。可能大家会觉得改动这么大，模板命令还有什么用呢？
 
 其实模板只是生成基础目录，把大家引进一个风格的项目中，这样管理起来会轻松许多。下面我们解释一下为什么要新增三个目录：**basic**，**model**和**conf**。
 
-**basic**和**model**其实和Micro无关，只是为了满足我们为**user-srv**的业务定位，它是一个**MVC**应用后台，而C交给了**user-web**，其中的**M**才是它的主要功能。
+**basic**和**model**其实和Micro无关，只是为了满足我们为**user-service**的业务定位，它是一个**MVC**应用后台，而C交给了**user-web**，其中的**M**才是它的主要功能。
 
 - **basic** 负责初始化基础组件，比如数据库、配置等
 
@@ -125,7 +139,7 @@ micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-
 
 - **conf** 配置文件目录，现在我们还没用配置中心，暂先用文件的方式
 
-有朋友会问，那**handler**目录呢？刚说**user-srv**本质上是一个MVC应用的后台，它弱化了C成handler，只负责接收请求，不改动业务数据**值**，但可能改动结构以便回传。
+有朋友会问，那**handler**目录呢？刚说**user-service**本质上是一个MVC应用的后台，它弱化了C成handler，只负责接收请求，不改动业务数据**值**，但可能改动结构以便回传。
 
 下面我们开始处理业务方面的东西
 
@@ -136,7 +150,7 @@ micro new --namespace=mu.micro.book --type=srv --alias=user github.com/micro-in-
 ```proto
 syntax = "proto3";
 
-package mu.micro.book.srv.user;
+package mu.micro.book.service.user;
 
 service User {
     rpc QueryUserByName (Request) returns (Response) {
@@ -187,7 +201,7 @@ package main
 func main() {
     // New Service
     service := micro.NewService(
-        micro.Name("mu.micro.book.srv.user"),
+        micro.Name("mu.micro.book.service.user"),
         micro.Version("latest"),
     )
 
@@ -198,17 +212,16 @@ func main() {
     s.RegisterUserHandler(service.Server(), new(handler.User))
 
     // Register Struct as Subscriber
-    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), new(subscriber.User))
+    micro.RegisterSubscriber("mu.micro.book.service.user", service.Server(), new(subscriber.User))
 
     // Register Function as Subscriber
-    micro.RegisterSubscriber("mu.micro.book.srv.user", service.Server(), subscriber.Handler)
+    micro.RegisterSubscriber("mu.micro.book.service.user", service.Server(), subscriber.Handler)
 
     // Run service
     if err := service.Run(); err != nil {
         log.Fatal(err)
     }
 }
-
 ```
 
 生成的**main**方法比较简单，根据我们当前的需求，我们把不要的pubsub（发布订阅）都删掉，变成：
@@ -221,7 +234,7 @@ package main
 func main() {
     // New Service   新建服务
     service := micro.NewService(
-        micro.Name("mu.micro.book.srv.user"),
+        micro.Name("mu.micro.book.service.user"),
         micro.Version("latest"),
     )
 
@@ -269,14 +282,14 @@ INSERT INTO user (user_id, user_name, pwd) VALUE (10001, 'micro', '123');
 
 ### 基础组件
 
-[基础组件](./user-srv/basic)目前主要的功能是初始化配置与数据库。它的入口代码是一个**Init**初始化方法，负责初始化其下所有组件。
+[基础组件](./user-service/basic)目前主要的功能是初始化配置与数据库。它的入口代码是一个**Init**初始化方法，负责初始化其下所有组件。
 
 ```go
 package basic
 
 import (
-    "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/basic/config"
-    "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/basic/db"
+    "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic/config"
+    "github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/basic/db"
 )
 
 func Init() {
@@ -289,7 +302,7 @@ func Init() {
 
 加载配置我们会使用到[go-config](https://github.com/micro/go-micro/v2/config)里面的本地文件配置。相关示例可以参考[go-config示例](https://github.com/micro-in-cn/tutorials/examples/tree/master/basic-practices/micro-config)。
 
-我们先看下根配置文件[application.yml](./user-srv/conf/application.yml)的样子
+我们先看下根配置文件[application.yml](./user-service/conf/application.yml)的样子
 
 ```yaml
 app:
@@ -342,7 +355,7 @@ func InitConfig() {
         panic(err)
     }
 
-    log.Logf("[InitConfig] 加载配置文件：path: %s, %+v\n", pt+"/application.yml", profiles)
+    log.Infof("[InitConfig] 加载配置文件：path: %s, %+v\n", pt+"/application.yml", profiles)
 
     // 开始导入新文件
     if len(profiles.GetInclude()) > 0 {
@@ -370,11 +383,11 @@ func InitConfig() {
 }
 ```
 
-我们目前定义了三个配置结构，它们在basic的[config](user-srv/basic/config)目录下
+我们目前定义了三个配置结构，它们在basic的[config](user-service/basic/config)目录下
 
-- [profiles](./user-srv/basic/config/profiles.go)
-- [etcd](./user-srv/basic/config/etcd.go)
-- [mysql](./user-srv/basic/config/mysql.go)：
+- [profiles](./user-service/basic/config/profiles.go)
+- [etcd](./user-service/basic/config/etcd.go)
+- [mysql](./user-service/basic/config/mysql.go)：
 
 ```go
 // defaultProfiles 属性配置文件
@@ -400,7 +413,7 @@ type defaultMysqlConfig struct {
 
 ### 数据库初始化
 
-数据库的初始化动作在[db.go](user-srv/basic/db/db.go)目录下，下面是初始化方法入口：
+数据库的初始化动作在[db.go](user-service/basic/db/db.go)目录下，下面是初始化方法入口：
 
 ```go
 package db
@@ -443,7 +456,7 @@ func GetDB() *sql.DB {
 
 从代码中可以看到，在判断配置文件中有激活Mysql指令**GetEnabled**时才会去加载数据库。
 
-[mysql.go](user-srv/basic/db/mysql.go)中的初始化代码：
+[mysql.go](user-service/basic/db/mysql.go)中的初始化代码：
 
 ```go
 func initMysql() {
@@ -478,7 +491,7 @@ func initMysql() {
 
 用户模型服务很简单，就是像数据库获取用户信息被返回给调用者
 
-下面用户模型服务类定义及初始化[user.go](./user-srv/model/user/user.go)
+下面用户模型服务类定义及初始化[user.go](./user-service/model/user/user.go)
 
 user.go
 
@@ -525,7 +538,7 @@ func Init() {
 
 1. 其定义了接口*Service*，声明其能力*GetService*。
 2. **service**结构继承*Service*提供服务。
-3. userService向[model.go](./user-srv/model/model.go)暴露初始化方法**Init**
+3. userService向[model.go](./user-service/model/model.go)暴露初始化方法**Init**
 
 - model.go
 
@@ -540,7 +553,7 @@ func Init() {
 }
 ```
 
-现在我们有了服务模型层的结构，开始实现从数据库里获取数据，具体逻辑写在[user_get.go](./user-srv/model/user/user_get.go)里
+现在我们有了服务模型层的结构，开始实现从数据库里获取数据，具体逻辑写在[user_get.go](./user-service/model/user/user_get.go)里
 
 user_get.go
 
@@ -570,7 +583,7 @@ func (s *service) QueryUserByName(userName string) (ret *proto.User, err error) 
 
 查询方法很简单，这里不赘述。
 
-服务类写完之后，我们还差handler与main方法没有完成，下一步我们编写handler处理器[user.go](./user-srv/handler/user.go)，让它来调用model模型层。
+服务类写完之后，我们还差handler与main方法没有完成，下一步我们编写handler处理器[user.go](./user-service/handler/user.go)，让它来调用model模型层。
 
 **user.go**
 
@@ -615,7 +628,7 @@ func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Re
 
 handler直接调用模型层方法获取数据并回传给rsp结构。
 
-下面把[main.go](./user-srv/main.go)调整一下，然后就可以启动程序了：
+下面把[main.go](./user-service/main.go)调整一下，然后就可以启动程序了：
 
 ```go
 package main
@@ -632,7 +645,7 @@ func main() {
 
     // New Service
     service := micro.NewService(
-        micro.Name("mu.micro.book.srv.user"),
+        micro.Name("mu.micro.book.service.user"),
         micro.Registry(micReg),
         micro.Version("latest"),
     )
@@ -673,19 +686,19 @@ func registryOptions(ops *registry.Options) {
 ```bash
 $ go run main.go plugin.go
 
-2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application.yml, {Include:etcd, db}
-2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application-etcd.yml
-2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/conf/application-db.yml
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/conf/application.yml, {Include:etcd, db}
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/conf/application-etcd.yml
+2019/04/12 23:57:12 [Init] 加载配置文件：path: /Users/me/workspace/go/src/github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service/conf/application-db.yml
 2019/04/12 23:57:12 Transport [http] Listening on [::]:52801
 2019/04/12 23:57:12 Broker [http] Connected to [::]:52802
-2019/04/12 23:57:12 Registry [etcd] Registering node: mu.micro.book.srv.user-f1cb2a6c-1c8b-4d90-97b6-a9e287c1acc4
+2019/04/12 23:57:12 Registry [etcd] Registering node: mu.micro.book.service.user-f1cb2a6c-1c8b-4d90-97b6-a9e287c1acc4
 
 ```
 
 启动成功，我们调用*Service.QueryUserByName*测试一下服务是否正常:
 
 ```bash
-$ micro --registry=etcd call mu.micro.book.srv.user User.QueryUserByName '{"userName":"micro"}'
+$ micro --registry=etcd call mu.micro.book.service.user User.QueryUserByName '{"userName":"micro"}'
 {
    "user": {
        "id": 10001,
@@ -713,7 +726,7 @@ $ micro --registry=etcd call mu.micro.book.srv.user User.QueryUserByName '{"user
 
 ![](../docs/part1_user_login_process.png)
 
-相信大家在了解**user-srv**之后，对整个编码过程更熟悉了，所以我们加快步伐。开始写代码。
+相信大家在了解**user-service**之后，对整个编码过程更熟悉了，所以我们加快步伐。开始写代码。
 
 ### 新建模板
 
@@ -772,7 +785,7 @@ type Error struct {
 }
 
 func Init() {
-    serviceClient = us.NewUserService("mu.micro.book.srv.user", client.DefaultClient)
+    serviceClient = us.NewUserService("mu.micro.book.service.user", client.DefaultClient)
 }
 
 // Login 登录入口
@@ -840,10 +853,10 @@ handler里定义了错误结构体**Error**、**Init**、**Login**方法。
 $ micro --registry=etcd --api_namespace=mu.micro.book.web  api --handler=web
 ```
 
-运行user-srv
+运行user-service
 
 ```bash
-$ cd ../user-srv
+$ cd ../user-service
 $ go run main.go plugin.go 
 ```
 
