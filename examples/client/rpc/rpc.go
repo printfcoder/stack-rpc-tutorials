@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 
 	proto "github.com/micro-in-cn/tutorials/examples/client/rpc/proto"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/errors"
+	"github.com/micro/go-micro/v2/logger"
+	"github.com/micro/go-micro/v2/transport/grpc"
 )
 
 type Example struct{}
@@ -15,7 +16,7 @@ type Example struct{}
 type Foo struct{}
 
 func (e *Example) Call(ctx context.Context, req *proto.CallRequest, rsp *proto.CallResponse) error {
-	log.Printf("收到 Example.Call 请求 %v\n", req)
+	logger.Infof("收到 Example.Call 请求 %v\n", req)
 	fmt.Printf("%v\n", req)
 
 	if len(req.Name) == 0 {
@@ -27,13 +28,14 @@ func (e *Example) Call(ctx context.Context, req *proto.CallRequest, rsp *proto.C
 }
 
 func (f *Foo) Bar(ctx context.Context, req *proto.EmptyRequest, rsp *proto.EmptyResponse) error {
-	log.Print("收到 Foo.Bar 请求")
+	logger.Infof("收到 Foo.Bar 请求")
 	return nil
 }
 
 func main() {
 	service := micro.NewService(
 		micro.Name("go.micro.rpc.example"),
+		micro.Transport(grpc.NewTransport()),
 	)
 
 	service.Init()
@@ -45,6 +47,6 @@ func main() {
 	proto.RegisterFooHandler(service.Server(), new(Foo))
 
 	if err := service.Run(); err != nil {
-		log.Fatal(err)
+		logger.Error(err)
 	}
 }

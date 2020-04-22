@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/micro/go-micro/v2/client"
+	"github.com/micro/go-micro/v2/client/grpc"
 	"github.com/micro/go-micro/v2/metadata"
 	"github.com/micro/go-micro/v2/registry/mdns"
 )
@@ -20,7 +21,7 @@ type whatEverRsp struct {
 }
 
 func main() {
-	cli := client.NewClient(
+	cli := grpc.NewClient(
 		// 与目录服务同注册中心即可
 		client.Registry(mdns.NewRegistry()),
 	)
