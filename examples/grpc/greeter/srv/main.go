@@ -6,8 +6,8 @@ import (
 	"time"
 
 	pb "github.com/micro-in-cn/tutorials/examples/grpc/proto/go/micro"
-	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/metadata"
+	"github.com/micro/go-micro/v2/service"
 	"github.com/micro/go-micro/v2/service/grpc"
 )
 
@@ -22,21 +22,21 @@ func (s *Say) Hello(ctx context.Context, req *pb.Request, rsp *pb.Response) erro
 }
 
 func main() {
-	service := grpc.NewService(
-		micro.Name("go.micro.srv.greeter"),
-		micro.RegisterTTL(time.Second*30),
-		micro.RegisterInterval(time.Second*10),
-		micro.Address(":9090"),
+	srv := grpc.NewService(
+		service.Name("go.micro.srv.greeter"),
+		service.RegisterTTL(time.Second*30),
+		service.RegisterInterval(time.Second*10),
+		service.Address(":9090"),
 	)
 
 	// optionally setup command line usage
-	service.Init()
+	srv.Init()
 
 	// Register Handlers
-	pb.RegisterSayHandler(service.Server(), new(Say))
+	pb.RegisterSayHandler(srv.Server(), new(Say))
 
 	// Run server
-	if err := service.Run(); err != nil {
+	if err := srv.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
