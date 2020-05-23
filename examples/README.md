@@ -23,4 +23,4 @@
   - [*event-handler](./micro-api/event) event模式
   - [*meta-handler](./micro-api/meta) meta模式
 - [Micro Cors](./micro-cors) Micro跨域
-- [gRPC](./micro-cors) gRPC相关用法
+- [gRPC](./grpc) gRPC相关用法
