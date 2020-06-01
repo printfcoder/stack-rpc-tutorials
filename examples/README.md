@@ -9,7 +9,14 @@
  - [kafka](./broker/kafka)  集成Kafka
  - [nsq](./broker/nsq)  集成Nsq
  - [rabbitMQ](./broker/rabbitmq) 集成RabbitMQ 
-- [Client](./client) 如何单独使用Go-Micro客户端
+- [Client](./client) Go-Micro客户端
+  - [json](./client/json) JSON格式调用
+  - [retry](./client/retry) 重试
+  - [rpc](./client/rpc) RPC调用
+  - [selector](./client/selector) 选择器
+    - [filter](./client/selector/filter) 过滤器
+      - [ip](./client/selector/filter/ip) 指定IP调用
+      - [version](./client/selector/filter/version) 指定版本号调用
 - [Service](./service) Service的各种用法，Func、Stream（file）、timeout等
   - [Function](./service/function) 函数式服务
   - [Service](./service/service) 常规用法
