@@ -24,5 +24,3 @@
   - [*meta-handler](./micro-api/meta) meta模式
 - [Micro Cors](./micro-cors) Micro跨域
 - [gRPC](./grpc) gRPC相关用法
-  - [codec](./grpc/codec) 自定义编码器 
-  - [gateway](./grpc/gateway) 自定义编码器
