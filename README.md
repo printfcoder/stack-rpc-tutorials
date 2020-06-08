@@ -69,6 +69,6 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 [链接](https://github.com/micro-in-cn/Notice/blob/master/donation/README.md)
 
-[cn-examples]: /examples
-[cn-blogs]: https://micro.mu/blog/cn/
-[cn-docs]: https://micro.mu/docs/cn/
+## 其它资源
+
+https://github.com/yaoliu/k8s-micro
