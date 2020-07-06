@@ -71,5 +71,5 @@ Micro在github上公开了源码，也有及时更新的文档，还有尽可能
 
 ## 其它资源
 
-![awesome-micro](https://github.com/micro-community/awesome-micro)
+[awesome-micro](https://github.com/micro-community/awesome-micro)
 
