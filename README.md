@@ -1,10 +1,6 @@
 # Micro 中国站教程系列
 
-[重要信息：原定的V2升级暂停，V2只是过渡版本，等V3后在一并更新]
-
-- [V1]()
-- [V2]()
-- [V2]()
+[重要信息：原定的V1V2只接收社区更新，不再主动升级]
 
 ## 主打系列
 
@@ -15,8 +11,8 @@
 - [快速开发包](https://github.com/micro-in-cn/starter-kit)
 - [学习视频](https://github.com/micro-in-cn/learning-videos)
 - [XConf 分布式配置中心](https://github.com/micro-in-cn/XConf)
-- [Platform-Web 服务管理平台](https://github.com/micro-in-cn/platform-web)
-- [使用Micro构建微服务](./microservice-in-micro) 
+- [使用Micro构建微服务-v1v2](./microservice-in-micro) 
+- [使用Micro构建微服务-v3](./microservice-in-microv3) 
 
 ## 讨论
 
