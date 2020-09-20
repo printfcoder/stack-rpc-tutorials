@@ -2,6 +2,8 @@
 
 [重要信息：原定的V1V2只接收社区更新，不再主动升级]
 
+[v1分支](https://github.com/micro-in-cn/tutorials/tree/v1-lastest)
+
 ## 主打系列
 
 - [中文示例][cn-examples]
