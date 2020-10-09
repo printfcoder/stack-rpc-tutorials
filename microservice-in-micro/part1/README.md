@@ -67,7 +67,7 @@ Micro有提供代码生成器指令[**new**][micro-new]，它可以新建服务�
 micro new --namespace=mu.micro.book --type=service --alias=user github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-service
 ```
 
-*注：如果有报Unknow type service，则把--type=service换成--type=service，srv这是micro@2.2.0及以前的版本用法*
+*注：如果有报Unknow type service，则把--type=service换成--type=srv，srv这是micro@2.2.0及以前的版本用法*
 
 我们解释一下各个flag参数
 
@@ -261,7 +261,7 @@ func main() {
 CREATE TABLE `user`
 (
     `id`           int(10) unsigned                                              NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `user_id`      int(10) unsigned                                                       DEFAULT NULL COMMENT '用户id',
+    `user_id`      int(10) unsigned                                              NOT NULL COMMENT '用户id',
     `user_name`    varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '用户名',
     `pwd`          varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码',
     `created_time` timestamp(3)                                                  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -274,7 +274,7 @@ CREATE TABLE `user`
   COLLATE = utf8mb4_bin COMMENT ='用户表';
 ```
 
-预置一条数据，*为了简化，我们的账户密码暂时使用明文*，后面的章节会加盐hash后再存储、匹配。
+预置一条数据，*为了简化，我们的账户密码暂时使用明文*，后面的章节会加密hash后再存储、匹配。
 
 ```sql
 INSERT INTO user (user_id, user_name, pwd) VALUE (10001, 'micro', '123');
