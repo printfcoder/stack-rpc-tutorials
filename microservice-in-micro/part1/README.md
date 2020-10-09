@@ -261,7 +261,7 @@ func main() {
 CREATE TABLE `user`
 (
     `id`           int(10) unsigned                                              NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `user_id`      int(10) unsigned                                                       DEFAULT NULL COMMENT '用户id',
+    `user_id`      int(10) unsigned                                              NOT NULL COMMENT '用户id',
     `user_name`    varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '用户名',
     `pwd`          varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码',
     `created_time` timestamp(3)                                                  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -274,7 +274,7 @@ CREATE TABLE `user`
   COLLATE = utf8mb4_bin COMMENT ='用户表';
 ```
 
-预置一条数据，*为了简化，我们的账户密码暂时使用明文*，后面的章节会加盐hash后再存储、匹配。
+预置一条数据，*为了简化，我们的账户密码暂时使用明文*，后面的章节会加密hash后再存储、匹配。
 
 ```sql
 INSERT INTO user (user_id, user_name, pwd) VALUE (10001, 'micro', '123');
