@@ -1,6 +1,8 @@
-# Micro 中国站教程系列
+# StackRPC 教程系列
 
-[重要信息：原定的V1V2只接收社区更新，不再主动升级]
+[重要信息：因Go-Micro停更，中国团队决定建立自己的版本，并重命名为[stack-rpc](https://github.com/stack-labs/stack-rpc)]
+
+## 以下内容将择期重构，敬请期待！
 
 [v1分支](https://github.com/micro-in-cn/tutorials/tree/v1-lastest)
 
