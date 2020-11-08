@@ -1,3 +1,0 @@
-app:
-  profiles:
-    include: etcd
