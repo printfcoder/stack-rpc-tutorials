@@ -1,8 +1,9 @@
-module github.com/stack-labs/stack-rpc-tutorials
+module github.com/stack-labs/stack-rpc-tutorials/examples
 
 go 1.14
 
 replace (
+    google.golang.org/grpc => google.golang.org/grpc v1.26.0
 	github.com/stack-labs/stack-rpc v1.0.0 => ../../stack-rpc
 	github.com/stack-labs/stack-rpc-plugins/logger/logrus v1.0.0 => ../../stack-rpc-plugins/logger/logrus
 	github.com/stack-labs/stack-rpc/plugins/config/source/apollo v1.0.0 => ../../stack-rpc-plugins/config/source/apollo
