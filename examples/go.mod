@@ -3,10 +3,11 @@ module github.com/stack-labs/stack-rpc-tutorials/examples
 go 1.14
 
 replace (
-    google.golang.org/grpc => google.golang.org/grpc v1.26.0
+	github.com/coreos/bbolt => go.etcd.io/bbolt v1.3.4
 	github.com/stack-labs/stack-rpc v1.0.0 => ../../stack-rpc
 	github.com/stack-labs/stack-rpc-plugins/logger/logrus v1.0.0 => ../../stack-rpc-plugins/logger/logrus
 	github.com/stack-labs/stack-rpc/plugins/config/source/apollo v1.0.0 => ../../stack-rpc-plugins/config/source/apollo
+	google.golang.org/grpc => google.golang.org/grpc v1.26.0
 )
 
 require (
@@ -37,5 +38,5 @@ require (
 	github.com/stack-labs/stack-rpc-plugins/logger/logrus v1.0.0
 	github.com/stack-labs/stack-rpc/plugins/config/source/apollo v1.0.0
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
-	google.golang.org/grpc v1.27.1
+	google.golang.org/grpc v1.29.1
 )
