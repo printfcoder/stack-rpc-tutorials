@@ -9,7 +9,7 @@
 
 ## 使用方法
 
-使用protoc生成go代码，proto文件在[proto](../../proto/service/rpc/)目录，内容如下：
+使用protoc生成go代码，proto文件在[proto](../../proto/service/rpc)目录，内容如下：
 
 ```proto
 syntax = "proto3";
@@ -29,30 +29,53 @@ message HelloResponse {
 
 它提供一个服务叫Greeter，方法叫Hello，入参和出参分别是HelloRequest与HelloResponse
 
-生成proto文件，没有protoc及stack插件，可以参考[准备安装]()
+生成proto文件（已生成好，但大家可自行尝试），没有protoc及stack插件，可以参考[准备安装](http://microhq.cn/docs/stack-rpc/prepare-env-cn)
+
+切到proto的rpc目录，再执行：
 
 ```
-protoc  --go_out=. --stack_out=. proto/rpc.proto
+protoc  --go_out=. --stack_out=. rpc/rpc.proto
 ```
 
-以rpc模式运行**API**
+## 编写Server
+
+```golang
+// 服务类
+type Greeter struct {
+}
+
+// 实现proto中的Hello接口
+func (g Greeter) Hello(ctx context.Context, req *proto.HelloRequest, rsp *proto.HelloResponse) error {
+	rsp.Greeting = "Hello! " + req.Name
+	return nil
+}
+
+func main() {
+    // 实例化服务，并命名为stack.rpc.greeter
+	service := stack.NewService(
+		stack.Name("stack.rpc.greeter"),
+	)
+    // 初始化服务
+	service.Init()
+
+	// 将Greeter注册到服务上
+	proto.RegisterGreeterHandler(service.Server(), new(Greeter))
+
+    // 运行服务
+	if err := service.Run(); err != nil {
+		logger.Error(err)
+	}
+}
+```
+
+运行server:
 
 ```
-micro api --handler=rpc --namespace=go.micro.rpc
+go run server.go
 ```
 
-```
-go run rpc.go
-```
-
-当我们POST请求到 **/example/call**时，**API**会将它转成RPC转发到**go.micro.rpc.example**服务的**Example.Call**接口上。
+打开另一窗口，运行client:
 
 ```
-curl -H 'Content-Type: application/json' -d '{"name": "小小先"}' "http://localhost:8080/example/call"
-```
-
-同样，POST请求到 **/example/foo/bar**时，**API**会将它转成RPC转发到**go.micro.api.example**服务的**Foo.Bar**接口上。
-
-```
-curl -H 'Content-Type: application/json' -d '{}' http://localhost:8080/example/foo/bar
+go run server.go
 ```
