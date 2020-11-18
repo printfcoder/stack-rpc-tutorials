@@ -1,31 +1,34 @@
 package main
 
 import (
+	"time"
+
+	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/plugins/config/source/apollo"
 )
 
 func main() {
-	c, err := config.NewConfig(
-		config.Storage(true),
-	)
-
-	if err != nil {
-		logger.Fatal(err)
-	}
-
-	err = c.Load(
+	service := stack.NewService(stack.ConfigSource(
 		apollo.NewSource(
 			apollo.Addr("http://127.0.0.1:8080"),
 			apollo.Namespaces("application"),
-			apollo.AppID("demo-app"),
+			apollo.AppID("demo"),
 			apollo.Cluster("dev"),
-		))
-	if err != nil {
-		logger.Error(err)
-	}
+		),
+	))
+	service.Init()
 
-	logger.Info(c.Get("test.config1").String("test.config1 default value"))
-	logger.Info(c.Get("test.config2").String("test.config1 default value"))
+	go func() {
+		// 到阿波罗配置后台改变下面的配置值
+		for {
+			select {
+			case <-time.After(1 * time.Second):
+				logger.Infof("value: %s", config.Get("demo.server.addr").String("456"))
+			}
+		}
+	}()
+
+	service.Run()
 }
