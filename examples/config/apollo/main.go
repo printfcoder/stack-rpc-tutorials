@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"github.com/stack-labs/stack-rpc"
+	"github.com/stack-labs/stack-rpc-plugins/config/source/apollo"
 	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugins/config/source/apollo"
 )
 
 func main() {
