@@ -463,6 +463,7 @@ github.com/micro-in-cn/tutorials/examples v0.0.0-20201009111623-6942a78f3f99 h1:
 github.com/micro-in-cn/tutorials/examples v0.0.0-20201102112622-908d5548b80c h1:osmqToNZoo0kpmfaBwKD3lvyvYKmfu6E4a5jxokTWTw=
 github.com/micro-in-cn/tutorials/examples v0.0.0-20201102112622-908d5548b80c/go.mod h1:GiwK6rD/LlSfMXlJ5OGI1IRXYxDpYFdFxuekmmBLPQ8=
 github.com/micro-in-cn/tutorials/examples v0.0.0-20201108164919-d9384a14c8cb h1:AblXRK/MEvSjw7qq0qfuvsWBevcfX5AJVAGC+rKLHv0=
+github.com/micro-in-cn/tutorials/examples v0.0.0-20201111022353-6737cdba75a3 h1:kDqQghxegJaDNsL9eh6jn+nvAQqArhjYgIiPY2vZ9O8=
 github.com/micro/cli v0.2.0 h1:ut3rV5JWqZjsXIa2MvGF+qMUP8DAUTvHX9Br5gO4afA=
 github.com/micro/cli v0.2.0/go.mod h1:jRT9gmfVKWSS6pkKcXQ8YhUyj6bzwxK8Fp5b0Y7qNnk=
 github.com/micro/cli/v2 v2.1.2 h1:43J1lChg/rZCC1rvdqZNFSQDrGT7qfMrtp6/ztpIkEM=
@@ -728,6 +729,8 @@ github.com/spf13/viper v1.7.1 h1:pM5oEahlgWv/WnHXpgbKz7iLIxRf65tye2Ci+XFK5sk=
 github.com/spf13/viper v1.7.1/go.mod h1:8WkrPz2fc9jxqZNCJI/76HCieCp4Q8HaLFoCha5qpdg=
 github.com/src-d/gcfg v1.4.0/go.mod h1:p/UMsR43ujA89BJY9duynAwIpvqEujIH/jFlfL7jWoI=
 github.com/stack-labs/stack-rpc v0.0.0-20201109172001-476524747036 h1:9xEi/Poq+H7P/MDT3gdQGmGLRT8vak+t6j8c9xWLS/U=
+github.com/stack-labs/stack-rpc v0.0.0-20201111122544-66af4b3dd2ab h1:tRKhlq3/CT1UcdbwI43GobNA+DsrvFfPLkQ+Gmi+VJg=
+github.com/stack-labs/stack-rpc v0.0.0-20201113122949-6f4cb846af53 h1:e+FFx9EBP8Uzf8c/u0EFdlNZfkJbsljMJtcSzZEyaQU=
 github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71 h1:2MR0pKUzlP3SGgj5NYJe/zRYDwOu9ku6YHy+Iw7l5DM=
 github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71/go.mod h1:AZpEONHx3DKn8O/DFsRAY58/XVQiIPMTMB1SddzLXVw=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
