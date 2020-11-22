@@ -77,5 +77,5 @@ go run server.go
 打开另一窗口，运行client:
 
 ```
-go run server.go
+go run client.go
 ```
