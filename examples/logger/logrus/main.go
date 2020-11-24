@@ -1,9 +1,10 @@
 package main
 
 import (
+	"time"
+
 	"github.com/stack-labs/stack-rpc-plugins/logger/logrus"
 	log "github.com/stack-labs/stack-rpc/logger"
-	"time"
 )
 
 func main() {
