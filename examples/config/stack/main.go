@@ -1,23 +1,21 @@
-package main
+package stack
 
 import (
 	"time"
 
 	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc-plugins/config/source/apollo"
+	stack2 "github.com/stack-labs/stack-rpc-plugins/config/source/stack"
 	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/logger"
 )
 
 func main() {
-	service := stack.NewService(stack.ConfigSource(
-		apollo.NewSource(
-			apollo.Addr("http://127.0.0.1:8080"),
-			apollo.Namespaces("application"),
-			apollo.AppID("demo"),
-			apollo.Cluster("dev"),
+	service := stack.NewService(
+		stack.ConfigSource(
+			stack2.NewSource(),
 		),
-	))
+	)
+
 	service.Init()
 
 	go func() {
