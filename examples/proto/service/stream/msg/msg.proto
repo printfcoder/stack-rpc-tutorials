@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+service MsgStream {
+    rpc Msg(stream StreamMessage) returns (StreamResponse) {}
+    rpc HeartBeat(HeartBeatRequest) returns(HeartBeatRespond) {}
+}
+
+message StreamMessage {
+    string namespace = 1;
+    string id = 2;
+    repeated Field fields = 3;
+    repeated Payload payload = 4;
+    map<string, string> extends = 5;
+}
+
+message Field {
+    string name = 1;
+    string type = 2;
+}
+
+message Payload {
+    repeated string value = 1;
+}
+
+message StreamResponse {
+    string status = 1;
+}
+
+message MsgByte {
+    bytes byte = 1;
+    int64 len = 2;
+}
+
+message HeartBeatRequest {
+    string areYouOk = 1;
+}
+
+message HeartBeatRespond {
+    string imOK = 1;
+}

@@ -5,19 +5,19 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
+	file2 "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/stream/file"
 	"io"
 	"io/ioutil"
 	"os"
 
 	"github.com/stack-labs/stack-rpc"
-	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/stream"
 	"github.com/stack-labs/stack-rpc/errors"
 )
 
 type File struct{}
 
 // 文件接收方法
-func (g *File) File(ctx context.Context, file proto.File_FileStream) error {
+func (g *File) File(ctx context.Context, file file2.File_FileStream) error {
 	//将接受到的内容储存到临时文件中
 	temp, err := ioutil.TempFile("", "stack")
 	if err != nil {
@@ -38,13 +38,13 @@ func (g *File) File(ctx context.Context, file proto.File_FileStream) error {
 	}
 	println(temp.Name())
 	// 发送文件信息
-	return file.SendMsg(&proto.FileMsg{
+	return file.SendMsg(&file2.FileMsg{
 		FileName: temp.Name(),
 	})
 }
 
 // 文件处理方法
-func (g *File) DealFile(ctx context.Context, req *proto.DealFileRequest, rsp *proto.DealFileRespond) error {
+func (g *File) DealFile(ctx context.Context, req *file2.DealFileRequest, rsp *file2.DealFileRespond) error {
 	// 通过文件名获取到文件内容
 	// 计算文件md5
 	hash := md5.New()
@@ -71,7 +71,7 @@ func main() {
 	service.Init()
 
 	// 注册服务
-	_ = proto.RegisterFileHandler(service.Server(), new(File))
+	_ = file2.RegisterFileHandler(service.Server(), new(File))
 
 	// 启动服务
 	if err := service.Run(); err != nil {

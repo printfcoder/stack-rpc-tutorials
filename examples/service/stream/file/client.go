@@ -2,15 +2,15 @@ package main
 
 import (
 	"context"
+	file2 "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/stream/file"
 	"io"
 	"net/http"
 
 	"github.com/stack-labs/stack-rpc"
-	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/stream"
 	"github.com/stack-labs/stack-rpc/client"
 )
 
-var fileService proto.FileService
+var fileService file2.FileService
 
 var c client.Client
 
@@ -54,7 +54,7 @@ func UploadFile(rsp http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			if err == io.EOF {
 				//全部读取完成,发送一个完成标识,跳出
-				err = stream.Send(&proto.FileByte{
+				err = stream.Send(&file2.FileByte{
 					Byte: nil,
 					Len:  -1,
 				})
@@ -69,7 +69,7 @@ func UploadFile(rsp http.ResponseWriter, req *http.Request) {
 			_, _ = rsp.Write([]byte(err.Error()))
 			return
 		}
-		err = stream.Send(&proto.FileByte{
+		err = stream.Send(&file2.FileByte{
 			Byte: buff[:sendLen],
 			Len:  int64(sendLen),
 		})
@@ -80,7 +80,7 @@ func UploadFile(rsp http.ResponseWriter, req *http.Request) {
 		}
 	}
 	// 接收收到的消息之后就可以关闭了
-	fileMsg := &proto.FileMsg{}
+	fileMsg := &file2.FileMsg{}
 	if err := stream.RecvMsg(fileMsg); err != nil {
 		rsp.WriteHeader(500)
 		_, _ = rsp.Write([]byte(err.Error()))
@@ -89,7 +89,7 @@ func UploadFile(rsp http.ResponseWriter, req *http.Request) {
 	_ = stream.Close()
 
 	// 调用文件处理的rpc
-	ret, err := fileService.DealFile(context.Background(), &proto.DealFileRequest{
+	ret, err := fileService.DealFile(context.Background(), &file2.DealFileRequest{
 		FileName: fileMsg.FileName,
 		Param:    "a param",
 	}, func(options *client.CallOptions) {
@@ -112,7 +112,7 @@ func main() {
 
 	// 创建客户端
 	c = service.Client()
-	fileService = proto.NewFileService("file.service", c)
+	fileService = file2.NewFileService("file.service", c)
 
 	// 一个文件上传的api
 	http.HandleFunc("/upload", UploadFile)
