@@ -13,7 +13,7 @@ go run server.go
 运行本示例中的main.go
 
 ```bash
-go run main.go
+go run main.go --gateway_handler=rpc --gateway_namespace=stack.rpc
 ```
 
 ### 请求
