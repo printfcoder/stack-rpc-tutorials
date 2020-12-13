@@ -10,14 +10,17 @@ import (
 )
 
 func main() {
-	service := stack.NewService(stack.ConfigSource(
-		apollo.NewSource(
-			apollo.Addr("http://127.0.0.1:8080"),
-			apollo.Namespaces("application"),
-			apollo.AppID("demo"),
-			apollo.Cluster("dev"),
-		),
-	))
+	service := stack.NewService(
+		stack.Config(
+			config.NewConfig(
+				config.Source(apollo.NewSource(
+					apollo.Addr("http://127.0.0.1:8080"),
+					apollo.Namespaces("application"),
+					apollo.AppID("demo"),
+					apollo.Cluster("dev"),
+				)),
+			),
+		))
 	service.Init()
 
 	go func() {
