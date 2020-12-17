@@ -477,12 +477,14 @@ github.com/mholt/certmagic v0.9.3 h1:RmzuNJ5mpFplDbyS41z+gGgE/py24IX6m0nHZ0yNTQU
 github.com/mholt/certmagic v0.9.3/go.mod h1:nu8jbsbtwK4205EDH/ZUMTKsfYpJA1Q7MKXHfgTihNw=
 github.com/micro-in-cn/tutorials v0.0.0-20201108164919-d9384a14c8cb h1:2swPpLu50BK/f4PmS+PJ6I1GX5zzMxNGnDrbcHZTWH8=
 github.com/micro-in-cn/tutorials v0.0.0-20201124152730-adb30053be8a h1:N4s2FqNqLe0kxnu1e0zerN21lr3zXgT+FX2Ge/Bu368=
+github.com/micro-in-cn/tutorials v0.0.0-20201130162436-115f1399f9cc h1:FDou/gBYvq0NP/aFtmoPV/77hvaD7cFeQA8oROXTlNU=
 github.com/micro-in-cn/tutorials/examples v0.0.0-20201009111623-6942a78f3f99 h1:1kD0O2j/Ec0K9tzgBontYZXFgOEOUZ8clbm5AdLHo/A=
 github.com/micro-in-cn/tutorials/examples v0.0.0-20201102112622-908d5548b80c h1:osmqToNZoo0kpmfaBwKD3lvyvYKmfu6E4a5jxokTWTw=
 github.com/micro-in-cn/tutorials/examples v0.0.0-20201102112622-908d5548b80c/go.mod h1:GiwK6rD/LlSfMXlJ5OGI1IRXYxDpYFdFxuekmmBLPQ8=
 github.com/micro-in-cn/tutorials/examples v0.0.0-20201108164919-d9384a14c8cb h1:AblXRK/MEvSjw7qq0qfuvsWBevcfX5AJVAGC+rKLHv0=
 github.com/micro-in-cn/tutorials/examples v0.0.0-20201111022353-6737cdba75a3 h1:kDqQghxegJaDNsL9eh6jn+nvAQqArhjYgIiPY2vZ9O8=
 github.com/micro-in-cn/tutorials/examples v0.0.0-20201124152730-adb30053be8a h1:o4YR6vnYgj4r3Kf67dIiqFLIIbZGSUiaFBk6uCkr9Uw=
+github.com/micro-in-cn/tutorials/examples v0.0.0-20201130162436-115f1399f9cc h1:VCMVXhLKNVx02cXXRukx3/1IlfQaBmDYMLth8Y3MqxA=
 github.com/micro/cli v0.2.0 h1:ut3rV5JWqZjsXIa2MvGF+qMUP8DAUTvHX9Br5gO4afA=
 github.com/micro/cli v0.2.0/go.mod h1:jRT9gmfVKWSS6pkKcXQ8YhUyj6bzwxK8Fp5b0Y7qNnk=
 github.com/micro/cli/v2 v2.1.2 h1:43J1lChg/rZCC1rvdqZNFSQDrGT7qfMrtp6/ztpIkEM=
@@ -781,6 +783,10 @@ github.com/stack-labs/stack-rpc v0.0.0-20201113122949-6f4cb846af53 h1:e+FFx9EBP8
 github.com/stack-labs/stack-rpc v0.0.0-20201118152624-d448b92ef772 h1:HsNA9NuMepI+yc7Pc8XWK5jMd0sbMQyS4fUzaBrPEWA=
 github.com/stack-labs/stack-rpc v0.0.0-20201121032241-f9f199e600b6 h1:oXdDnlaJsFJyDqPJokncrBmnS9Ebt/UcDtYWsBSU+2o=
 github.com/stack-labs/stack-rpc v0.0.0-20201121032241-f9f199e600b6/go.mod h1:DPjCA+qDAt6ezu5+LHHqRNu4e13VNcZjdHEi03eYzYo=
+github.com/stack-labs/stack-rpc v1.0.0-rc2/go.mod h1:Wyvz2jT9SbryJ1tfDNV86wXMEGOi+xF2zlXXnBW1f2A=
+github.com/stack-labs/stack-rpc-plugins v0.0.0-20201203145117-5f9402e0f630 h1:EhUWuQBhXl5415Z3FcK2MehFH0nBh95nuCzlSLpTEJI=
+github.com/stack-labs/stack-rpc-plugins/config/source/stack v0.0.0-20201203145117-5f9402e0f630 h1:X8Hn717pj6bSs406RT5QU5pRFf6f3IhbQQ/UeG1ke9E=
+github.com/stack-labs/stack-rpc-plugins/config/source/stack v0.0.0-20201203145117-5f9402e0f630/go.mod h1:vNyyP6tBRx+agET/1aJwZq/4gLUHRA5o0lVz0WCZLkE=
 github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71 h1:2MR0pKUzlP3SGgj5NYJe/zRYDwOu9ku6YHy+Iw7l5DM=
 github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71/go.mod h1:AZpEONHx3DKn8O/DFsRAY58/XVQiIPMTMB1SddzLXVw=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
@@ -822,6 +828,7 @@ github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2 h1:eY9dn8+vbi4tKz5
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/xlab/treeprint v0.0.0-20181112141820-a009c3971eca h1:1CFlNzQhALwjS9mBAUkycX616GzgsuYUOCHA5+HSlXI=
 github.com/xlab/treeprint v0.0.0-20181112141820-a009c3971eca/go.mod h1:ce1O1j6UtZfjr22oyGxGLbauSBp2YVXpARAosm7dHBg=
+github.com/xlab/treeprint v1.0.0/go.mod h1:IoImgRak9i3zJyuxOKUP1v4UZd1tMoKkq/Cimt1uhCg=
 github.com/zouyx/agollo/v4 v4.0.0-rc1 h1:mvHONioUhLMt2UmWnLUnTmlngSfpOC+KAuoNnP/gpAs=
 github.com/zouyx/agollo/v4 v4.0.0-rc1/go.mod h1:unhojnZiGLlT4gLpWz3Oa7sGcChZWv/1DJBkV6s8uAE=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
