@@ -1,0 +1,5 @@
+stack:
+  includes: includeA.yml
+  server:
+    name: File-Demo
+    address: :8899

@@ -1,0 +1,4 @@
+includeA:
+  demoA: Hello! 我是DemoA
+  includeB:
+    demoB: Hello! 我是DemoB
