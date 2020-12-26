@@ -1,10 +1,11 @@
 package main
 
 import (
+	"time"
+
 	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/config"
 	log "github.com/stack-labs/stack-rpc/logger"
-	"time"
 )
 
 type includeA struct {
@@ -30,11 +31,11 @@ func init() {
 
 func main() {
 	service := stack.NewService()
-	service.Init(stack.AfterStart(func() error {
-		log.Infof("demoA: %s", value.IncludeA.DemoA)
-		log.Infof("demoB: %s", value.IncludeA.IncludeB.DemoB)
-		return nil
-	}))
+	service.Init()
+
+	log.Infof("demoA: %s", value.IncludeA.DemoA)
+	log.Infof("demoB: %s", value.IncludeA.IncludeB.DemoB)
+	log.Infof("demoA used get: %s", config.Get("includeA", "demoA").String(""))
 
 	go func() {
 		for {

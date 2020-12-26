@@ -11,7 +11,7 @@ import (
 
 func main() {
 	service := stack.NewService(
-		stack.ConfigSource(
+		stack.New(
 			stack2.NewSource(),
 		),
 	)
