@@ -12,7 +12,7 @@
 - [快速开发包](https://github.com/stack-labs/starter-kit)
 - [学习视频](https://github.com/stack-labs/learning-videos)
 - [XConf 分布式配置中心](https://github.com/stack-labs/XConf)
-- [使用StackRPC构建微服务](./microservice-system) 
+- [使用StackRPC构建微服务](./microservice-from-stack) 
 
 ## 讨论
 
