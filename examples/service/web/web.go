@@ -9,9 +9,13 @@ import (
 
 func main() {
 	s := stack.NewWebService(
+		// 服务名
 		stack.Name("stack.rpc.web"),
+		// 地址与端口
 		stack.Address(":8080"),
+		// 根目录
 		stack.WebRootPath("web-demo"),
+		// 路由与Handler
 		stack.WebHandleFuncs(
 			web.HandlerFunc{
 				Route: "hello",
@@ -20,6 +24,7 @@ func main() {
 				},
 			},
 		),
+		// 静态目录
 		stack.WebStaticDir("webapp", "static"),
 	)
 	err := s.Init()

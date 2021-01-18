@@ -14,6 +14,8 @@
   - [Stack-Plugin](./config/stack) [TODO] Stack 配置中心插件
 - [Service](./service)
   - [RPC](./service/rpc) RPC服务
+  - [Stream](./service/stream) 流服务
+  - [Web](./service/web) Web HTTP服务
     - 编写RPC服务  
 - [micro-wrapper](./wrapper) 
   - [基础用法](./wrapper/basic)
