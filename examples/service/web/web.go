@@ -3,16 +3,16 @@ package main
 import (
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/service"
+	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/service/web"
 )
 
 func main() {
-	s := web.NewService(
-		service.Name("stack.rpc.web"),
-		service.Address(":8080"),
-		web.RootPath("web-demo"),
-		web.HandleFuncs(
+	s := stack.NewWebService(
+		stack.Name("stack.rpc.web"),
+		stack.Address(":8080"),
+		stack.WebRootPath("web-demo"),
+		stack.WebHandleFuncs(
 			web.HandlerFunc{
 				Route: "hello",
 				Func: func(w http.ResponseWriter, r *http.Request) {
@@ -20,7 +20,7 @@ func main() {
 				},
 			},
 		),
-		web.StaticDir("webapp", "static"),
+		stack.WebStaticDir("webapp", "static"),
 	)
 	err := s.Init()
 	if err != nil {

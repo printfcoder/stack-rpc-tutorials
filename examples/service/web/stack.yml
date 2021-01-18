@@ -1,0 +1,5 @@
+stack:
+  service:
+    web:
+      root-path: web-demo
+      static-dir: static
