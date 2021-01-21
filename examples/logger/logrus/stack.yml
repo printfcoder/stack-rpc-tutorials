@@ -10,6 +10,7 @@ stack:
       dir: /tmp/logs
       backup-dir: /tmp/logs/backup
     slogrus:
+      split-level: true
       without-key: true
       without-quote: true
-      timestamp-format: 2020-01-02 21:33:33.999
+      timestamp-format: 2006-01-02 15:04:05.000

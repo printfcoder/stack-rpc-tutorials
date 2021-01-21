@@ -16,13 +16,7 @@ func main() {
 			logrus.NewLogger(
 				log.WithLevel(log.TraceLevel),
 				// 将不同级别切成不同文件存储
-				logrus.SplitLevel(true),
-				// 打印时忽略key
-				logrus.WithoutKey(true),
-				// 打印时不要引号
-				logrus.WithoutQuote(true),
-				// 打印时不要引号
-				logrus.TimestampFormat("2020-01-02 21:33:33.999"),
+				logrus.SplitLevel(false),
 			)))
 
 	err := service.Init()
