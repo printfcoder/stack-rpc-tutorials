@@ -7,8 +7,8 @@ stack:
       max-file-size: 10
       max-backup-size: 500
       max-backup-keep-days: 1
-      dir: "/tmp/logs"
-      backup-dir: "/tmp/logs/backup"
+      dir: /tmp/logs
+      backup-dir: /tmp/logs/backup
     slogrus:
       without-key: true
       without-quote: true
