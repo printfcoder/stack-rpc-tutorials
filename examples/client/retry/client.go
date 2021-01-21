@@ -3,40 +3,45 @@ package main
 import (
 	"context"
 
+	"github.com/stack-labs/stack-rpc"
 	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/rpc"
 	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/client/mucp"
 	log "github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 func main() {
-	cli := client.NewClient(
-		// 根据需要指定重试次数
-		client.Retries(4),
-		client.Retry(func(ctx context.Context, req client.Request, retryCount int, err error) (b bool, e error) {
-			// 遇错重试
-			if err != nil {
-				// 在这里进行业务代码控制逻辑
-				if err2, ok := err.(*errors.Error); ok {
-					// 假设大于1000的都是业务异常
-					if err2.Code > 1000 {
-						log.Infof("[ERR] 请求错误，业务异常，不重试, err: %s", err)
-						return false, nil
+	cli := stack.NewService(
+		stack.Client(mucp.NewClient(
+			// 根据需要指定重试次数
+			client.Retries(4),
+			client.Retry(func(ctx context.Context, req client.Request, retryCount int, err error) (b bool, e error) {
+				// 遇错重试
+				if err != nil {
+					// 在这里进行业务代码控制逻辑
+					if err2, ok := err.(*errors.Error); ok {
+						// 假设大于1000的都是业务异常
+						if err2.Code > 1000 {
+							log.Infof("[ERR] 请求错误，业务异常，不重试, err: %s", err)
+							return false, nil
+						}
 					}
+
+					log.Infof("[ERR] 请求错误，第%d次重试，即将重试, err: %s", retryCount+1, err)
+					// 返回true，则客户端会进行重试
+					return true, nil
 				}
 
-				log.Infof("[ERR] 请求错误，第%d次重试，即将重试, err: %s", retryCount, err)
-				// 返回true，则客户端会进行重试
-				return true, nil
-			}
+				// 没有错误，则返回false，意味不需要重试
+				return false, nil
+			}),
+		)))
 
-			// 没有错误，则返回false，意味不需要重试
-			return false, nil
-		}),
-	)
+	cli.Init()
 
 	// 创建客户端
-	greeter := proto.NewGreeterService("stack.rpc.greeter.retry", cli)
+	greeter := proto.NewGreeterService("stack.rpc.greeter.retry", cli.Client())
 
 	// 调用greeter服务
 	for i := 0; i < 10; i++ {

@@ -6,8 +6,8 @@ import (
 
 	"github.com/stack-labs/stack-rpc"
 	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/rpc"
-	"github.com/stack-labs/stack-rpc/errors"
 	log "github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 type FailureExample struct{}
