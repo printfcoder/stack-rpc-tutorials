@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math/rand"
 	"time"
 
 	"github.com/stack-labs/stack-rpc"
@@ -10,39 +11,42 @@ import (
 
 func main() {
 	service := stack.NewService(
-		stack.Logger(logrus.NewLogger(
-			log.WithLevel(log.TraceLevel),
-			log.Persistence(&log.PersistenceOptions{
-				Enable:                true,
-				MaxFileSize:           10,
-				MaxBackupSize:         500,
-				MaxBackupKeepDays:     1,
-				FileNamePattern:       "",
-				BackupFileNamePattern: "",
-				Dir:                   "/tmp/logs",
-				BackupDir:             "/tmp/logs/backup",
-			}),
-			// 将不同级别切成不同文件存储
-			logrus.SplitLevel(true),
-		)))
+		stack.Name("stack.rpc.logger"),
+		stack.Logger(
+			logrus.NewLogger(
+				log.WithLevel(log.TraceLevel),
+				// 将不同级别切成不同文件存储
+				logrus.SplitLevel(true),
+				// 打印时忽略key
+				logrus.WithoutKey(true),
+				// 打印时不要引号
+				logrus.WithoutQuote(true),
+				// 打印时不要引号
+				logrus.TimestampFormat("2020-01-02 21:33:33.999"),
+			)))
 
-	service.Init()
-
+	err := service.Init()
+	if err != nil {
+		panic(err)
+	}
+	rand.Seed(time.Now().UnixNano())
 	go func() {
-		tk := time.NewTicker(time.Second * 2)
+		rTime := time.Duration(rand.Int31n(1000)) * time.Millisecond
+		tk := time.NewTicker(rTime)
 		for {
 			select {
 			case c := <-tk.C:
-				for i := 0; i < 10; i++ {
-					log.Tracef("hello world! %s", c.String())
-					log.Debugf("hello world!  %s", c.String())
-					log.Infof("hello world! %s", c.String())
-					log.Warnf("hello world! %s", c.String())
-					log.Errorf("hello world! %s", c.String())
-				}
+				log.Tracef("I'm Tracef. hello world! %s", c.String())
+				log.Debugf("I'm Debugf. hello world!  %s", c.String())
+				log.Infof("I'm Infof. hello world! %s", c.String())
+				log.Warnf("I'm Warnf. hello world! %s", c.String())
+				log.Errorf("I'm Errorf. hello world! %s", c.String())
 			}
 		}
 	}()
 
-	service.Run()
+	err = service.Run()
+	if err != nil {
+		panic(err)
+	}
 }
