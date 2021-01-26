@@ -7,6 +7,7 @@ replace (
 	github.com/stack-labs/stack-rpc v1.0.0 => ../../stack-rpc
 	github.com/stack-labs/stack-rpc-plugins/config/source/apollo v1.0.0 => ../../stack-rpc-plugins/config/source/apollo
 	github.com/stack-labs/stack-rpc-plugins/logger/logrus v1.0.0 => ../../stack-rpc-plugins/logger/logrus
+	github.com/stack-labs/stack-rpc-plugins/registry/consul v1.0.0 => ../../stack-rpc-plugins/registry/consul
 	github.com/stack-labs/stack-rpc-plugins/service/stackway v1.0.0 => ../../stack-rpc-plugins/service/stackway
 	google.golang.org/grpc => google.golang.org/grpc v1.26.0
 )
@@ -56,6 +57,7 @@ require (
 	github.com/stack-labs/stack-rpc-plugins/config/source/apollo v1.0.0
 	github.com/stack-labs/stack-rpc-plugins/logger/logrus v1.0.0
 	github.com/stack-labs/stack-rpc-plugins/service/stackway v1.0.0
+	github.com/stack-labs/stack-rpc-plugins/registry/consul v1.0.0
 	github.com/tevid/gohamcrest v1.1.1 // indirect
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20200427203606-3cfed13b9966 // indirect
 	go.etcd.io/bbolt v1.3.5 // indirect
