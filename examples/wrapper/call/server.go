@@ -7,7 +7,7 @@ import (
 	"github.com/stack-labs/stack-rpc"
 	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/rpc"
 	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/metadata"
+	"github.com/stack-labs/stack-rpc/pkg/metadata"
 )
 
 type Greeter struct{}
@@ -16,8 +16,8 @@ func (g *Greeter) Hello(ctx context.Context, req *proto.HelloRequest, rsp *proto
 	newMd, _ := metadata.FromContext(ctx)
 	rsp.Greeting = "Hi! " + req.Name
 
-	log.Info("[Hello] call-wrapped1: ", newMd["Call-Wrapped1"])
-	log.Info("[Hello] call-wrapped2: ", newMd["Call-Wrapped2"])
+	log.Infof("[Hello] call-wrapped1: %s", newMd["Call-Wrapped1"])
+	log.Infof("[Hello] call-wrapped2: %s", newMd["Call-Wrapped2"])
 	return nil
 }
 

@@ -5,13 +5,13 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	file2 "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/stream/file"
 	"io"
 	"io/ioutil"
 	"os"
 
 	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/errors"
+	file2 "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/stream/file"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 type File struct{}

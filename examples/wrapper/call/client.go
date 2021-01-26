@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/stack-labs/stack-rpc"
 	"time"
 
 	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/rpc"
 	"github.com/stack-labs/stack-rpc/client"
 	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/metadata"
+	"github.com/stack-labs/stack-rpc/pkg/metadata"
 	"github.com/stack-labs/stack-rpc/registry"
 )
 
@@ -54,16 +55,17 @@ func NewCallWrapper2() client.CallWrapper {
 }
 
 func main() {
-	cli := client.NewClient(
-		client.WrapCall(
-			NewCallWrapper1(),
-			NewCallWrapper2()),
+	client := stack.NewService(
+		stack.Name("wrap.call.client"),
+		stack.WrapCall(NewCallWrapper1(), NewCallWrapper2()),
 	)
 
-	req := client.NewRequest("wrap.call.service", "Greeter.Hello", &proto.HelloRequest{Name: "StackLabs"})
+	client.Init()
+
+	req := client.Client().NewRequest("wrap.call.service", "Greeter.Hello", &proto.HelloRequest{Name: "StackLabs"})
 	rsp := &proto.HelloResponse{}
 
-	err := cli.Call(context.Background(), req, rsp)
+	err := client.Client().Call(context.Background(), req, rsp)
 	if err != nil {
 		panic(err)
 	}

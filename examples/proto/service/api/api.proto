@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "github.com/stack-labs/stack-rpc/api/proto/api.proto";
+
+service Greeter {
+	rpc Hello(go.api.Request) returns(go.api.Response) {};
+}
+
+service Foo {
+	rpc Bar(go.api.Request) returns(go.api.Response) {};
+}

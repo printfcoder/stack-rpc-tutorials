@@ -1,6 +1,6 @@
 # File
 
-本篇演示micro中的大文件传输（流式调用）。
+本篇演示Stack中的大文件传输（流式调用）。
 
 ## 内容
 
@@ -27,10 +27,13 @@ go run client.go
 ```
 
 ## 使用
+
 使用Postman/CURL向[http://127.0.0.1:8080/upload](http://127.0.0.1:8080/upload)发送文件
 
 ```shell
-curl http://127.0.0.1:8080/upload -F "file=@go.sum"
+curl --location --request POST 'http://127.0.0.1:8080/upload' \
+--header 'Content-Type: multipart/form-data;' \
+--form 'file=@"README.md"'
 ```
 
-得到一串md5
+回参是该文件的md5

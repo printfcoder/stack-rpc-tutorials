@@ -10,8 +10,7 @@ import (
 )
 
 // 服务类
-type Greeter struct {
-}
+type Greeter struct {}
 
 // 实现proto中的Hello接口
 func (g Greeter) Hello(ctx context.Context, req *proto.HelloRequest, rsp *proto.HelloResponse) error {

@@ -5,21 +5,20 @@ import (
 	"encoding/json"
 	"strings"
 
-	proto "github.com/micro-in-cn/tutorials/examples/basic-practices/micro-api/api/proto"
 	"github.com/stack-labs/stack-rpc"
+	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/rpc"
 	api "github.com/stack-labs/stack-rpc/api/proto"
-	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/util/errors"
 	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type Example struct{}
 
-type Foo struct{}
 
-// Example.Call 通过API向外暴露为/example/call，接收http请求
+// Example.Hello 通过API向外暴露为/example/hello，接收http请求
 // 即：/example/call请求会调用go.micro.api.example服务的Example.Call方法
-func (e *Example) Call(ctx context.Context, req *api.Request, rsp *api.Response) error {
+func (e *Example) Hello(ctx context.Context, req *api.Request, rsp *api.Response) error {
 	log.Logf("Example.Call接口收到请求")
 
 	name, ok := req.Get["name"]
@@ -77,14 +76,14 @@ func rspHeaderWrapper(fn server.HandlerFunc) server.HandlerFunc {
 
 func main() {
 	service := stack.NewService(
-		stack.Name("go.micro.api.example"),
+		stack.Name("stack.wrapper.handler.example"),
 		stack.WrapHandler(logWrapper, rspHeaderWrapper),
 	)
 
 	service.Init()
 
 	// 注册 example handler
-	proto.RegisterExampleHandler(service.Server(), new(Example))
+	proto.RegisterGreeterHandler(service.Server(), new(Example))
 
 	if err := service.Run(); err != nil {
 		log.Fatal(err)

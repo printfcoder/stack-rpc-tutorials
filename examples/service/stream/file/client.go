@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	file2 "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/stream/file"
 	"io"
 	"net/http"
 
 	"github.com/stack-labs/stack-rpc"
+	file2 "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/stream/file"
 	"github.com/stack-labs/stack-rpc/client"
 )
 
@@ -37,11 +37,10 @@ func UploadFile(rsp http.ResponseWriter, req *http.Request) {
 	// 建立链接
 	// 因为这里是用的临时文件储存的方式,如果因为负载均衡算法导致下一次节点切换,另外一个节点是无法通过文件名来获取到文件数据的
 	// 使用这种方法来固定一个节点
-	next, _ := c.Options().Selector.Select("file.service")
-	node, _ := next()
+	next, _ := c.Options().Selector.Next("file.service")
 	stream, err := fileService.File(context.Background(), func(options *client.CallOptions) {
 		// 指定节点
-		options.Address = []string{node.Address}
+		options.Address = []string{next.Address}
 	})
 	if err != nil {
 		rsp.WriteHeader(500)
@@ -94,7 +93,7 @@ func UploadFile(rsp http.ResponseWriter, req *http.Request) {
 		Param:    "a param",
 	}, func(options *client.CallOptions) {
 		// 指定节点
-		options.Address = []string{node.Address}
+		options.Address = []string{next.Address}
 	})
 	if err != nil {
 		rsp.WriteHeader(500)
