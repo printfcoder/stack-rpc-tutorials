@@ -1,4 +1,6 @@
-# StackRPC 教程系列[更新中]
+# StackRPC 教程系列[停止更新]
+
+稳步至：[教程与示例](https://github.com/stack-labs/stack-rpc/tree/master/examples)
 
 [重要信息：因Go-Micro停更，中国团队决定建立自己的版本，并重命名为[stack-rpc](https://github.com/stack-labs/stack-rpc)]
 
